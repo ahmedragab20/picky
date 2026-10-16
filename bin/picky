@@ -1,0 +1,4 @@
+#!/bin/sh
+# Runs the TypeScript CLI directly (Node >= 24 strips types natively).
+here="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
+exec node --no-warnings "$here/../src/cli.ts" "$@"
