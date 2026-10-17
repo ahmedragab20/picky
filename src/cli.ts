@@ -1,10 +1,13 @@
 import { spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hookScript } from './assets.ts';
 import { decideCached } from './decide.ts';
 import { repoRoot } from './git.ts';
 import { bashFlags, rewriteScript, scanScript } from './hook.ts';
+import { planInit, type InitFile } from './init.ts';
 import { currentStep, loadJob, planSetup } from './job.ts';
 import { planCommand, type Outcome } from './plan.ts';
 import { formatDecision, writeJobSummary } from './report.ts';
@@ -13,6 +16,7 @@ import { quoteArgv, splitAssignments, tokenize } from './sh.ts';
 const USAGE = `picky: runs only the tests, lint and type checks a change can affect (JS/TS and PHP)
 
 usage:
+  picky init [--write]                  show (or apply) the files and workflow edits that turn picky on
   picky explain                         show the decision for the current branch
   picky decide                          compute the decision once, for other jobs to reuse
   picky -- <command...>                 run a test, lint or check command, narrowed to the change
@@ -31,6 +35,7 @@ async function main(argv: string[]): Promise<number> {
   if (cmd === '--') return runCommand(rest);
   if (cmd === 'explain') return explain();
   if (cmd === 'decide') return decideOnce();
+  if (cmd === 'init') return init(rest.includes('--write'));
   if (cmd === 'hook-exec') return hookExec(rest[0], rest.slice(1));
   if (cmd === 'rewrite') return rewrite(rest);
   log(USAGE);
@@ -80,6 +85,57 @@ async function decideOnce(): Promise<number> {
     log(`picky: no shared decision (${(err as Error).message}); each job decides on its own`);
   }
   return 0;
+}
+
+/** The single-file bundle to vendor: this file when running from it, else the build output. */
+function bundlePath(): string {
+  const self = fileURLToPath(import.meta.url);
+  return self.endsWith('.mjs') ? self : path.resolve(path.dirname(self), '../dist/picky.mjs');
+}
+
+/** `picky init`: prints the changes as a diff; `--write` applies them. */
+function init(write: boolean): number {
+  const bundle = bundlePath();
+  if (!existsSync(bundle)) return log(`picky: ${bundle} is missing; run \`npm run build\` first`), 1;
+  const root = repoRoot(process.cwd());
+  const { files, notes } = planInit(root, { hook: hookScript(), bundle: readFileSync(bundle) });
+  const out = (s: string) => process.stdout.write(`${s}\n`);
+
+  if (!write) for (const f of files) out(diffOf(f));
+  else {
+    for (const f of files) {
+      const full = path.join(root, f.path);
+      mkdirSync(path.dirname(full), { recursive: true });
+      writeFileSync(full, f.after);
+      if (f.mode) chmodSync(full, f.mode);
+    }
+  }
+  for (const n of notes) out(`picky: ${n}`);
+  if (files.length === 0) return out('picky: already set up; nothing to change'), 0;
+  if (!write) return out(`picky: ${files.length} file${files.length === 1 ? '' : 's'} would change; run \`picky init --write\` to apply`), 0;
+  out(`picky: wrote ${files.map((f) => f.path).join(', ')}`);
+  const shadow = files.some((f) => f.path === '.picky.yml') ? ' picky starts in shadow mode: it logs what it would skip and runs everything.' : '';
+  out(`picky: next, add the PICKY_API_KEY secret, then commit.${shadow}`);
+  return 0;
+}
+
+/** A unified diff of one planned file; the bundle is summarized. */
+function diffOf(f: InitFile): string {
+  if (typeof f.after !== 'string') return `${f.before === null ? 'new' : 'updated'} file ${f.path} (${(f.after.length / 1e6).toFixed(1)} MB)`;
+  const tmp = mkdtempSync(path.join(tmpdir(), 'picky-init-'));
+  try {
+    const side = (name: string, text: string | null) => {
+      if (text === null) return '/dev/null';
+      const file = path.join(name, f.path);
+      mkdirSync(path.join(tmp, path.dirname(file)), { recursive: true });
+      writeFileSync(path.join(tmp, file), text);
+      return file;
+    };
+    const res = spawnSync('git', ['diff', '--no-index', '--no-color', '--no-prefix', '--', side('a', f.before), side('b', f.after)], { cwd: tmp, encoding: 'utf8' });
+    return res.stdout.trimEnd();
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
 }
 
 /** `picky -- cmd args`: the prefix form for CIs without a step hook. */

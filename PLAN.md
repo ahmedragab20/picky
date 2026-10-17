@@ -25,18 +25,18 @@ The build is v0.2. It's tested locally (75 unit tests, plus end-to-end runs with
 | Type checks and analyzers | tsc, vue-tsc, svelte-check, biome, phpstan, psalm, phpcs, php-cs-fixer, pint, rector: skipped when no changed file can matter to them (docs, media, styles, another language), otherwise run in full | new |
 | Job-level setup skip | `npm ci`/`install`, `pnpm`/`yarn`/`bun install`, `composer install` and `npx playwright install` are skipped when every other command in the job is a marked command that skips. The job is read from the workflow (`GITHUB_WORKFLOW_REF`, `GITHUB_JOB`). Any unmarked command, non-bash step, expression working directory or non-passive `uses:` step keeps the setup | M2 (part) |
 | Hook | `BASH_ENV` hook, `# picky` markers inside scripts **and** as the YAML comment of a one-line `run:` (YAML drops that comment, so picky reads it from the workflow), shell flags preserved, original line on any failure | M2 (part) |
-| One decision per PR | `picky decide` in a small `picky` job computes the decision once into `$RUNNER_TEMP/picky`; the job uploads it as an artifact, and every other job (`needs: picky`, `if: ${{ !cancelled() }}`) downloads it there and reuses it. **Verified with live Jev on 2026-10-17:** 1 model call per PR (before: 1 per job, with answers that differed near the threshold); every job prints the same decision. Cost: the `picky` job takes 7–12 s before the other jobs start. Fail-open: `picky decide` always exits 0, and a job without the artifact decides on its own | M2 (part) |
+| One decision per PR | `picky decide` in a small `picky` job computes the decision once into `$RUNNER_TEMP/picky`; the job uploads it as an artifact, and every other job (`needs: picky`) downloads it there and reuses it. Every step of the `picky` job is `continue-on-error`, so it never blocks the jobs that need it. **Verified with live Jev on 2026-10-17:** 1 model call per PR (before: 1 per job, with answers that differed near the threshold); every job prints the same decision. Cost: the `picky` job takes 7–12 s before the other jobs start. Fail-open: `picky decide` always exits 0, and a job without the artifact decides on its own | M2 (part) |
+| `picky init` and the vendored bundle | `npm run build` makes one minified file (3.8 MB, Node 20+). `picky init` shows a diff, and `--write` applies it: `.picky.yml` (shadow), `.github/picky/` (hook, wrapper, bundle), the 2 env lines, `# picky` on every recognized command, and the decide job when several jobs or a matrix use picky. Workflows are edited as text at parser positions, so formatting and comments are kept; it is idempotent. Pull-request workflows only; Windows, container and non-bash jobs are skipped with a note. The hook finds the vendored bundle next to itself, so `PICKY_BIN` is no longer needed. **Verified on 2026-10-17:** the fixture's workflow was reset to plain commands and set up by `init` alone; all 4 PRs behaved as before. Found and fixed: `init` put two spaces before `# picky`, which the repo's own `prettier --check` rejected | M2 (part) |
 | Model | Jev `noul` judge for tests outside the floor, retries, 30 s budget, usage line (questions, requests, tokens) | M1 (part) |
 | Modes and report | shadow and enforce; log and job summary | M8 (part) |
 | M0 spike | **Passed on ubuntu-latest (Node 22, PHP 8.3):** workflow-level `BASH_ENV` with `${{ github.workspace }}` works; `$0` is the step script; one-line `# picky` YAML comments are honored; the step script text matches `run:`, so job-level skip works (`composer install` skipped on the TS and docs PRs); a failing narrowed PHPUnit run fails the job. Decisions take 0.6–1.1 s. **Found and fixed:** the event's base sha goes stale when the base branch moves, so picky diffs against the first parent of GitHub's merge commit (fetched at depth 1) | M0 |
 
 ### Pending, in release order
 
-1. **M2 distribution.** The e2e repo vendors a 10 MB esbuild bundle, which proves a single-file build works. Still to build:
-   - pinned, checksum-verified binary download in `hook.sh`
-   - `picky init`, which also adds the `picky` decide job and the download step to each job
-   - the `picky` workflow and artifacts
-   - the `picky/setup` + `shell: picky {0}` fallback
+1. **M2 remainder.**
+   - pinned, checksum-verified download in `hook.sh` (the bundle is vendored for now, which git already pins)
+   - the `picky` workflow: graph and history artifacts, `workflow_run` learning, nightly. It's only useful once M3's graph cache and M4's history exist
+   - the `picky/setup` + `shell: picky {0}` fallback for Windows, container and non-bash jobs
    - upstream-job skipping through `needs:`
 2. **Shadow recall report (M8).** It shows whether a test picky would have skipped failed, which tells users when it's safe to switch to `enforce`.
 3. **M1 remainder:**

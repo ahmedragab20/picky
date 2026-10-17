@@ -33,11 +33,28 @@ bin/picky explain                        # show the decision for this branch
 bin/picky -- npx vitest run              # run narrowed to the affected test files
 ```
 
+### Set up a repo: `picky init`
+
+```bash
+npm run build                      # dist/picky.mjs, one 3.8 MB file (Node 20+)
+cd ~/code/my-repo
+node ~/code/picky/dist/picky.mjs init           # shows every change as a diff
+node ~/code/picky/dist/picky.mjs init --write   # applies it
+```
+
+`init`:
+- writes `.picky.yml` (shadow mode) if there is none
+- vendors `.github/picky/` (the hook, a `picky` wrapper and the bundle); git pins the version, so there's no download at run time
+- in each workflow that runs on `pull_request`: adds the 2 env lines and puts `# picky` on every command it recognizes
+- when several jobs (or a matrix) use picky, adds the decide job and the download step (below)
+
+It runs again safely: it never adds anything twice. To upgrade picky, rerun it with a newer bundle. Then add the `PICKY_API_KEY` secret and commit.
+
 ### In a CI step: the `# picky` marker
 
 ```yaml
 env:
-  BASH_ENV: ${{ github.workspace }}/.github/picky/hook.sh   # copy of hook/hook.sh
+  BASH_ENV: ${{ github.workspace }}/.github/picky/hook.sh
   PICKY_API_KEY: ${{ secrets.PICKY_API_KEY }}
 steps:
   - uses: actions/checkout@v4
@@ -67,29 +84,31 @@ Bash sources the hook before every step:
 
 ### Several jobs: one decision per PR
 
-Model answers vary slightly between calls, so jobs that decide on their own can disagree about a test near the threshold. Compute the decision once and share it:
+Model answers vary slightly between calls, so jobs that decide on their own can disagree about a test near the threshold. `init` makes the decision once and shares it:
 
 ```yaml
 jobs:
-  picky:
+  picky:                                          # every step continue-on-error: it never fails the run
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: .github/picky/picky decide          # always exits 0
+        continue-on-error: true
+      - run: .github/picky/picky decide
+        continue-on-error: true
       - uses: actions/upload-artifact@v4
+        continue-on-error: true
         with: { name: picky-decision, path: "${{ runner.temp }}/picky", retention-days: 7 }
   test:
     needs: picky
-    if: ${{ !cancelled() }}                       # runs even if the picky job failed
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
-        continue-on-error: true                   # without it, the job decides on its own
+        continue-on-error: true                   # without the artifact, the job decides on its own
         with: { name: picky-decision, path: "${{ runner.temp }}/picky" }
-      - run: npx vitest run  # picky
+      - uses: actions/checkout@v4
+      - run: npx vitest run # picky
 ```
 
-The model is called once per PR, and every job acts on the same answers. The cost is the `picky` job, about 10 s before the other jobs start.
+The model is called once per PR, and every job acts on the same answers. The cost is the `picky` job: about 10 s before the other jobs start.
 
 ## What v0.2 does
 
@@ -120,8 +139,8 @@ The model is called once per PR, and every job acts on the same answers. The cos
 ## Not yet (see PLAN.md "Build status")
 
 - **Not in v0.2:**
-  - binary distribution for GitHub (the hook needs `PICKY_BIN` or `picky` on `PATH`)
-  - `picky init`
+  - a pinned download instead of the vendored bundle
+  - the `picky/setup` action for non-bash and container jobs (`init` skips those jobs)
   - a shadow-mode recall report
   - `extends` presets
   - other model providers

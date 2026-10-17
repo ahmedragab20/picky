@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { chmodSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { markedLines } from '../src/hook.ts';
@@ -113,6 +113,16 @@ describe('hook (real bash)', () => {
     chmodSync(path.join(code, 'fake-bin/npm'), 0o755);
     const ran = runStep(code, 'npm ci\n', fake(code));
     expect(ran.out).toContain('npm-ran ci');
+  });
+
+  it('finds the picky that init vendored next to the hook when PICKY_BIN is unset', () => {
+    const root = repo({ ...SHOP, ...tests, ...GRAPH_ONLY }, MATH_CHANGE);
+    mkdirSync(path.join(root, '.github/picky'), { recursive: true });
+    copyFileSync(path.join(HOME, 'hook/hook.sh'), path.join(root, '.github/picky/hook.sh'));
+    writeFileSync(path.join(root, '.github/picky/picky'), `#!/bin/sh\nexec ${path.join(HOME, 'bin/picky')} "$@"\n`, { mode: 0o755 });
+    const r = runStep(root, 'node --test # picky\n', { BASH_ENV: path.join(root, '.github/picky/hook.sh'), PICKY_BIN: '' });
+    expect(r.code).toBe(0);
+    expect(r.err).toContain('picky: $ node --test test/cart.test.ts test/math.test.ts');
   });
 
   it('runs unmarked steps without picky', () => {
