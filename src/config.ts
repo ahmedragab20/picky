@@ -59,7 +59,8 @@ export function loadConfig(root: string, env: NodeJS.ProcessEnv): Config {
     low: raw.low === undefined ? DEFAULT_LOW : list(raw.low),
     apiKey: resolvedModel.provider === 'typesafe' ? (env.PICKY_API_KEY ?? env.TYPESAFE_API_KEY) : undefined,
     problem,
-    source: JSON.stringify({ source, mode, modelId }),
+    // Git may check the file out with CRLF (Windows autocrlf); the line endings don't change the config.
+    source: JSON.stringify({ source: source.replace(/\r\n/g, '\n'), mode, modelId }),
   };
 }
 

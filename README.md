@@ -82,6 +82,27 @@ Bash sources the hook before every step:
 - **Install commands** (`npm ci`, `pnpm install`, `composer install`, `npx playwright install`, …) are skipped when every other command in the job is a marked command that skips.
 - **If picky fails**, the original line runs.
 
+### Windows, containers and other shells: `shell: picky {0}`
+
+The hook needs bash and a host path, so it can't reach Windows jobs, container jobs, or `sh`/`pwsh` steps. There, picky runs the whole step as its shell:
+
+```yaml
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/picky              # puts picky on PATH (vendored by init)
+      - run: npm ci
+        shell: picky pwsh {0}
+      - run: npx vitest run
+        shell: picky pwsh {0}
+```
+
+- `picky {0}` uses GitHub's default shell (pwsh on Windows; bash, else sh, elsewhere). `picky bash|sh|pwsh|powershell {0}` names one.
+- Every command in the step is decided. Setup commands follow the job-level rule, and everything else runs as written, with GitHub's own flags for that shell.
+- In a container without node, picky uses the runner's own node. Without any node, or on any error, the step runs unchanged.
+- `init` sets this up for these jobs (it needs `actions/checkout` before the setup step) and leaves `cmd` and custom shells alone.
+
 ### Several jobs: one decision per PR
 
 Model answers vary slightly between calls, so jobs that decide on their own can disagree about a test near the threshold. `init` makes the decision once and shares it:
@@ -140,7 +161,7 @@ The model is called once per PR, and every job acts on the same answers. The cos
 
 - **Not in v0.2:**
   - a pinned download instead of the vendored bundle
-  - the `picky/setup` action for non-bash and container jobs (`init` skips those jobs)
+  - `cmd` and custom shells in `shell: picky …`
   - a shadow-mode recall report
   - `extends` presets
   - other model providers

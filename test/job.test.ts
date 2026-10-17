@@ -52,6 +52,24 @@ describe('planSetup', () => {
     expect(plan.note).toContain('`node --test`: running 2 of 3 test files');
   });
 
+  it('counts `shell: picky {0}` steps as marked, e.g. on Windows', async () => {
+    const steps = [
+      '      - uses: actions/checkout@v4',
+      '      - uses: ./.github/picky',
+      '      - run: npm ci',
+      '        shell: picky pwsh {0}',
+      '      - run: node --test',
+      '        shell: picky pwsh {0}',
+      '',
+    ].join('\n');
+    const windows = { '.github/workflows/ci.yml': workflow(steps)['.github/workflows/ci.yml'].replace('ubuntu-latest', 'windows-latest') };
+    expect(await setupPlan(windows, { 'README.md': 'x' })).toEqual({ skip: true, note: 'skip: all 1 marked commands in this job skip' });
+
+    // Without picky as its shell, a Windows step is invisible to picky, so setup stays.
+    const plain = { '.github/workflows/ci.yml': windows['.github/workflows/ci.yml'].replace('      - run: node --test\n        shell: picky pwsh {0}\n', '      - run: node --test # picky\n') };
+    expect(await setupPlan(plain, { 'README.md': 'x' })).toMatchObject({ skip: false, note: "setup runs (picky can't decide `node --test` here)" });
+  });
+
   it('keeps setup when the job does other work', async () => {
     const extra = workflow(`${STEPS}      - run: npm run build\n`);
     expect(await setupPlan(extra, { 'README.md': 'x' })).toMatchObject({ skip: false, note: 'setup runs (the job also runs `npm run build`)' });

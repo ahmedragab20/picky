@@ -37,6 +37,7 @@ export function isSetupCommand(words: string[] | null): boolean {
 const PASSIVE_ACTIONS = [
   /^actions\/(checkout|setup-[\w-]+|cache(\/(restore|save))?|upload-artifact|download-artifact)@/,
   /^(shivammathur\/setup-php|pnpm\/action-setup|oven-sh\/setup-bun)@/,
+  /^\.\/\.github\/picky\/?$/, // the setup action `picky init` vendors
 ];
 
 export interface JobPlan {
@@ -49,7 +50,9 @@ interface Step {
   uses?: string;
   /** `run: cmd  # picky` on one line: YAML drops the comment, so the marker never reaches the script. */
   markedInYaml: boolean;
-  /** Bash with BASH_ENV, so the hook sees the step. */
+  /** `shell: picky {0}`: picky runs the whole step, every command in it marked. */
+  pickyShell: boolean;
+  /** Bash with BASH_ENV, or the picky shell, so picky sees the step. */
   hooked: boolean;
   /** Working directory relative to the workspace, or null when it's an expression. */
   dir: string | null;
@@ -79,12 +82,16 @@ export function loadJob(root: string, env: NodeJS.ProcessEnv): Job | string {
     const step = job.steps[i] ?? {};
     const runNode = isMap(node) ? node.get('run', true) : undefined;
     const shell = step.shell ?? job.defaults?.run?.shell ?? workflow.defaults?.run?.shell;
+    const pickyShell = typeof shell === 'string' && /^picky(\s|$)/.test(shell);
+    // In a container the hook path (a host path) doesn't exist, and on Windows there's no bash by default.
+    const hookable = !job.container && !/windows/i.test(String(job['runs-on']));
     const dir = String(step['working-directory'] ?? job.defaults?.run?.['working-directory'] ?? workflow.defaults?.run?.['working-directory'] ?? '.');
     return {
       run: typeof step.run === 'string' ? step.run : undefined,
       uses: step.uses === undefined ? undefined : String(step.uses),
       markedInYaml: isScalar(runNode) && /^\s*picky\s*$/.test(runNode.comment ?? ''),
-      hooked: shell === undefined ? !/windows/i.test(String(job['runs-on'])) : /^bash(\s|$)/.test(shell),
+      pickyShell,
+      hooked: pickyShell || (hookable && (shell === undefined || /^bash(\s|$)/.test(shell))),
       dir: dir.includes('${{') ? null : dir,
     };
   });
@@ -93,7 +100,8 @@ export function loadJob(root: string, env: NodeJS.ProcessEnv): Job | string {
 
 /** The workflow step running `script`; a reusable or composite workflow can share the job id, so it must match. */
 export function currentStep(job: Job, script: string): Step | undefined {
-  return job.steps.find((s) => s.run !== undefined && s.run.trim() === script.trim());
+  const text = script.replace(/\r\n/g, '\n').trim();
+  return job.steps.find((s) => s.run !== undefined && s.run.trim() === text);
 }
 
 /** Decides one setup line of the current step. `decide` is only called when the job could be skipped. */
@@ -117,7 +125,7 @@ export async function planSetup(
       continue;
     }
     if (step.run === undefined) continue;
-    for (const line of scanScript(step.run, step.markedInYaml)) {
+    for (const line of scanScript(step.run, step.markedInYaml || step.pickyShell)) {
       const words = line.simple ? tokenize(line.text) : null;
       if (!line.marked && isSetupCommand(words)) continue;
       const label = line.text.trim();

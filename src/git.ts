@@ -2,7 +2,10 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 export function git(cwd: string, args: string[]): string {
-  return execFileSync('git', args, {
+  // A container job runs as root over a workspace the runner user owns, which git refuses as
+  // "dubious ownership". picky only reads the repo the job already runs code from.
+  const safe = process.env.GITHUB_ACTIONS === 'true' ? ['-c', 'safe.directory=*'] : [];
+  return execFileSync('git', [...safe, ...args], {
     cwd,
     encoding: 'utf8',
     maxBuffer: 1 << 30,

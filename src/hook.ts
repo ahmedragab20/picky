@@ -35,7 +35,9 @@ export function scanScript(script: string, markAll = false): ScriptLine[] {
     const doc = HEREDOC.exec(line);
     if (doc) heredocEnd = doc[2];
     const continued = (i > 0 && lines[i - 1].trimEnd().endsWith('\\')) || trimmed.endsWith('\\');
-    out.push({ line: i + 1, text: line, marked: markAll || MARKER.test(line), simple: !doc && !continued });
+    // A whole-step marker leaves setup commands to the job-level rule.
+    const marked = MARKER.test(line) || (markAll && !isSetupCommand(tokenize(line)));
+    out.push({ line: i + 1, text: line, marked, simple: !doc && !continued });
   }
   return out;
 }

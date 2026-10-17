@@ -3,7 +3,9 @@ import path from 'node:path';
 import { isMap, isScalar, isSeq, parseDocument, type Node, type Pair, type Scalar, type YAMLMap, type YAMLSeq } from 'yaml';
 import { recognize } from './commands.ts';
 import { scanScript } from './hook.ts';
+import { isSetupCommand } from './job.ts';
 import { tokenize } from './sh.ts';
+import { isShell } from './shell.ts';
 
 /**
  * `picky init`: the files picky needs in a repo, and the workflow edits that turn it on.
@@ -24,7 +26,39 @@ export interface InitAssets {
   bundle: Buffer;
 }
 
-export const WRAPPER = '#!/bin/sh\n# Runs the picky bundle vendored next to this file.\nexec node --no-warnings "$(dirname "$0")/picky.mjs" "$@"\n';
+export const WRAPPER = `#!/bin/sh
+# Runs the picky bundle vendored next to this file. A container may have no node on PATH, so
+# the runner's own node (mounted at /__e) is tried next. Without any node, a
+# \`shell: picky {0}\` step still runs, unchanged.
+here="$(dirname "$0")"
+for n in node /__e/node*/bin/node; do
+  if "$n" --version >/dev/null 2>&1; then exec "$n" --no-warnings "$here/picky.mjs" "$@"; fi
+done
+echo "picky: node not found; running the step unchanged" >&2
+case "$1" in
+  bash) exec bash --noprofile --norc -eo pipefail "$2" ;;
+  sh) exec sh -e "$2" ;;
+esac
+if [ $# -eq 1 ] && [ -f "$1" ]; then exec sh -e "$1"; fi
+exit 127
+`;
+
+/** Windows resolves \`shell: picky {0}\` to this through PATHEXT. */
+export const WRAPPER_CMD = '@echo off\r\nrem Runs the picky bundle vendored next to this file.\r\nnode --no-warnings "%~dp0picky.mjs" %*\r\nexit /b %ERRORLEVEL%\r\n';
+
+/** \`uses: ./.github/picky\`: puts picky on PATH for \`shell: picky {0}\` steps. */
+export const SETUP_ACTION = `name: picky setup
+description: "Puts picky on PATH, for steps that run with \`shell: picky {0}\` (Windows, containers, shells other than bash)."
+runs:
+  using: composite
+  steps:
+    - if: runner.os == 'Windows'
+      shell: pwsh
+      run: Add-Content -Path $env:GITHUB_PATH -Value $env:GITHUB_ACTION_PATH
+    - if: runner.os != 'Windows'
+      shell: sh
+      run: echo "$GITHUB_ACTION_PATH" >> "$GITHUB_PATH"
+`;
 
 const CONFIG = `# picky: runs only the tests, lint and type checks a change can affect.
 mode: shadow   # decide and log, but run everything. Switch to enforce once the summaries look right.
@@ -50,6 +84,8 @@ export function planInit(root: string, assets: InitAssets): { files: InitFile[];
   if (!existsSync(path.join(root, '.picky.yml'))) add('.picky.yml', CONFIG);
   add('.github/picky/hook.sh', assets.hook);
   add('.github/picky/picky', WRAPPER, 0o755);
+  add('.github/picky/picky.cmd', WRAPPER_CMD);
+  add('.github/picky/action.yml', SETUP_ACTION);
   add('.github/picky/picky.mjs', assets.bundle);
 
   const dir = path.join(root, '.github/workflows');
@@ -94,37 +130,70 @@ export function editWorkflow(text: string, root: string): { text: string; notes:
     const name = String(pair.key?.value);
     const job = workflow.jobs[name];
     if (!isMap(pair.value) || !job || name === 'picky') continue;
-    const skip = (why: string) => notes.push(`job "${name}" skipped: ${why}`);
     if (job.uses) continue; // a reusable workflow call has no steps here
-    if (/windows/i.test(String(job['runs-on']))) { skip('Windows runner (the hook needs bash)'); continue; }
-    if (job.container) { skip('container job (bash and node may be missing)'); continue; }
+    const windows = /windows/i.test(String(job['runs-on']));
+    // The hook needs bash and a host path: Windows and container jobs use `shell: picky {0}` instead.
+    const hookable = !windows && !job.container;
     const jobShell = job.defaults?.run?.shell ?? workflow.defaults?.run?.shell;
     const steps = pair.value.get('steps', true);
     if (!isSeq(steps)) continue;
 
+    const jobEdits: Edit[] = [];
     let marked = false;
+    let viaShell = false;
+    let recognizedAny = false;
+    const fallback: Array<{ node: YAMLMap; run: Scalar; inner: string }> = [];
     steps.items.forEach((node, i) => {
       const step = job.steps?.[i];
       if (!isMap(node) || typeof step?.run !== 'string') return;
-      const shell = step.shell ?? jobShell;
-      if (shell !== undefined && !/^bash(\s|$)/.test(shell)) return;
       const dir = String(step['working-directory'] ?? job.defaults?.run?.['working-directory'] ?? workflow.defaults?.run?.['working-directory'] ?? '.');
       if (dir.includes('${{')) return;
       const run = node.get('run', true);
       if (!isScalar(run) || !run.range) return;
-
       const cwd = path.resolve(root, dir);
-      if (/^\s*picky\s*$/.test(run.comment ?? '') || scanScript(step.run).some((l) => l.marked)) {
-        marked = true;
+      const shell = step.shell ?? jobShell;
+      if (typeof step.shell === 'string' && /^picky(\s|$)/.test(step.shell)) {
+        marked = viaShell = true;
         return;
       }
-      const found = markRun(text, run, step.run, cwd);
-      if (found.length) marked = true;
-      marks += found.length;
-      edits.push(...found);
+
+      if (hookable && (shell === undefined || /^bash(\s|$)/.test(shell))) {
+        if (/^\s*picky\s*$/.test(run.comment ?? '') || scanScript(step.run).some((l) => l.marked)) {
+          marked = true;
+          return;
+        }
+        const found = markRun(text, run, step.run, cwd);
+        if (found.length) marked = true;
+        marks += found.length;
+        jobEdits.push(...found);
+        return;
+      }
+
+      // `shell: picky [shell] {0}` runs the whole step; any other custom shell is left alone.
+      const inner = shell === undefined ? (windows ? 'pwsh' : '') : String(shell).trim();
+      if (inner !== '' && !isShell(inner)) return;
+      const words = scanScript(step.run).flatMap((l) => (l.simple ? [tokenize(l.text)] : [])).filter((w): w is string[] => !!w?.length);
+      const recognized = words.some((w) => recognize(w, cwd) !== null);
+      recognizedAny ||= recognized;
+      if (recognized || words.some((w) => isSetupCommand(w))) fallback.push({ node, run, inner });
     });
 
+    if (recognizedAny) {
+      const setup = setupActionStep(text, steps, job.steps);
+      if (setup === undefined) notes.push(`job "${name}" skipped: it needs actions/checkout before picky's setup step`);
+      else {
+        if (setup) jobEdits.push(setup);
+        for (const f of fallback) jobEdits.push(shellEdit(text, f.node, f.run, f.inner));
+        marks += fallback.length;
+        marked = viaShell = true;
+      }
+    } else if (viaShell && !hasSetupAction(job.steps)) {
+      const setup = setupActionStep(text, steps, job.steps);
+      if (setup) jobEdits.push(setup);
+    }
+
     if (marked) {
+      edits.push(...jobEdits);
       pickyJobs.push({ name, map: pair.value });
       instances += job.strategy?.matrix ? 2 : 1;
     }
@@ -147,12 +216,37 @@ export function editWorkflow(text: string, root: string): { text: string; notes:
         else notes.push(`job "${name}": add \`picky\` to its needs by hand`);
       }
       const downloads = job.steps?.some((s: any) => /^actions\/download-artifact@/.test(String(s?.uses)) && s?.with?.name === 'picky-decision');
-      const step = downloads ? null : downloadStep(text, map);
+      const step = downloads ? null : downloadStep(text, map, Boolean(job.container));
       if (step) edits.push(step);
     }
   }
   notes.push(`marked ${marks} command${marks === 1 ? '' : 's'} in ${pickyJobs.length} job${pickyJobs.length === 1 ? '' : 's'}`);
   return { text: apply(text, edits), notes };
+}
+
+const hasSetupAction = (steps: any[] | undefined) => steps?.some((s) => /^\.\/\.github\/picky\/?$/.test(String(s?.uses))) ?? false;
+
+/** Adds `uses: ./.github/picky` right after checkout. Null when present; undefined when there's no checkout to follow. */
+function setupActionStep(text: string, steps: YAMLSeq, jsSteps: any[]): Edit | null | undefined {
+  if (hasSetupAction(jsSteps)) return null;
+  const i = jsSteps.findIndex((s) => /^actions\/checkout@/.test(String(s?.uses)));
+  const next = steps.items[i + 1] as any;
+  if (i < 0 || !next?.range) return undefined;
+  const at = lineStart(text, next.range[0]);
+  return { at, text: `${text.slice(at, next.range[0])}uses: ./.github/picky\n` };
+}
+
+/** Runs the step through picky: `shell: picky [shell] {0}`, replacing or adding the step's `shell`. */
+function shellEdit(text: string, step: YAMLMap, run: Scalar, inner: string): Edit {
+  const value = `picky ${inner ? `${inner} ` : ''}{0}`;
+  const shell = step.get('shell', true) as Node | undefined;
+  if (isScalar(shell) && shell.range) return { at: shell.range[0], remove: shell.range[1] - shell.range[0], text: value };
+  const runKey = (step.items as Pair<Scalar, Node>[]).find((p) => p.key?.value === 'run')!.key;
+  const indent = ' '.repeat(column(text, runKey.range![0]));
+  const end = run.range![1];
+  // A block value already ends after its last line break.
+  const at = text[end - 1] === '\n' ? end : Math.min(lineEnd(text, end) + 1, text.length);
+  return { at, text: `${at === text.length && !text.endsWith('\n') ? '\n' : ''}${indent}shell: ${value}\n` };
 }
 
 function runsOnPullRequests(on: unknown): boolean {
@@ -255,7 +349,7 @@ function needsPicky(text: string, job: YAMLMap): Edit | null {
 }
 
 /** Downloads the shared decision before the job's first step. A missing artifact is ignored. */
-function downloadStep(text: string, job: YAMLMap): Edit | null {
+function downloadStep(text: string, job: YAMLMap, container: boolean): Edit | null {
   const steps = job.get('steps', true);
   if (!isSeq(steps) || steps.flow || steps.items.length === 0) return null;
   const first = steps.items[0] as any;
@@ -269,7 +363,8 @@ function downloadStep(text: string, job: YAMLMap): Edit | null {
       `${i}continue-on-error: true`,
       `${i}with:`,
       `${i}  name: picky-decision`,
-      `${i}  path: \${{ runner.temp }}/picky`,
+      // In a container, \`runner.temp\` is still the host path; the runner mounts it at /__w/_temp.
+      `${i}  path: ${container ? '/__w/_temp/picky' : '${{ runner.temp }}/picky'}`,
       '',
     ].join('\n'),
   };

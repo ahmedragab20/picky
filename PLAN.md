@@ -10,7 +10,9 @@ The core is a single-file CLI that works in any CI. The GitHub Action is a thin 
 
 ## Build status (2026-10-17)
 
-The build is v0.2. It's tested locally (75 unit tests, plus end-to-end runs with real PHPUnit 11, ESLint 9, Prettier 3 and tsc) and **on GitHub-hosted runners** through the private fixture repo `ahmedragab20/picky-e2e` (4 PRs: PHP change, TS change, docs only, and a deliberately broken PHP class that must fail).
+The build is v0.2. It's tested locally (93 unit tests, plus end-to-end runs with real PHPUnit 11, ESLint 9, Prettier 3 and tsc) and **on GitHub-hosted runners** through the private fixture repo `ahmedragab20/picky-e2e`:
+- 6 jobs set up by `picky init`: the decide job, bash JS and PHP jobs, Windows (pwsh), `node:22-alpine` and node-less `composer:2`
+- 4 PRs: PHP change, TS change, docs only, a deliberately broken PHP class that must fail
 
 ### Done
 
@@ -26,7 +28,8 @@ The build is v0.2. It's tested locally (75 unit tests, plus end-to-end runs with
 | Job-level setup skip | `npm ci`/`install`, `pnpm`/`yarn`/`bun install`, `composer install` and `npx playwright install` are skipped when every other command in the job is a marked command that skips. The job is read from the workflow (`GITHUB_WORKFLOW_REF`, `GITHUB_JOB`). Any unmarked command, non-bash step, expression working directory or non-passive `uses:` step keeps the setup | M2 (part) |
 | Hook | `BASH_ENV` hook, `# picky` markers inside scripts **and** as the YAML comment of a one-line `run:` (YAML drops that comment, so picky reads it from the workflow), shell flags preserved, original line on any failure | M2 (part) |
 | One decision per PR | `picky decide` in a small `picky` job computes the decision once into `$RUNNER_TEMP/picky`; the job uploads it as an artifact, and every other job (`needs: picky`) downloads it there and reuses it. Every step of the `picky` job is `continue-on-error`, so it never blocks the jobs that need it. **Verified with live Jev on 2026-10-17:** 1 model call per PR (before: 1 per job, with answers that differed near the threshold); every job prints the same decision. Cost: the `picky` job takes 7–12 s before the other jobs start. Fail-open: `picky decide` always exits 0, and a job without the artifact decides on its own | M2 (part) |
-| `picky init` and the vendored bundle | `npm run build` makes one minified file (3.8 MB, Node 20+). `picky init` shows a diff, and `--write` applies it: `.picky.yml` (shadow), `.github/picky/` (hook, wrapper, bundle), the 2 env lines, `# picky` on every recognized command, and the decide job when several jobs or a matrix use picky. Workflows are edited as text at parser positions, so formatting and comments are kept; it is idempotent. Pull-request workflows only; Windows, container and non-bash jobs are skipped with a note. The hook finds the vendored bundle next to itself, so `PICKY_BIN` is no longer needed. **Verified on 2026-10-17:** the fixture's workflow was reset to plain commands and set up by `init` alone; all 4 PRs behaved as before. Found and fixed: `init` put two spaces before `# picky`, which the repo's own `prettier --check` rejected | M2 (part) |
+| `picky init` and the vendored bundle | `npm run build` makes one minified file (3.8 MB, Node 20+). `picky init` shows a diff, and `--write` applies it: `.picky.yml` (shadow), `.github/picky/` (hook, wrapper, bundle), the 2 env lines, `# picky` on every recognized command, and the decide job when several jobs or a matrix use picky. Workflows are edited as text at parser positions, so formatting and comments are kept; it is idempotent. Pull-request workflows only; Windows, container and non-bash jobs get the `shell: picky {0}` fallback (next row). The hook finds the vendored bundle next to itself, so `PICKY_BIN` is no longer needed. **Verified on 2026-10-17:** the fixture's workflow was reset to plain commands and set up by `init` alone; all 4 PRs behaved as before. Found and fixed: `init` put two spaces before `# picky`, which the repo's own `prettier --check` rejected | M2 (part) |
+| `shell: picky {0}` fallback | For Windows, container and non-bash steps. GitHub hands picky the step script; picky decides every command (setup commands by the job-level rule) and runs the result in bash, sh, pwsh or powershell with GitHub's flags and PowerShell wrapper. A vendored local action (`uses: ./.github/picky`) puts it on PATH (`picky.cmd` on Windows); in node-less containers the wrapper uses the runner's node under `/__e`, and without any node the step runs unchanged. `init` sets it up. **Verified on 2026-10-17** with a Windows job (pwsh), `node:22-alpine` and node-less `composer:2`: narrowing, setup skips and the failing PHP run all behave as in the bash jobs, and every job reuses the shared decision. **Found and fixed:** git refuses a container workspace ("dubious ownership"), so picky's read-only git calls pass `safe.directory`; in a container `runner.temp` is the host path, so init downloads to `/__w/_temp`; Windows checks out `.picky.yml` with CRLF and writes the event JSON differently, so the cache key normalizes both. A job that can't reuse a shared decision now logs which input differed | M2 (part) |
 | Model | Jev `noul` judge for tests outside the floor, retries, 30 s budget, usage line (questions, requests, tokens) | M1 (part) |
 | Modes and report | shadow and enforce; log and job summary | M8 (part) |
 | M0 spike | **Passed on ubuntu-latest (Node 22, PHP 8.3):** workflow-level `BASH_ENV` with `${{ github.workspace }}` works; `$0` is the step script; one-line `# picky` YAML comments are honored; the step script text matches `run:`, so job-level skip works (`composer install` skipped on the TS and docs PRs); a failing narrowed PHPUnit run fails the job. Decisions take 0.6–1.1 s. **Found and fixed:** the event's base sha goes stale when the base branch moves, so picky diffs against the first parent of GitHub's merge commit (fetched at depth 1) | M0 |
@@ -36,7 +39,6 @@ The build is v0.2. It's tested locally (75 unit tests, plus end-to-end runs with
 1. **M2 remainder.**
    - pinned, checksum-verified download in `hook.sh` (the bundle is vendored for now, which git already pins)
    - the `picky` workflow: graph and history artifacts, `workflow_run` learning, nightly. It's only useful once M3's graph cache and M4's history exist
-   - the `picky/setup` + `shell: picky {0}` fallback for Windows, container and non-bash jobs
    - upstream-job skipping through `needs:`
 2. **Shadow recall report (M8).** It shows whether a test picky would have skipped failed, which tells users when it's safe to switch to `enforce`.
 3. **M1 remainder:**
@@ -439,10 +441,8 @@ PR jobs download the latest graph and history artifacts through the REST API wit
 
 ### Fallbacks
 
-- **Steps that aren't bash** (Windows `pwsh`, `sh` in Alpine containers) and **containers without `curl`**:
-  - Add `uses: picky/setup@v1` to the job; it uses the JS action runtime instead of the hook.
-  - Then mark the step with `shell: picky {0}` instead of the comment.
-- **If the hook can't run at all** (no network, checksum mismatch, missing file), every step runs unchanged. That counts as a full run.
+- **Steps the hook can't reach** (Windows, containers, `sh` or `pwsh` steps): `picky init` adds `uses: ./.github/picky` after checkout and runs those steps with `shell: picky [shell] {0}`. picky decides every command of the step, then runs it in the real shell. (`picky/setup@v1` replaces the local action once picky is published.)
+- **If picky can't run at all** (no node, missing file): every step runs unchanged. That counts as a full run.
 
 ### Other CIs
 
@@ -682,7 +682,7 @@ Stack: TypeScript, node24, rollup single-file bundle, vitest, web-tree-sitter, `
 
 ## Open items
 
-- ~~**M0 spike results.**~~ Workflow-level `BASH_ENV` works on ubuntu-latest, so the hook stays the default (see Build status). Windows and container jobs are still untested.
+- ~~**M0 spike results.**~~ Workflow-level `BASH_ENV` works on ubuntu-latest, so the hook stays the default (see Build status). Windows and container jobs work through the `shell: picky {0}` fallback (verified 2026-10-17).
 
 - Check that the name `picky` is free on the Marketplace and npm.
 - **Blocking for M3:** Jev's context window and its question limit per request, both read from `/v1/models` or found by probing. They set the request packing.

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import picomatch from 'picomatch';
 import { loadConfig, type Config, type Mode } from './config.ts';
@@ -35,6 +35,8 @@ export interface Decision {
   modelUsage?: ModelUsage;
   /** The GitHub job that computed this decision; other jobs reuse it when it's shared as an artifact. */
   job?: string;
+  /** What the cache key is made of, so a job that can't reuse a shared decision can say why. */
+  inputs?: Record<string, string>;
   ms: number;
 }
 
@@ -69,7 +71,7 @@ const ECOSYSTEM_GLOBS: Record<Ecosystem, string[]> = {
   php: ['**/composer.json', '**/composer.lock', '**/phpunit.xml', '**/phpunit.xml.dist', '**/phpunit.dist.xml'],
 };
 /** Bump when the decision's shape changes, so cached decisions from older versions aren't reused. */
-const DECISION_SCHEMA = 3;
+const DECISION_SCHEMA = 4;
 
 export interface DecideOptions {
   root: string;
@@ -84,6 +86,8 @@ export interface CachedDecision {
   report: boolean;
   /** Where the decision is stored; null when it couldn't be keyed. */
   file: string | null;
+  /** Set when another job's decision is here but was made from different inputs. */
+  mismatch?: string;
 }
 
 /**
@@ -93,22 +97,29 @@ export interface CachedDecision {
  */
 export async function decideCached(opts: DecideOptions): Promise<CachedDecision> {
   let file: string | null = null;
+  let inputs: Record<string, string> | undefined;
   try {
     const config = loadConfig(opts.root, opts.env);
-    const head = git(opts.root, ['rev-parse', 'HEAD']).trim();
-    const key = createHash('sha256')
-      .update(JSON.stringify([DECISION_SCHEMA, head, config.source, opts.env.PICKY_BASE, opts.env.GITHUB_EVENT_NAME, opts.env.GITHUB_EVENT_PATH]))
-      .digest('hex')
-      .slice(0, 16);
-    file = path.join(cacheDir(opts.root, opts.env), `decision-${key}.json`);
+    inputs = {
+      schema: String(DECISION_SCHEMA),
+      head: git(opts.root, ['rev-parse', 'HEAD']).trim(),
+      config: digest(config.source),
+      base: opts.env.PICKY_BASE ?? '',
+      event: opts.env.GITHUB_EVENT_NAME ?? '',
+      // The event's content, not its path: a container job sees the same event at another path.
+      payload: eventDigest(opts.env),
+    };
+    file = path.join(cacheDir(opts.root, opts.env), `decision-${digest(JSON.stringify(inputs)).slice(0, 16)}.json`);
     const decision: Decision = JSON.parse(readFileSync(file, 'utf8'));
     const job = opts.env.GITHUB_JOB;
     return { decision, cached: true, report: decision.job !== job && firstSight(file, job), file };
   } catch {
     // no cached decision
   }
+  const mismatch = file && inputs ? sharedMismatch(path.dirname(file), inputs) : undefined;
   const decision = await decide(opts);
   if (opts.env.GITHUB_JOB) decision.job = opts.env.GITHUB_JOB;
+  if (inputs) decision.inputs = inputs;
   if (file) {
     try {
       mkdirSync(path.dirname(file), { recursive: true });
@@ -117,7 +128,37 @@ export async function decideCached(opts: DecideOptions): Promise<CachedDecision>
       // caching is an optimization only
     }
   }
-  return { decision, cached: false, report: true, file };
+  return { decision, cached: false, report: true, file, ...(mismatch && { mismatch }) };
+}
+
+/** Names the inputs that differ from a decision already in the cache directory, e.g. one downloaded from the `picky` job. */
+function sharedMismatch(dir: string, inputs: Record<string, string>): string | undefined {
+  try {
+    for (const name of readdirSync(dir).filter((f) => /^decision-\w+\.json$/.test(f))) {
+      const other: Decision = JSON.parse(readFileSync(path.join(dir, name), 'utf8'));
+      if (!other.inputs) continue;
+      const differ = Object.keys(inputs).filter((k) => other.inputs![k] !== inputs[k]);
+      return `the decision from job "${other.job ?? 'unknown'}" was made from a different ${differ.join(', ')}`;
+    }
+  } catch {
+    // nothing shared
+  }
+  return undefined;
+}
+
+function digest(text: string | Buffer): string {
+  return createHash('sha256').update(text).digest('hex');
+}
+
+/** The event payload, parsed: Windows writes the same event with other line endings and spacing. */
+function eventDigest(env: NodeJS.ProcessEnv): string {
+  if (!env.GITHUB_EVENT_PATH) return '';
+  try {
+    const text = readFileSync(env.GITHUB_EVENT_PATH, 'utf8').replace(/^\uFEFF/, '');
+    return digest(JSON.stringify(JSON.parse(text)));
+  } catch {
+    return '';
+  }
 }
 
 /** Claims the report of a shared decision for this job, so only its first marked command prints it. */

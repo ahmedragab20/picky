@@ -11,6 +11,7 @@ import { planInit, type InitFile } from './init.ts';
 import { currentStep, loadJob, planSetup } from './job.ts';
 import { planCommand, type Outcome } from './plan.ts';
 import { formatDecision, writeJobSummary } from './report.ts';
+import { defaultShell, extension, finalize, invocation, isShell, rewriteStep } from './shell.ts';
 import { quoteArgv, splitAssignments, tokenize } from './sh.ts';
 
 const USAGE = `picky: runs only the tests, lint and type checks a change can affect (JS/TS and PHP)
@@ -22,6 +23,8 @@ usage:
   picky -- <command...>                 run a test, lint or check command, narrowed to the change
   picky hook-exec <script> [args...]    run a CI step script, handling '# picky' lines
   picky rewrite --script <s> --line <n> print the shell text for one marked line
+  picky [bash|sh|pwsh|powershell] <script>
+                                        run a whole step: \`shell: picky {0}\` in a workflow
 
 environment:
   PICKY_MODE=shadow|enforce   PICKY_MODEL=jev|typesafe/<version>|none
@@ -38,14 +41,17 @@ async function main(argv: string[]): Promise<number> {
   if (cmd === 'init') return init(rest.includes('--write'));
   if (cmd === 'hook-exec') return hookExec(rest[0], rest.slice(1));
   if (cmd === 'rewrite') return rewrite(rest);
+  if (isShell(cmd) && rest.length === 1) return shellExec(cmd, rest[0]);
+  if (cmd && rest.length === 0 && path.isAbsolute(cmd) && existsSync(cmd)) return shellExec(undefined, cmd);
   log(USAGE);
   return cmd === undefined || cmd === '--help' || cmd === '-h' ? 0 : 2;
 }
 
 async function decisionFor(cwd: string) {
   const root = repoRoot(cwd);
-  const { decision, report } = await decideCached({ root, env: process.env });
+  const { decision, report, mismatch } = await decideCached({ root, env: process.env });
   if (report) {
+    if (mismatch) log(`picky: not reusing a shared decision: ${mismatch}`);
     if (decision.job && decision.job !== process.env.GITHUB_JOB) log(`picky: using the decision computed by job "${decision.job}"`);
     log(formatDecision(decision));
     writeJobSummary(decision, process.env);
@@ -169,6 +175,27 @@ function hookExec(script: string, args: string[]): number {
     log(`picky: could not prepare the step (${(err as Error).message}); running it unchanged`);
   }
   const res = spawnSync('bash', [...flags, target, ...args], { stdio: 'inherit' });
+  if (res.error) return log(`picky: ${res.error.message}`), 127;
+  return res.status ?? (res.signal ? 128 : 1);
+}
+
+/** `shell: picky [shell] {0}`: decides every command of the step, then runs it in the real shell. */
+async function shellExec(named: string | undefined, file: string): Promise<number> {
+  const shell = isShell(named) ? named : defaultShell();
+  const text = readFileSync(file, 'utf8');
+  let script = text;
+  try {
+    const root = repoRoot(process.cwd());
+    const decision = async () => (await decisionFor(process.cwd())).decision;
+    script = await rewriteStep(text, shell, { line: outcomeFor, setup: () => planSetup(text, root, process.env, decision) }, log);
+  } catch (err) {
+    log(`picky: could not prepare the step (${(err as Error).message}); running it unchanged`);
+  }
+  const target = `${file}.picky${extension(shell)}`;
+  writeFileSync(target, finalize(script, shell));
+  const { cmd, args } = invocation(shell, target);
+  // The step's own bash must not hand it to picky a second time through the hook.
+  const res = spawnSync(cmd, args, { stdio: 'inherit', env: { ...process.env, PICKY_HOOK_ACTIVE: '1' } });
   if (res.error) return log(`picky: ${res.error.message}`), 127;
   return res.status ?? (res.signal ? 128 : 1);
 }

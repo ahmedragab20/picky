@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { decide, decideCached, THRESHOLD } from '../src/decide.ts';
-import { cleanEnv, repo, SHOP, tempDir } from './helpers.ts';
+import path from 'node:path';
+import { cleanEnv, repo, SHOP, tempDir, writeFiles } from './helpers.ts';
 
 const GRAPH_ONLY = { '.picky.yml': 'mode: enforce\nmodel: none\n' };
 const JEV = { '.picky.yml': 'mode: enforce\nmodel: jev\n' };
@@ -158,5 +159,36 @@ describe('decideCached: one decision per PR', () => {
     expect((await decideCached({ root, env: env('js'), fetchImpl })).report).toBe(false);
     expect((await decideCached({ root, env: env('picky'), fetchImpl })).report).toBe(false);
     expect(fetchImpl).toHaveBeenCalledOnce();
+  });
+
+  it('shares the decision with a container job, which sees the same event at another path', async () => {
+    const root = repo({ ...SHOP, ...JEV }, { 'src/math.ts': '// x\n' });
+    const runnerTemp = tempDir();
+    let n = 0;
+    const event = (dir: string) => {
+      // The second job (Windows) gets the same event with a BOM, CRLF and indentation.
+      writeFiles(dir, { 'event.json': n++ === 0 ? '{"pull_request":{"number":7}}' : '\uFEFF{\r\n  "pull_request": {\r\n    "number": 7\r\n  }\r\n}\r\n' });
+      return path.join(dir, 'event.json');
+    };
+    const env = (job: string, dir: string) =>
+      cleanEnv({ PICKY_API_KEY: 'k', RUNNER_TEMP: runnerTemp, GITHUB_JOB: job, GITHUB_EVENT_NAME: 'pull_request', GITHUB_EVENT_PATH: event(dir) });
+    const fetchImpl = vi.fn(async () => jevReply({ t0: 0.9 }));
+    await decideCached({ root, env: env('picky', tempDir()), fetchImpl });
+    expect(await decideCached({ root, env: env('alpine', tempDir()), fetchImpl })).toMatchObject({ cached: true, report: true });
+    expect(fetchImpl).toHaveBeenCalledOnce();
+  });
+
+  it('ignores CRLF in the config (Windows checkouts), and names the input that differs', async () => {
+    const root = repo({ ...SHOP, ...JEV }, { 'src/math.ts': '// x\n' });
+    const runnerTemp = tempDir();
+    const env = (job: string, extra: Record<string, string> = {}) => cleanEnv({ PICKY_API_KEY: 'k', RUNNER_TEMP: runnerTemp, GITHUB_JOB: job, ...extra });
+    const fetchImpl = vi.fn(async () => jevReply({ t0: 0.9 }));
+    await decideCached({ root, env: env('picky'), fetchImpl });
+
+    writeFiles(root, { '.picky.yml': JEV['.picky.yml'].replaceAll('\n', '\r\n') });
+    expect(await decideCached({ root, env: env('windows'), fetchImpl })).toMatchObject({ cached: true });
+
+    const other = await decideCached({ root, env: env('shadow', { PICKY_MODE: 'shadow' }), fetchImpl });
+    expect(other).toMatchObject({ cached: false, mismatch: 'the decision from job "picky" was made from a different config' });
   });
 });
