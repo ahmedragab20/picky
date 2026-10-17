@@ -78,6 +78,10 @@ describe('planCommand: lint and type checks', () => {
 
   it('turns every skip or narrow into a full run in shadow mode', async () => {
     const { plan } = await plans({ 'README.md': 'x' }, { ...MIXED, '.picky.yml': 'mode: shadow\nmodel: none\n' });
-    expect(plan('npx tsc')).toEqual({ action: 'full', note: 'shadow mode: would skip: no changes tsc checks; running in full' });
+    expect(plan('npx tsc')).toEqual({
+      action: 'full',
+      note: 'shadow mode: would skip: no changes tsc checks; running in full',
+      enforce: { action: 'skip', note: 'skip: no changes tsc checks' },
+    });
   });
 });

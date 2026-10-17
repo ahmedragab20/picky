@@ -5,10 +5,10 @@ import { ecosystemOf, recognize, type CheckCommand, type Command, type FilesComm
 import type { Decision } from './decide.ts';
 import { isVendored } from './graph.ts';
 
-export type Outcome =
-  | { action: 'full'; note: string }
-  | { action: 'skip'; note: string }
-  | { action: 'narrow'; argv: string[]; note: string };
+export type Skip = { action: 'skip'; note: string };
+export type Narrow = { action: 'narrow'; argv: string[]; note: string };
+/** `enforce`: in shadow mode, what enforce mode would have done instead of the full run. */
+export type Outcome = { action: 'full'; note: string; enforce?: Skip | Narrow } | Skip | Narrow;
 
 const DOCS = ['**/*.{md,mdx,txt,rst,adoc}', '**/LICENSE*'];
 const MEDIA = ['**/*.{png,jpg,jpeg,gif,webp,avif,svg,ico,bmp,woff,woff2,ttf,otf,eot,mp3,mp4,wav,webm,pdf}'];
@@ -46,7 +46,7 @@ export function planCommand(argv: string[], cwd: string, root: string, decision:
 
   const outcome = planKind(command, cwd, root, decision);
   if (decision.mode === 'shadow' && outcome.action !== 'full') {
-    return { action: 'full', note: `shadow mode: would ${outcome.note.replace(/^running/, 'run')}; running in full` };
+    return { action: 'full', note: `shadow mode: would ${outcome.note.replace(/^running/, 'run')}; running in full`, enforce: outcome };
   }
   return outcome;
 }

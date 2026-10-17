@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { chmodSync, copyFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import { chmodSync, copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { markedLines } from '../src/hook.ts';
@@ -123,6 +123,52 @@ describe('hook (real bash)', () => {
     const r = runStep(root, 'node --test # picky\n', { BASH_ENV: path.join(root, '.github/picky/hook.sh'), PICKY_BIN: '' });
     expect(r.code).toBe(0);
     expect(r.err).toContain('picky: $ node --test test/cart.test.ts test/math.test.ts');
+  });
+
+  describe('shadow mode', () => {
+    const SHADOW = { '.picky.yml': 'mode: shadow\nmodel: none\n' };
+    const fail = (name: string) => `import { test } from 'node:test';\nimport '../src/${name}.ts';\ntest('${name}', () => { throw new Error('boom'); });\n`;
+    const actions = (root: string) => ({ GITHUB_ACTIONS: 'true', GITHUB_STEP_SUMMARY: path.join(root, '.summary.md') });
+
+    it('reports a failure in a test enforce mode would have skipped', () => {
+      const root = repo({ ...SHOP, ...tests, ...SHADOW, 'test/strings.test.ts': fail('strings') }, MATH_CHANGE);
+      const r = runStep(root, 'node --test # picky\necho unreachable\n', actions(root));
+      expect(r.code).not.toBe(0);
+      expect(r.out).not.toContain('unreachable');
+      expect(r.err).toContain('picky: node --test -> shadow mode: would run 2 of 3 test files; running in full');
+      expect(r.err).toContain('picky: $ node --test test/cart.test.ts test/math.test.ts');
+      const miss = 'enforce mode would have run only `node --test test/cart.test.ts test/math.test.ts` (running 2 of 3 test files), which passes, while the full `node --test` failed';
+      expect(r.err).toContain(`picky: SHADOW MISS: ${miss}.`);
+      expect(r.out).toContain(`::warning title=picky shadow miss::${miss}\n`);
+      expect(r.out).toContain('::group::picky shadow check\n');
+      expect(readFileSync(path.join(root, '.summary.md'), 'utf8')).toContain(`### picky: shadow miss\n${miss}.\n`);
+    });
+
+    it('stays quiet when enforce mode would have caught the failure too', () => {
+      const root = repo({ ...SHOP, ...tests, ...SHADOW, 'test/math.test.ts': fail('math') }, MATH_CHANGE);
+      const r = runStep(root, 'node --test # picky\n', actions(root));
+      expect(r.code).not.toBe(0);
+      expect(r.err).toContain('picky: shadow check: that fails too, so enforce mode would have caught this failure');
+      expect(r.err).not.toContain('SHADOW MISS');
+      expect(r.out).not.toContain('::warning');
+    });
+
+    it('checks the prefix form too: picky -- <command>', () => {
+      const root = repo({ ...SHOP, ...tests, ...SHADOW, 'test/strings.test.ts': fail('strings') }, MATH_CHANGE);
+      const res = spawnSync(path.join(HOME, 'bin/picky'), ['--', 'node', '--test'], { cwd: root, encoding: 'utf8', env: cleanEnv() });
+      expect(res.status).not.toBe(0);
+      expect(res.stderr).toContain('picky: $ node --test test/cart.test.ts test/math.test.ts');
+      expect(res.stderr).toContain('picky: SHADOW MISS: enforce mode would have run only `node --test test/cart.test.ts test/math.test.ts`');
+    });
+
+    it('runs a passing step once, with no check', () => {
+      const root = repo({ ...SHOP, ...tests, ...SHADOW }, MATH_CHANGE);
+      const r = runStep(root, 'node --test # picky\n');
+      expect(r.code).toBe(0);
+      expect(r.out.match(/✔ math/g)).toHaveLength(1);
+      expect(r.out).toMatch(/✔ strings/);
+      expect(r.err).not.toContain('shadow check');
+    });
   });
 
   it('runs unmarked steps without picky', () => {

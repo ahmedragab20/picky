@@ -1,7 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { scanScript } from './hook.ts';
 import type { JobPlan } from './job.ts';
-import type { Outcome } from './plan.ts';
+import type { Narrow, Outcome, Skip } from './plan.ts';
+import { shadowMissMessage } from './report.ts';
 import { quoteArgv, splitAssignments, tokenize } from './sh.ts';
 
 /**
@@ -47,10 +48,38 @@ export function quoteFor(shell: Shell, argv: string[]): string {
   return argv.map((w) => (/^[\w\-./:=+,]+$/.test(w) ? w : `'${w.replaceAll("'", "''")}'`)).join(' ');
 }
 
+/**
+ * Shadow mode: the command runs in full, in the step's own shell. If it fails, the line checks it
+ * against what enforce mode would have run, and picky (`self`) only reports. The exit code stays.
+ */
+export function shadowLine(shell: Shell, words: string[], enforce: Skip | Narrow, self: string[]): string {
+  const full = quoteFor(shell, words);
+  // PowerShell has no `VAR=value cmd` form.
+  if (!isPosix(shell) && enforce.action === 'narrow' && Object.keys(splitAssignments(enforce.argv).env).length) return full;
+  const message = shadowMissMessage(words, enforce);
+  const narrowed = enforce.action === 'narrow' ? quoteFor(shell, enforce.argv) : '';
+  if (isPosix(shell)) {
+    const report = (...args: string[]) => `${quoteArgv([...self, 'shadow-report', ...args])} || true`;
+    const check =
+      enforce.action === 'skip'
+        ? report('skipped', message)
+        : `${report('check', narrowed)}; if ${narrowed}; then ${report('missed', message)}; else ${report('caught')}; fi`;
+    return `${full} || { __picky_rc=$?; ${check}; (exit $__picky_rc); }`;
+  }
+  const report = (...args: string[]) => `& ${quoteFor(shell, [...self, 'shadow-report', ...args])}`;
+  const check =
+    enforce.action === 'skip'
+      ? report('skipped', message)
+      : `${report('check', narrowed)}; ${narrowed}; if ($LASTEXITCODE) { ${report('caught')} } else { ${report('missed', message)} }`;
+  return `${full}; if ($LASTEXITCODE) { $__picky_rc = $LASTEXITCODE; ${check}; $global:LASTEXITCODE = $__picky_rc }`;
+}
+
 export interface StepPlanner {
   line(words: string[]): Promise<Outcome>;
   /** The job-level rule for setup commands; asked at most once per step. */
   setup(): Promise<JobPlan>;
+  /** The command line that runs picky, for shadow-mode lines. */
+  self: string[];
 }
 
 /** Decides every command of a step: recognized ones are skipped, narrowed or kept; setup commands follow the job rule. */
@@ -80,7 +109,9 @@ export async function rewriteStep(script: string, shell: Shell, planner: StepPla
     if (outcome.action === 'full' && outcome.note === 'command not recognized; runs in full') continue;
     log(`picky: ${label} -> ${outcome.note}`);
     if (outcome.action === 'skip') lines[line.line - 1] = indent + noop;
-    else if (outcome.action === 'narrow') {
+    else if (outcome.action === 'full' && outcome.enforce) {
+      lines[line.line - 1] = indent + shadowLine(shell, words, outcome.enforce, planner.self);
+    } else if (outcome.action === 'narrow') {
       // PowerShell has no `VAR=value cmd` form.
       if (!isPosix(shell) && Object.keys(splitAssignments(outcome.argv).env).length) continue;
       log(`picky: $ ${quoteFor(shell, outcome.argv)}`);

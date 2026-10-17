@@ -50,6 +50,14 @@ node ~/code/picky/dist/picky.mjs init --write   # applies it
 
 It runs again safely: it never adds anything twice. To upgrade picky, rerun it with a newer bundle. Then add the `PICKY_API_KEY` secret and commit.
 
+### Shadow mode first
+
+In shadow mode every marked command runs in full, and picky logs what it would have done. When a command fails, picky checks whether enforce mode would have caught the failure:
+- **Would have skipped it:** a miss.
+- **Would have narrowed it:** picky runs the narrowed command too (in a collapsed log group). If that passes, it's a miss; if it fails too, enforce mode would have caught it.
+
+A miss shows as a `picky shadow miss` warning on the run and in the job summary, and never changes the step's result. A flaky test or a runner problem can look like a miss, so read the failure. When PRs go by without real misses, set `mode: enforce`.
+
 ### In a CI step: the `# picky` marker
 
 ```yaml
@@ -162,7 +170,7 @@ The model is called once per PR, and every job acts on the same answers. The cos
 - **Not in v0.2:**
   - a pinned download instead of the vendored bundle
   - `cmd` and custom shells in `shell: picky …`
-  - a shadow-mode recall report
+  - recall measured across runs (each shadow run reports its own misses)
   - `extends` presets
   - other model providers
   - Go and Rust

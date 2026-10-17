@@ -10,9 +10,9 @@ The core is a single-file CLI that works in any CI. The GitHub Action is a thin 
 
 ## Build status (2026-10-17)
 
-The build is v0.2. It's tested locally (93 unit tests, plus end-to-end runs with real PHPUnit 11, ESLint 9, Prettier 3 and tsc) and **on GitHub-hosted runners** through the private fixture repo `ahmedragab20/picky-e2e`:
+The build is v0.2. It's tested locally (99 unit tests, plus end-to-end runs with real PHPUnit 11, ESLint 9, Prettier 3 and tsc) and **on GitHub-hosted runners** through the private fixture repo `ahmedragab20/picky-e2e`:
 - 6 jobs set up by `picky init`: the decide job, bash JS and PHP jobs, Windows (pwsh), `node:22-alpine` and node-less `composer:2`
-- 4 PRs: PHP change, TS change, docs only, a deliberately broken PHP class that must fail
+- 6 PRs: PHP change, TS change, docs only, a deliberately broken PHP class that must fail, and 2 shadow-mode PRs that must report a miss
 
 ### Done
 
@@ -32,6 +32,7 @@ The build is v0.2. It's tested locally (93 unit tests, plus end-to-end runs with
 | `shell: picky {0}` fallback | For Windows, container and non-bash steps. GitHub hands picky the step script; picky decides every command (setup commands by the job-level rule) and runs the result in bash, sh, pwsh or powershell with GitHub's flags and PowerShell wrapper. A vendored local action (`uses: ./.github/picky`) puts it on PATH (`picky.cmd` on Windows); in node-less containers the wrapper uses the runner's node under `/__e`, and without any node the step runs unchanged. `init` sets it up. **Verified on 2026-10-17** with a Windows job (pwsh), `node:22-alpine` and node-less `composer:2`: narrowing, setup skips and the failing PHP run all behave as in the bash jobs, and every job reuses the shared decision. **Found and fixed:** git refuses a container workspace ("dubious ownership"), so picky's read-only git calls pass `safe.directory`; in a container `runner.temp` is the host path, so init downloads to `/__w/_temp`; Windows checks out `.picky.yml` with CRLF and writes the event JSON differently, so the cache key normalizes both. A job that can't reuse a shared decision now logs which input differed | M2 (part) |
 | Model | Jev `noul` judge for tests outside the floor, retries, 30 s budget, usage line (questions, requests, tokens) | M1 (part) |
 | Modes and report | shadow and enforce; log and job summary | M8 (part) |
+| Shadow check | In shadow mode, when a marked command fails, picky checks it against what enforce mode would have run: a would-skip command that failed, or a narrowed run that passes, is a **shadow miss** (log, `picky shadow miss` warning annotation, job summary). A narrowed run that fails too means enforce mode would have caught it. The check runs only after a failure, in the step's own shell (bash hook, `shell: picky {0}` on bash/sh/pwsh, and `picky --`), and never changes the step's exit code. **Verified on 2026-10-17** with a test that reads a markdown fixture (a dependency the graph can't see): a fixture-only PR (all tests skipped as low-risk) and a fixture + `math.ts` PR (Jev scored the hidden test p=0.05, so it narrowed to 2 of 3 files) each reported the miss in the bash, `node:22-alpine` and Windows (pwsh) jobs. **Found and fixed:** on Windows, node can't spawn `npx.cmd`, so the shadow lines now run in the step's shell and call picky only to report. Not yet: recall measured across runs | M8 (part) |
 | M0 spike | **Passed on ubuntu-latest (Node 22, PHP 8.3):** workflow-level `BASH_ENV` with `${{ github.workspace }}` works; `$0` is the step script; one-line `# picky` YAML comments are honored; the step script text matches `run:`, so job-level skip works (`composer install` skipped on the TS and docs PRs); a failing narrowed PHPUnit run fails the job. Decisions take 0.6–1.1 s. **Found and fixed:** the event's base sha goes stale when the base branch moves, so picky diffs against the first parent of GitHub's merge commit (fetched at depth 1) | M0 |
 
 ### Pending, in release order
@@ -40,18 +41,17 @@ The build is v0.2. It's tested locally (93 unit tests, plus end-to-end runs with
    - pinned, checksum-verified download in `hook.sh` (the bundle is vendored for now, which git already pins)
    - the `picky` workflow: graph and history artifacts, `workflow_run` learning, nightly. It's only useful once M3's graph cache and M4's history exist
    - upstream-job skipping through `needs:`
-2. **Shadow recall report (M8).** It shows whether a test picky would have skipped failed, which tells users when it's safe to switch to `enforce`.
-3. **M1 remainder:**
+2. **M1 remainder:**
    - `extends` and layered config
    - `config print`/`validate` and the schema
    - risk inference and `[picky: …]` annotations
    - label or commit-trailer override
    - `php artisan test`, which isn't verified, so it currently runs in full
-4. **M3 remainder:**
+3. **M3 remainder:**
    - symbol-level analysis
    - need-based context packing (diffs over 200k characters currently run every candidate)
    - lossless compaction
-5. **Later milestones:**
+4. **Later milestones:**
    - M4 history and backstop
    - M5 Go and Rust
    - M7 other model providers
@@ -437,7 +437,7 @@ PR jobs download the latest graph and history artifacts through the REST API wit
    - marks the steps it recognizes with `# picky` and shows the diff for you to review
    - Every marker is optional; delete any you don't want.
 2. Add the `PICKY_API_KEY` secret.
-3. Merge. picky starts in `shadow` mode. Once the summary says it's ready, set `mode: enforce` in `.picky.yml`.
+3. Merge. picky starts in `shadow` mode. Once PRs go by without shadow misses, set `mode: enforce` in `.picky.yml`.
 
 ### Fallbacks
 

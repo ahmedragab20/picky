@@ -9,9 +9,9 @@ import { repoRoot } from './git.ts';
 import { bashFlags, rewriteScript, scanScript } from './hook.ts';
 import { planInit, type InitFile } from './init.ts';
 import { currentStep, loadJob, planSetup } from './job.ts';
-import { planCommand, type Outcome } from './plan.ts';
-import { formatDecision, writeJobSummary } from './report.ts';
-import { defaultShell, extension, finalize, invocation, isShell, rewriteStep } from './shell.ts';
+import { planCommand, type Narrow, type Outcome, type Skip } from './plan.ts';
+import { formatDecision, shadowMissMessage, shadowReport, writeJobSummary } from './report.ts';
+import { defaultShell, extension, finalize, invocation, isShell, rewriteStep, shadowLine } from './shell.ts';
 import { quoteArgv, splitAssignments, tokenize } from './sh.ts';
 
 const USAGE = `picky: runs only the tests, lint and type checks a change can affect (JS/TS and PHP)
@@ -21,6 +21,7 @@ usage:
   picky explain                         show the decision for the current branch
   picky decide                          compute the decision once, for other jobs to reuse
   picky -- <command...>                 run a test, lint or check command, narrowed to the change
+  picky shadow-report <kind> [arg]      report a shadow-mode check (used by the step rewrites)
   picky hook-exec <script> [args...]    run a CI step script, handling '# picky' lines
   picky rewrite --script <s> --line <n> print the shell text for one marked line
   picky [bash|sh|pwsh|powershell] <script>
@@ -36,6 +37,7 @@ const SELF = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../bin/
 async function main(argv: string[]): Promise<number> {
   const [cmd, ...rest] = argv;
   if (cmd === '--') return runCommand(rest);
+  if (cmd === 'shadow-report') return shadowReport(rest[0], rest[1] ?? '', process.env, log), 0;
   if (cmd === 'explain') return explain();
   if (cmd === 'decide') return decideOnce();
   if (cmd === 'init') return init(rest.includes('--write'));
@@ -151,11 +153,27 @@ async function runCommand(argv: string[]): Promise<number> {
   log(`picky: ${outcome.note}`);
   if (outcome.action === 'skip') return 0;
 
-  const { env, rest } = splitAssignments(outcome.action === 'narrow' ? outcome.argv : argv);
-  if (outcome.action === 'narrow') log(`picky: $ ${quoteArgv(rest)}`);
+  if (outcome.action === 'narrow') log(`picky: $ ${quoteArgv(outcome.argv)}`);
+  const res = spawnArgv(outcome.action === 'narrow' ? outcome.argv : argv);
+  if (res.failed && outcome.action === 'full' && outcome.enforce) shadowCheck(argv, outcome.enforce);
+  return res.code;
+}
+
+/** `failed`: the command ran and exited non-zero (not: it could not start, or a signal stopped it). */
+function spawnArgv(argv: string[]): { code: number; failed: boolean } {
+  const { env, rest } = splitAssignments(argv);
   const res = spawnSync(rest[0], rest.slice(1), { stdio: 'inherit', env: { ...process.env, ...env } });
-  if (res.error) return log(`picky: ${res.error.message}`), 127;
-  return res.status ?? 1;
+  if (res.error) return log(`picky: ${res.error.message}`), { code: 127, failed: false };
+  return { code: res.status ?? 1, failed: (res.status ?? 0) !== 0 };
+}
+
+/** Shadow mode, after the full run failed: would enforce mode have let the failure through? */
+function shadowCheck(argv: string[], enforce: Skip | Narrow): void {
+  const report = (kind: string, arg = '') => shadowReport(kind, arg, process.env, log);
+  if (enforce.action === 'skip') return report('skipped', shadowMissMessage(argv, enforce));
+  report('check', quoteArgv(enforce.argv));
+  if (spawnArgv(enforce.argv).code !== 0) report('caught');
+  else report('missed', shadowMissMessage(argv, enforce));
 }
 
 /** Called by the bash hook for a step script that contains `# picky` markers. */
@@ -163,9 +181,8 @@ function hookExec(script: string, args: string[]): number {
   const flags = bashFlags(process.env.PICKY_SHELL_FLAGS, process.env.PICKY_PIPEFAIL === '1');
   let target = script;
   try {
-    const self = process.env.PICKY_BIN ? path.resolve(process.env.PICKY_BIN) : SELF;
     const text = readFileSync(script, 'utf8');
-    const rewritten = rewriteScript(text, path.resolve(script), self, markedInWorkflow(text));
+    const rewritten = rewriteScript(text, path.resolve(script), selfBin(), markedInWorkflow(text));
     // Nothing to decide in this step (its workflow is marked elsewhere): run it as is, keeping $0.
     if (rewritten !== text) {
       target = `${script}.picky.sh`;
@@ -179,6 +196,11 @@ function hookExec(script: string, args: string[]): number {
   return res.status ?? (res.signal ? 128 : 1);
 }
 
+/** The picky the hook runs. */
+function selfBin(): string {
+  return process.env.PICKY_BIN ? path.resolve(process.env.PICKY_BIN) : SELF;
+}
+
 /** `shell: picky [shell] {0}`: decides every command of the step, then runs it in the real shell. */
 async function shellExec(named: string | undefined, file: string): Promise<number> {
   const shell = isShell(named) ? named : defaultShell();
@@ -187,7 +209,9 @@ async function shellExec(named: string | undefined, file: string): Promise<numbe
   try {
     const root = repoRoot(process.cwd());
     const decision = async () => (await decisionFor(process.cwd())).decision;
-    script = await rewriteStep(text, shell, { line: outcomeFor, setup: () => planSetup(text, root, process.env, decision) }, log);
+    // This process's own command line runs the shadow checks: node and the bundle, wherever they are.
+    const self = [process.execPath, ...process.execArgv, process.argv[1]];
+    script = await rewriteStep(text, shell, { line: outcomeFor, setup: () => planSetup(text, root, process.env, decision), self }, log);
   } catch (err) {
     log(`picky: could not prepare the step (${(err as Error).message}); running it unchanged`);
   }
@@ -242,6 +266,8 @@ async function rewrite(args: string[]): Promise<number> {
   else if (outcome.action === 'narrow') {
     log(`picky: $ ${quoteArgv(outcome.argv)}`);
     process.stdout.write(`${quoteArgv(outcome.argv)}\n`);
+  } else if (outcome.action === 'full' && outcome.enforce) {
+    process.stdout.write(`${shadowLine('bash', words!, outcome.enforce, [selfBin()])}\n`);
   } else process.stdout.write(`${original}\n`);
   return 0;
 }
