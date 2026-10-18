@@ -1,0 +1,4070 @@
+{
+  "hono": {
+    "repo": "https://github.com/honojs/hono",
+    "head": "5ca49b0720",
+    "commits": 100,
+    "excluded": [],
+    "testFiles": 160,
+    "medianSelected": 0.6231884057971014,
+    "meanSelected": 0.551432506830472,
+    "shareNone": 0.04,
+    "shareNarrowed": 0.51,
+    "shareAll": 0.45,
+    "decisionMsP50": 93,
+    "decisionMsP95": 99,
+    "measured": "2026-10-18",
+    "runs": [
+      {
+        "sha": "5ca49b0720",
+        "subject": "fix(css): Fix multiline CSS handling in style replacement (#5405)",
+        "changed": 2,
+        "tests": 160,
+        "run": 4,
+        "kind": "narrowed",
+        "reason": "selected 4 of 160 test files",
+        "ms": 146
+      },
+      {
+        "sha": "e9c01079a9",
+        "subject": "fix(hono-base): disallow `getPath` when `strict` is `false` (#5563)",
+        "changed": 3,
+        "tests": 160,
+        "run": 83,
+        "kind": "narrowed",
+        "reason": "selected 83 of 160 test files",
+        "ms": 106
+      },
+      {
+        "sha": "08807ce12a",
+        "subject": "fix(trie-router): keep first value for duplicate path params (#5422) (#5423)",
+        "changed": 5,
+        "tests": 160,
+        "run": 72,
+        "kind": "narrowed",
+        "reason": "selected 72 of 160 test files",
+        "ms": 100
+      },
+      {
+        "sha": "e77c7c8eb9",
+        "subject": "fix(helper/route): match regex params in basePath() the same way as the router (#5498)",
+        "changed": 2,
+        "tests": 160,
+        "run": 3,
+        "kind": "narrowed",
+        "reason": "selected 3 of 160 test files",
+        "ms": 96
+      },
+      {
+        "sha": "d54720da80",
+        "subject": "fix(serve-static): respect q-values in Accept-Encoding for precompressed files (#5436)",
+        "changed": 2,
+        "tests": 160,
+        "run": 3,
+        "kind": "narrowed",
+        "reason": "selected 3 of 160 test files",
+        "ms": 97
+      },
+      {
+        "sha": "ae401f0800",
+        "subject": "fix(css): keep the descendant combinator before a pseudo-class when minifying (#5451)",
+        "changed": 2,
+        "tests": 160,
+        "run": 4,
+        "kind": "narrowed",
+        "reason": "selected 4 of 160 test files",
+        "ms": 94
+      },
+      {
+        "sha": "2013fed5b2",
+        "subject": "fix(css): keep \"//\" inside an unquoted url() when minifying (#5450)",
+        "changed": 2,
+        "tests": 160,
+        "run": 4,
+        "kind": "narrowed",
+        "reason": "selected 4 of 160 test files",
+        "ms": 95
+      },
+      {
+        "sha": "43379d93e2",
+        "subject": "fix(jsx): preserve self-closing void elements in cloneElement (#5314)",
+        "changed": 2,
+        "tests": 160,
+        "run": 22,
+        "kind": "narrowed",
+        "reason": "selected 22 of 160 test files",
+        "ms": 95
+      },
+      {
+        "sha": "3362244401",
+        "subject": "fix(build): keep barrel imports in the bundled `d.ts` (#5557)",
+        "changed": 5,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 96
+      },
+      {
+        "sha": "588ec13fa6",
+        "subject": "fix(serve-static): only serve GET and HEAD requests (#5514)",
+        "changed": 2,
+        "tests": 160,
+        "run": 3,
+        "kind": "narrowed",
+        "reason": "selected 3 of 160 test files",
+        "ms": 95
+      },
+      {
+        "sha": "552ea02425",
+        "subject": "docs(readme): remove the deepwiki badge (#5548)",
+        "changed": 1,
+        "tests": 160,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 160 test files",
+        "ms": 93
+      },
+      {
+        "sha": "f78a245abc",
+        "subject": "chore: unified oxfmt and oxlint config (#5518)",
+        "changed": 3,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 95
+      },
+      {
+        "sha": "decda78a36",
+        "subject": "chore(adapters): release @hono/vercel@1.0.1",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 92
+      },
+      {
+        "sha": "d22fd95c18",
+        "subject": "chore(adapters): release @hono/service-worker@1.0.1",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 96
+      },
+      {
+        "sha": "afe57ddeeb",
+        "subject": "chore(adapters): release @hono/netlify@1.0.2",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 96
+      },
+      {
+        "sha": "0b9134e2b2",
+        "subject": "chore(adapters): release @hono/lambda-edge@1.0.1",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 96
+      },
+      {
+        "sha": "f0ea83e77d",
+        "subject": "chore(adapters): release @hono/deno@1.0.3",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 98
+      },
+      {
+        "sha": "c9bfef0a13",
+        "subject": "chore(adapters): release @hono/cloudflare-workers@1.0.1",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 95
+      },
+      {
+        "sha": "8d0f24be49",
+        "subject": "chore(adapters): release @hono/bun@1.0.1",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 94
+      },
+      {
+        "sha": "3c42c647bc",
+        "subject": "chore(adapters): release @hono/aws-lambda@1.0.1",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 97
+      },
+      {
+        "sha": "da54a6bd7e",
+        "subject": "fix(adapters): accept Hono v5 prereleases in the `hono` peer range (#5537)",
+        "changed": 8,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 93
+      },
+      {
+        "sha": "5f36607f67",
+        "subject": "docs(readme): sync the contributing list with CONTRIBUTING.md (#5527)",
+        "changed": 2,
+        "tests": 160,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 160 test files",
+        "ms": 92
+      },
+      {
+        "sha": "d4542eeb11",
+        "subject": "docs(contributing): ask for issues instead of RPs (#5526)",
+        "changed": 1,
+        "tests": 160,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 160 test files",
+        "ms": 94
+      },
+      {
+        "sha": "08a023cbfd",
+        "subject": "4.13.13",
+        "changed": 1,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 95
+      },
+      {
+        "sha": "ae595de8ae",
+        "subject": "feat(mount): introduce Mount Middleware and deprecate `app.mount` (#5221)",
+        "changed": 5,
+        "tests": 160,
+        "run": 160,
+        "kind": "all",
+        "reason": "selected 160 of 160 test files",
+        "ms": 95
+      },
+      {
+        "sha": "f23b146afc",
+        "subject": "fix(jsx): allow JSXNode function component results (#5476)",
+        "changed": 2,
+        "tests": 159,
+        "run": 22,
+        "kind": "narrowed",
+        "reason": "selected 22 of 159 test files",
+        "ms": 96
+      },
+      {
+        "sha": "6d73a74f97",
+        "subject": "docs(request): fix jsdoc comments for some getters (#5445)",
+        "changed": 1,
+        "tests": 159,
+        "run": 82,
+        "kind": "narrowed",
+        "reason": "selected 82 of 159 test files",
+        "ms": 95
+      },
+      {
+        "sha": "deff529656",
+        "subject": "test(client): simulate network error for undefined route in parseResponse test (#5439)",
+        "changed": 1,
+        "tests": 159,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 159 test files",
+        "ms": 92
+      },
+      {
+        "sha": "6abd35b0a5",
+        "subject": "4.13.12",
+        "changed": 1,
+        "tests": 159,
+        "run": 159,
+        "kind": "all",
+        "reason": "selected 159 of 159 test files",
+        "ms": 91
+      },
+      {
+        "sha": "95eb860473",
+        "subject": "chore(deps): upgrade vite-plus to 1.0.0 (#5464)",
+        "changed": 2,
+        "tests": 159,
+        "run": 159,
+        "kind": "all",
+        "reason": "selected 159 of 159 test files",
+        "ms": 93
+      },
+      {
+        "sha": "afb2068c1c",
+        "subject": "fix(combine): return a Response from a short-circuiting middleware in some() (#5391)",
+        "changed": 2,
+        "tests": 159,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 159 test files",
+        "ms": 95
+      },
+      {
+        "sha": "e5bb2062a3",
+        "subject": "fix(jsx): add px to numeric gridGap, gridRowGap and gridColumnGap (#5487)",
+        "changed": 2,
+        "tests": 159,
+        "run": 23,
+        "kind": "narrowed",
+        "reason": "selected 23 of 159 test files",
+        "ms": 94
+      },
+      {
+        "sha": "c3053ccf14",
+        "subject": "fix(etag): correctly match mixed-case header name in retainedHeader option (#5475)",
+        "changed": 2,
+        "tests": 159,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 159 test files",
+        "ms": 91
+      },
+      {
+        "sha": "c437d75692",
+        "subject": "test(build): type-check the bundled declarations from a consumer project (#5486)",
+        "changed": 6,
+        "tests": 159,
+        "run": 159,
+        "kind": "all",
+        "reason": "selected 159 of 159 test files",
+        "ms": 93
+      },
+      {
+        "sha": "be1f7498fe",
+        "subject": "fix(build): keep internal types private in bundled d.ts and avoid a self-referencing JSX.IntrinsicElements (#5485)",
+        "changed": 11,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": "selected 157 of 157 test files",
+        "ms": 95
+      },
+      {
+        "sha": "37ce06904e",
+        "subject": "4.13.11",
+        "changed": 1,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": "selected 157 of 157 test files",
+        "ms": 91
+      },
+      {
+        "sha": "1e1207cabf",
+        "subject": "test(serve-static): fix the test (#5479)",
+        "changed": 1,
+        "tests": 157,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 157 test files",
+        "ms": 96
+      },
+      {
+        "sha": "8b05c774ef",
+        "subject": "Merge commit from fork",
+        "changed": 2,
+        "tests": 157,
+        "run": 3,
+        "kind": "narrowed",
+        "reason": "selected 3 of 157 test files",
+        "ms": 95
+      },
+      {
+        "sha": "18331a905e",
+        "subject": "chore(adapters): release @hono/netlify@1.0.1",
+        "changed": 1,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": "selected 157 of 157 test files",
+        "ms": 93
+      },
+      {
+        "sha": "6cd583bd48",
+        "subject": "chore(adapters): release @hono/deno@1.0.2",
+        "changed": 1,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": "selected 157 of 157 test files",
+        "ms": 90
+      },
+      {
+        "sha": "271dd0b1e8",
+        "subject": "ci: write the tag version into deno.json before publishing to JSR (#5469)",
+        "changed": 2,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 32
+      },
+      {
+        "sha": "ae93026fe5",
+        "subject": "chore(adapters): release @hono/deno@1.0.1",
+        "changed": 1,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": "selected 157 of 157 test files",
+        "ms": 89
+      },
+      {
+        "sha": "72f0d8d58e",
+        "subject": "feat(adapters/netlify): publish to JSR (#5468)",
+        "changed": 8,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": "selected 157 of 157 test files",
+        "ms": 91
+      },
+      {
+        "sha": "f3d5e88562",
+        "subject": "4.13.10",
+        "changed": 1,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": "selected 157 of 157 test files",
+        "ms": 99
+      },
+      {
+        "sha": "645ddd6e6c",
+        "subject": "test: move adapter runtime tests into `adapters/*` (#5466)",
+        "changed": 49,
+        "tests": 157,
+        "run": 157,
+        "kind": "all",
+        "reason": ".github/workflows/ci-adapters.yml changed",
+        "ms": 36
+      },
+      {
+        "sha": "1c6e060d13",
+        "subject": "feat(adapters/deno): publish to JSR (#5465)",
+        "changed": 10,
+        "tests": 154,
+        "run": 154,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 33
+      },
+      {
+        "sha": "b877827fcc",
+        "subject": "feat(adapters): add the seven adapters as workspace packages (#5463)",
+        "changed": 101,
+        "tests": 154,
+        "run": 154,
+        "kind": "all",
+        "reason": "selected 154 of 154 test files",
+        "ms": 100
+      },
+      {
+        "sha": "4d9f2a2ed4",
+        "subject": "chore(adapters/bun): ship ESM only (#5462)",
+        "changed": 3,
+        "tests": 140,
+        "run": 140,
+        "kind": "all",
+        "reason": "selected 140 of 140 test files",
+        "ms": 93
+      },
+      {
+        "sha": "fc2343dbad",
+        "subject": "feat(adapters): add @hono/bun as a workspace package (#5447)",
+        "changed": 27,
+        "tests": 140,
+        "run": 140,
+        "kind": "all",
+        "reason": ".github/workflows/ci-adapters.yml changed",
+        "ms": 34
+      },
+      {
+        "sha": "d7fb697292",
+        "subject": "chore(deps): upgrade vite-plus to `1.0.0-rc.1` (#5459)",
+        "changed": 2,
+        "tests": 137,
+        "run": 137,
+        "kind": "all",
+        "reason": "selected 137 of 137 test files",
+        "ms": 92
+      },
+      {
+        "sha": "52f6c7ec86",
+        "subject": "ci: remove empty step left in `cr.yml` by the pnpm migration (#5456)",
+        "changed": 1,
+        "tests": 137,
+        "run": 137,
+        "kind": "all",
+        "reason": ".github/workflows/cr.yml changed",
+        "ms": 32
+      },
+      {
+        "sha": "f69c1a525c",
+        "subject": "chore: stop editorconfig-checker from checking Markdown indent size (#5455)",
+        "changed": 1,
+        "tests": 137,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 137 test files",
+        "ms": 87
+      },
+      {
+        "sha": "ee0622e144",
+        "subject": "chore: convert build scripts into plugins (#5448)",
+        "changed": 9,
+        "tests": 137,
+        "run": 137,
+        "kind": "all",
+        "reason": "selected 137 of 137 test files",
+        "ms": 94
+      },
+      {
+        "sha": "90d02fb164",
+        "subject": "fix(types): allow returning a Blob as a response body (#5446)",
+        "changed": 3,
+        "tests": 139,
+        "run": 87,
+        "kind": "narrowed",
+        "reason": "selected 87 of 139 test files",
+        "ms": 92
+      },
+      {
+        "sha": "5f31392d72",
+        "subject": "chore: introduce Vite+ (#5444)",
+        "changed": 11,
+        "tests": 139,
+        "run": 139,
+        "kind": "all",
+        "reason": ".github/workflows/autofix.yml changed",
+        "ms": 34
+      },
+      {
+        "sha": "3ed3a14f6d",
+        "subject": "chore: replace eslint with oxlint (#5443)",
+        "changed": 7,
+        "tests": 139,
+        "run": 139,
+        "kind": "all",
+        "reason": "selected 139 of 139 test files",
+        "ms": 92
+      },
+      {
+        "sha": "859e2c2bd0",
+        "subject": "chore: let oxfmt sort imports instead of eslint (#5442)",
+        "changed": 60,
+        "tests": 139,
+        "run": 63,
+        "kind": "narrowed",
+        "reason": "selected 63 of 139 test files",
+        "ms": 90
+      },
+      {
+        "sha": "57ba76a2a4",
+        "subject": "chore(deps): upgrade vitest to 5.0.1 (#5437)",
+        "changed": 5,
+        "tests": 139,
+        "run": 139,
+        "kind": "all",
+        "reason": "selected 139 of 139 test files",
+        "ms": 92
+      },
+      {
+        "sha": "8dcd52b92b",
+        "subject": "chore: replace prettier with oxfmt (#5435)",
+        "changed": 7,
+        "tests": 139,
+        "run": 139,
+        "kind": "all",
+        "reason": "selected 139 of 139 test files",
+        "ms": 94
+      },
+      {
+        "sha": "a79a8048b6",
+        "subject": "chore(package.json): invoke package scripts through pnpm instead of bun (#5434)",
+        "changed": 1,
+        "tests": 139,
+        "run": 139,
+        "kind": "all",
+        "reason": "selected 139 of 139 test files",
+        "ms": 87
+      },
+      {
+        "sha": "535ae553fd",
+        "subject": "chore: migrate the package manager from bun to pnpm (#5433)",
+        "changed": 13,
+        "tests": 139,
+        "run": 139,
+        "kind": "all",
+        "reason": ".github/workflows/autofix.yml changed",
+        "ms": 38
+      },
+      {
+        "sha": "7c3b0df96d",
+        "subject": "4.13.9",
+        "changed": 1,
+        "tests": 139,
+        "run": 139,
+        "kind": "all",
+        "reason": "selected 139 of 139 test files",
+        "ms": 90
+      },
+      {
+        "sha": "6cadf75373",
+        "subject": "fix(lambda-edge): fail with a descriptive error on a malformed event (#5358)",
+        "changed": 2,
+        "tests": 139,
+        "run": 3,
+        "kind": "narrowed",
+        "reason": "selected 3 of 139 test files",
+        "ms": 90
+      },
+      {
+        "sha": "de310ac063",
+        "subject": "fix(lambda-edge): sync content type detection with aws-lambda (#5426)",
+        "changed": 2,
+        "tests": 139,
+        "run": 3,
+        "kind": "narrowed",
+        "reason": "selected 3 of 139 test files",
+        "ms": 88
+      },
+      {
+        "sha": "28e8572cd2",
+        "subject": "fix(aws-lambda): preserve empty query parameters (#5292)",
+        "changed": 2,
+        "tests": 139,
+        "run": 4,
+        "kind": "narrowed",
+        "reason": "selected 4 of 139 test files",
+        "ms": 90
+      },
+      {
+        "sha": "0d86899d28",
+        "subject": "fix(aws-lambda): treat binary +xml archive media types as binary (#5424)",
+        "changed": 2,
+        "tests": 139,
+        "run": 4,
+        "kind": "narrowed",
+        "reason": "selected 4 of 139 test files",
+        "ms": 89
+      },
+      {
+        "sha": "52febbcc30",
+        "subject": "fix(jwt): throw JwtTokenInvalid when the signature is not valid base64url (#5379)",
+        "changed": 2,
+        "tests": 139,
+        "run": 7,
+        "kind": "narrowed",
+        "reason": "selected 7 of 139 test files",
+        "ms": 89
+      },
+      {
+        "sha": "f950277cd3",
+        "subject": "fix(pretty-json): don't break responses with unparseable JSON bodies (#5377)",
+        "changed": 2,
+        "tests": 139,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 139 test files",
+        "ms": 90
+      },
+      {
+        "sha": "00ee875728",
+        "subject": "fix(linear-router): don't match an empty path segment as a param (#5373)",
+        "changed": 2,
+        "tests": 139,
+        "run": 8,
+        "kind": "narrowed",
+        "reason": "selected 8 of 139 test files",
+        "ms": 93
+      },
+      {
+        "sha": "f5a53463ad",
+        "subject": "fix(accepts): match media types and language tags case-insensitively (#5376)",
+        "changed": 2,
+        "tests": 139,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 139 test files",
+        "ms": 93
+      },
+      {
+        "sha": "cb5bea3614",
+        "subject": "fix(jsx): replace Suspense and ErrorBoundary content across newlines (#5380)",
+        "changed": 3,
+        "tests": 139,
+        "run": 20,
+        "kind": "narrowed",
+        "reason": "selected 20 of 139 test files",
+        "ms": 94
+      },
+      {
+        "sha": "098e11912a",
+        "subject": "4.13.8",
+        "changed": 1,
+        "tests": 139,
+        "run": 139,
+        "kind": "all",
+        "reason": "selected 139 of 139 test files",
+        "ms": 92
+      },
+      {
+        "sha": "e8c8c21244",
+        "subject": "perf(jsx/dom): optimize matching-head child lookup during reconciliation (#5329)",
+        "changed": 2,
+        "tests": 139,
+        "run": 22,
+        "kind": "narrowed",
+        "reason": "selected 22 of 139 test files",
+        "ms": 93
+      },
+      {
+        "sha": "8755b17fbc",
+        "subject": "docs(combine): fix except() JSDoc param and add missing @returns (#5346)",
+        "changed": 1,
+        "tests": 139,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 139 test files",
+        "ms": 91
+      },
+      {
+        "sha": "edd138ee30",
+        "subject": "fix(request): keep the request media type when reusing a cached body (#5366)",
+        "changed": 2,
+        "tests": 139,
+        "run": 87,
+        "kind": "narrowed",
+        "reason": "selected 87 of 139 test files",
+        "ms": 94
+      },
+      {
+        "sha": "9b4e9c2864",
+        "subject": "fix(accept): clamp a negative q to 0, not 1 (#5357)",
+        "changed": 2,
+        "tests": 139,
+        "run": 5,
+        "kind": "narrowed",
+        "reason": "selected 5 of 139 test files",
+        "ms": 92
+      },
+      {
+        "sha": "65cff90e15",
+        "subject": "fix(accept): treat the q parameter name as case-insensitive (#5349)",
+        "changed": 2,
+        "tests": 139,
+        "run": 5,
+        "kind": "narrowed",
+        "reason": "selected 5 of 139 test files",
+        "ms": 91
+      },
+      {
+        "sha": "f147de5ea1",
+        "subject": "fix(accepts, language): skip accept entries with quality 0 when matching (#5311)",
+        "changed": 4,
+        "tests": 139,
+        "run": 2,
+        "kind": "narrowed",
+        "reason": "selected 2 of 139 test files",
+        "ms": 92
+      },
+      {
+        "sha": "90e1b94846",
+        "subject": "fix(aws-lambda): respect backpressure when streaming the response body (#5351)",
+        "changed": 2,
+        "tests": 139,
+        "run": 4,
+        "kind": "narrowed",
+        "reason": "selected 4 of 139 test files",
+        "ms": 90
+      },
+      {
+        "sha": "7792f5dc14",
+        "subject": "perf(jsx/dom): reduce lookup work for large keyed updates (#5340)",
+        "changed": 3,
+        "tests": 138,
+        "run": 22,
+        "kind": "narrowed",
+        "reason": "selected 22 of 138 test files",
+        "ms": 93
+      },
+      {
+        "sha": "e7b38ee42b",
+        "subject": "docs: fix typos in code comments and link third-party middleware section (#5343)",
+        "changed": 6,
+        "tests": 138,
+        "run": 106,
+        "kind": "narrowed",
+        "reason": "selected 106 of 138 test files",
+        "ms": 96
+      },
+      {
+        "sha": "eebdf7be39",
+        "subject": "4.13.7",
+        "changed": 1,
+        "tests": 138,
+        "run": 138,
+        "kind": "all",
+        "reason": "selected 138 of 138 test files",
+        "ms": 90
+      },
+      {
+        "sha": "2b8ed402cd",
+        "subject": "Merge commit from fork",
+        "changed": 12,
+        "tests": 138,
+        "run": 23,
+        "kind": "narrowed",
+        "reason": "selected 23 of 138 test files",
+        "ms": 92
+      },
+      {
+        "sha": "cac0c4d3fe",
+        "subject": "4.13.6",
+        "changed": 1,
+        "tests": 138,
+        "run": 138,
+        "kind": "all",
+        "reason": "selected 138 of 138 test files",
+        "ms": 93
+      },
+      {
+        "sha": "dac5d5794c",
+        "subject": "refactor(on-handler): use forEach for consistent handler iteration (#5326)",
+        "changed": 1,
+        "tests": 138,
+        "run": 86,
+        "kind": "narrowed",
+        "reason": "selected 86 of 138 test files",
+        "ms": 92
+      },
+      {
+        "sha": "ec648d6837",
+        "subject": "chore: bump `editorconfig-checker` (#5336)",
+        "changed": 2,
+        "tests": 138,
+        "run": 138,
+        "kind": "all",
+        "reason": "selected 138 of 138 test files",
+        "ms": 91
+      },
+      {
+        "sha": "e2740d5a1b",
+        "subject": "fix(types): allow symbol keys in Context<any> get and set fallbacks (#5300)",
+        "changed": 2,
+        "tests": 138,
+        "run": 86,
+        "kind": "narrowed",
+        "reason": "selected 86 of 138 test files",
+        "ms": 92
+      },
+      {
+        "sha": "499c35ebda",
+        "subject": "fix(client): normalize root WebSocket URLs (#5291)",
+        "changed": 2,
+        "tests": 138,
+        "run": 22,
+        "kind": "narrowed",
+        "reason": "selected 22 of 138 test files",
+        "ms": 92
+      },
+      {
+        "sha": "50b8788cf5",
+        "subject": "fix(client): keep a param value of \"index\" in $url() and $path() (#5297)",
+        "changed": 2,
+        "tests": 138,
+        "run": 22,
+        "kind": "narrowed",
+        "reason": "selected 22 of 138 test files",
+        "ms": 93
+      },
+      {
+        "sha": "06880c4a2b",
+        "subject": "4.13.5",
+        "changed": 1,
+        "tests": 138,
+        "run": 138,
+        "kind": "all",
+        "reason": "selected 138 of 138 test files",
+        "ms": 98
+      },
+      {
+        "sha": "531e9c5a3a",
+        "subject": "Merge commit from fork",
+        "changed": 2,
+        "tests": 138,
+        "run": 86,
+        "kind": "narrowed",
+        "reason": "selected 86 of 138 test files",
+        "ms": 92
+      },
+      {
+        "sha": "3a67f7f399",
+        "subject": "Merge commit from fork",
+        "changed": 4,
+        "tests": 138,
+        "run": 6,
+        "kind": "narrowed",
+        "reason": "selected 6 of 138 test files",
+        "ms": 90
+      },
+      {
+        "sha": "9c28d724c5",
+        "subject": "Merge commit from fork",
+        "changed": 4,
+        "tests": 138,
+        "run": 94,
+        "kind": "narrowed",
+        "reason": "selected 94 of 138 test files",
+        "ms": 91
+      },
+      {
+        "sha": "017000d6ad",
+        "subject": "4.13.4",
+        "changed": 1,
+        "tests": 138,
+        "run": 138,
+        "kind": "all",
+        "reason": "selected 138 of 138 test files",
+        "ms": 89
+      },
+      {
+        "sha": "5e5b83d6ed",
+        "subject": "fix(utils/stream): do not let abort listeners crash abort() (#5274)",
+        "changed": 2,
+        "tests": 138,
+        "run": 9,
+        "kind": "narrowed",
+        "reason": "selected 9 of 138 test files",
+        "ms": 90
+      },
+      {
+        "sha": "241ae4c72b",
+        "subject": "fix(cookie): allow parsing signed cookies with empty string values (#5246)",
+        "changed": 3,
+        "tests": 138,
+        "run": 31,
+        "kind": "narrowed",
+        "reason": "selected 31 of 138 test files",
+        "ms": 91
+      },
+      {
+        "sha": "c409d855d9",
+        "subject": "fix(request): serialize cached JSON body in cloneRawRequest (#5288)",
+        "changed": 2,
+        "tests": 138,
+        "run": 86,
+        "kind": "narrowed",
+        "reason": "selected 86 of 138 test files",
+        "ms": 93
+      },
+      {
+        "sha": "612b59c022",
+        "subject": "fix(request): drop stale content length for cloned FormData (#5282)",
+        "changed": 2,
+        "tests": 138,
+        "run": 86,
+        "kind": "narrowed",
+        "reason": "selected 86 of 138 test files",
+        "ms": 92
+      },
+      {
+        "sha": "73794bdabe",
+        "subject": "fix(client): omit empty query delimiter (#5283)",
+        "changed": 2,
+        "tests": 138,
+        "run": 22,
+        "kind": "narrowed",
+        "reason": "selected 22 of 138 test files",
+        "ms": 96
+      },
+      {
+        "sha": "28a9c12891",
+        "subject": "fix(accepts): support wildcard media types and specificity ordering in defaultMatch (#5255)",
+        "changed": 2,
+        "tests": 138,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 138 test files",
+        "ms": 95
+      }
+    ]
+  },
+  "zod": {
+    "repo": "https://github.com/colinhacks/zod",
+    "head": "680d19f7d1",
+    "commits": 100,
+    "excluded": [],
+    "testFiles": 202,
+    "medianSelected": 0.15228426395939088,
+    "meanSelected": 0.2816358439069572,
+    "shareNone": 0.32,
+    "shareNarrowed": 0.46,
+    "shareAll": 0.22,
+    "decisionMsP50": 108,
+    "decisionMsP95": 115,
+    "measured": "2026-10-18",
+    "runs": [
+      {
+        "sha": "680d19f7d1",
+        "subject": "fix(v4): report a union option that only checks rejected (#6662)",
+        "changed": 2,
+        "tests": 202,
+        "run": 32,
+        "kind": "narrowed",
+        "reason": "selected 32 of 202 test files",
+        "ms": 162
+      },
+      {
+        "sha": "40a5dba080",
+        "subject": "fix(locales): add Sizable.map to es, fr, he, hr and lt, and check Sizable parity from source (#6661)",
+        "changed": 7,
+        "tests": 202,
+        "run": 5,
+        "kind": "narrowed",
+        "reason": "selected 5 of 202 test files",
+        "ms": 112
+      },
+      {
+        "sha": "311cd74b27",
+        "subject": "fix(v4): run a record's key schema on an own __proto__ key (#6660)",
+        "changed": 4,
+        "tests": 202,
+        "run": 32,
+        "kind": "narrowed",
+        "reason": "selected 32 of 202 test files",
+        "ms": 115
+      },
+      {
+        "sha": "b500a2ee95",
+        "subject": "4.6.7",
+        "changed": 6,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 111
+      },
+      {
+        "sha": "9c219833c3",
+        "subject": "ci: stage at verbose so a failed OIDC token exchange says why",
+        "changed": 1,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 108
+      },
+      {
+        "sha": "529f78dd94",
+        "subject": "4.6.6",
+        "changed": 6,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 112
+      },
+      {
+        "sha": "a0ebf970f2",
+        "subject": "fix(v4): check array, set and map size bounds before parsing elements (#6652)",
+        "changed": 6,
+        "tests": 202,
+        "run": 34,
+        "kind": "narrowed",
+        "reason": "selected 34 of 202 test files",
+        "ms": 109
+      },
+      {
+        "sha": "a2ba4a6798",
+        "subject": "fix(types): declare record output and input as members, not base type arguments (#6645)",
+        "changed": 1,
+        "tests": 202,
+        "run": 31,
+        "kind": "narrowed",
+        "reason": "selected 31 of 202 test files",
+        "ms": 110
+      },
+      {
+        "sha": "c42596bd1c",
+        "subject": "release: hold the run on the release-approval environment until the staged versions are approved (#6638)",
+        "changed": 2,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 31
+      },
+      {
+        "sha": "bacad518c4",
+        "subject": "docs: square the Code for Japan logo to match the other bronze tiles",
+        "changed": 1,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 113
+      },
+      {
+        "sha": "8fb2faf058",
+        "subject": "docs: crop the Code for Japan logo and list it first in bronze",
+        "changed": 3,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 115
+      },
+      {
+        "sha": "b2ef983e07",
+        "subject": "docs: add Code for Japan to bronze sponsors",
+        "changed": 2,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 113
+      },
+      {
+        "sha": "74304ce5b5",
+        "subject": "release: stage npm versions instead of publishing them (#6622)",
+        "changed": 2,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 31
+      },
+      {
+        "sha": "34a626f307",
+        "subject": "docs: tighten the z.locales tree-shaking note",
+        "changed": 1,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 111
+      },
+      {
+        "sha": "9d5e60f162",
+        "subject": "docs: import locales from zod/locales, not z.locales",
+        "changed": 2,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 107
+      },
+      {
+        "sha": "0cd3af5e9f",
+        "subject": "docs: load the en locale directly in Zod Mini",
+        "changed": 2,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 107
+      },
+      {
+        "sha": "59bbc03e10",
+        "subject": "chore: re-pin the integration peers to the workspace zod after the 4.6.5 bump",
+        "changed": 1,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 107
+      },
+      {
+        "sha": "0f3f5ee3ca",
+        "subject": "4.6.5",
+        "changed": 5,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 108
+      },
+      {
+        "sha": "cc4cd4ee9c",
+        "subject": "Revert \"Revert \"feat: add z.currencyCode() over a vendored ISO 4217 list, refreshed weekly by CI (#6595)\"\"",
+        "changed": 75,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": ".github/workflows/iso-4217.yml changed",
+        "ms": 40
+      },
+      {
+        "sha": "ca0229a404",
+        "subject": "Revert \"feat: add z.currencyCode() over a vendored ISO 4217 list, refreshed weekly by CI (#6595)\"",
+        "changed": 75,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": ".github/workflows/iso-4217.yml changed",
+        "ms": 38
+      },
+      {
+        "sha": "56222cd153",
+        "subject": "feat(instanceof): key the .properties() shape off the instance type (#6600)",
+        "changed": 2,
+        "tests": 202,
+        "run": 21,
+        "kind": "narrowed",
+        "reason": "selected 21 of 202 test files",
+        "ms": 107
+      },
+      {
+        "sha": "de65a5cb39",
+        "subject": "docs: lead the properties section with the check and add a Zod Mini tab (#6598)",
+        "changed": 1,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 106
+      },
+      {
+        "sha": "f1448f7cee",
+        "subject": "docs: fold the 4.6.x patch highlights into the 4.6 post's own sections",
+        "changed": 1,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 111
+      },
+      {
+        "sha": "d2b135cfb7",
+        "subject": "docs: add the 4.6.x patch highlights to the 4.6 post",
+        "changed": 1,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 107
+      },
+      {
+        "sha": "2bb087170f",
+        "subject": "chore: re-pin the integration peers to the workspace zod after the 4.6.4 bump",
+        "changed": 1,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 111
+      },
+      {
+        "sha": "743aedbba7",
+        "subject": "4.6.4",
+        "changed": 5,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 110
+      },
+      {
+        "sha": "f6e1701a71",
+        "subject": "chore(deps): bump next to 15.5.25 and vite to 7.3.6 (#6153)",
+        "changed": 3,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 109
+      },
+      {
+        "sha": "d6bc1e30ac",
+        "subject": "feat: add z.currencyCode() over a vendored ISO 4217 list, refreshed weekly by CI (#6595)",
+        "changed": 75,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": ".github/workflows/iso-4217.yml changed",
+        "ms": 42
+      },
+      {
+        "sha": "ad32d7512c",
+        "subject": "perf: reduce validation and schema allocation overhead (#6588)",
+        "changed": 14,
+        "tests": 202,
+        "run": 36,
+        "kind": "narrowed",
+        "reason": "selected 36 of 202 test files",
+        "ms": 112
+      },
+      {
+        "sha": "12e6272746",
+        "subject": "4.6.3",
+        "changed": 5,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 109
+      },
+      {
+        "sha": "413cce9a8c",
+        "subject": "fix(v4): make z.properties() a check again (#6594)",
+        "changed": 19,
+        "tests": 202,
+        "run": 36,
+        "kind": "narrowed",
+        "reason": "selected 36 of 202 test files",
+        "ms": 112
+      },
+      {
+        "sha": "75d63ee1e0",
+        "subject": "docs: show only the .properties() method form in the 4.6 post",
+        "changed": 1,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 108
+      },
+      {
+        "sha": "46da95720b",
+        "subject": "docs: match the error-message examples to what the parsers emit",
+        "changed": 2,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 110
+      },
+      {
+        "sha": "e359f7378f",
+        "subject": "4.6.2",
+        "changed": 5,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 115
+      },
+      {
+        "sha": "9446b5cc14",
+        "subject": "fix: preserve undefined prefault outputs and object keys (#6587)",
+        "changed": 5,
+        "tests": 202,
+        "run": 33,
+        "kind": "narrowed",
+        "reason": "selected 33 of 202 test files",
+        "ms": 112
+      },
+      {
+        "sha": "0c483c5884",
+        "subject": "docs: Zod 4.6 announcement post (#6546)",
+        "changed": 10,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 110
+      },
+      {
+        "sha": "a00c3f348a",
+        "subject": "docs: use Trigger.dev's brand-kit lockups for the platinum card",
+        "changed": 2,
+        "tests": 202,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 202 test files",
+        "ms": 110
+      },
+      {
+        "sha": "62311eb2c4",
+        "subject": "4.6.1",
+        "changed": 5,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": "selected 202 of 202 test files",
+        "ms": 111
+      },
+      {
+        "sha": "2efa8b803c",
+        "subject": "ci: give the npm wait a real budget and drop the back-publish path (#6583)",
+        "changed": 1,
+        "tests": 202,
+        "run": 202,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 35
+      },
+      {
+        "sha": "b12aa523e7",
+        "subject": "fix: preserve unique tags with defaulted discriminators (#6582)",
+        "changed": 4,
+        "tests": 202,
+        "run": 32,
+        "kind": "narrowed",
+        "reason": "selected 32 of 202 test files",
+        "ms": 112
+      },
+      {
+        "sha": "dd9c36fa2d",
+        "subject": "fix(v4): defer recursive object index inference (#6580)",
+        "changed": 3,
+        "tests": 202,
+        "run": 33,
+        "kind": "narrowed",
+        "reason": "selected 33 of 202 test files",
+        "ms": 110
+      },
+      {
+        "sha": "574d480fb4",
+        "subject": "fix(locales): clarify Tajik discriminator value message",
+        "changed": 2,
+        "tests": 202,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 202 test files",
+        "ms": 104
+      },
+      {
+        "sha": "c532d766de",
+        "subject": "test(locales): cover Tajik error branches",
+        "changed": 3,
+        "tests": 202,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 202 test files",
+        "ms": 107
+      },
+      {
+        "sha": "3b1549922b",
+        "subject": "feat(lang): add Tajik (`tg`) locale",
+        "changed": 5,
+        "tests": 202,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 202 test files",
+        "ms": 106
+      },
+      {
+        "sha": "1c51cbe0fe",
+        "subject": "4.6.0",
+        "changed": 5,
+        "tests": 201,
+        "run": 201,
+        "kind": "all",
+        "reason": "selected 201 of 201 test files",
+        "ms": 106
+      },
+      {
+        "sha": "661673ae3e",
+        "subject": "docs: make the 9thCO logo visible on the light theme",
+        "changed": 1,
+        "tests": 201,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 201 test files",
+        "ms": 105
+      },
+      {
+        "sha": "6de10dce1a",
+        "subject": "docs: reconcile the sponsor listings against every active sponsorship (#6579)",
+        "changed": 5,
+        "tests": 201,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 201 test files",
+        "ms": 107
+      },
+      {
+        "sha": "213ee75d2a",
+        "subject": "feat(compile): add z.withParser for externally generated parsers (#6575)",
+        "changed": 4,
+        "tests": 201,
+        "run": 31,
+        "kind": "narrowed",
+        "reason": "selected 31 of 201 test files",
+        "ms": 109
+      },
+      {
+        "sha": "f9465d4e64",
+        "subject": "docs: reconcile the sponsor listings with active sponsorships (#6576)",
+        "changed": 5,
+        "tests": 201,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 201 test files",
+        "ms": 108
+      },
+      {
+        "sha": "f7fd554806",
+        "subject": "perf(v4): drop the lookaheads from the email regex (#6573)",
+        "changed": 5,
+        "tests": 201,
+        "run": 34,
+        "kind": "narrowed",
+        "reason": "selected 34 of 201 test files",
+        "ms": 105
+      },
+      {
+        "sha": "36f17960d1",
+        "subject": "fix(v4): stop the memoizer from pinning a finished parse (#6572)",
+        "changed": 2,
+        "tests": 200,
+        "run": 32,
+        "kind": "narrowed",
+        "reason": "selected 32 of 200 test files",
+        "ms": 107
+      },
+      {
+        "sha": "22bed61328",
+        "subject": "feat(v4): add z.iban() string format with mod-97 checksum (#6571)",
+        "changed": 74,
+        "tests": 200,
+        "run": 32,
+        "kind": "narrowed",
+        "reason": "selected 32 of 200 test files",
+        "ms": 115
+      },
+      {
+        "sha": "c5b9bcb39b",
+        "subject": "bench: measure what a runtime island's leaked indent cost the generated source",
+        "changed": 1,
+        "tests": 199,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 199 test files",
+        "ms": 105
+      },
+      {
+        "sha": "e54716cb56",
+        "subject": "docs(ecosystem): add @apical-ts/craft (#5946)",
+        "changed": 1,
+        "tests": 199,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 199 test files",
+        "ms": 105
+      },
+      {
+        "sha": "dcbcf0529c",
+        "subject": "fix(compile): unwind the doc indent when a child generator throws (#6570)",
+        "changed": 2,
+        "tests": 199,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 199 test files",
+        "ms": 106
+      },
+      {
+        "sha": "277613a61a",
+        "subject": "docs: move the release procedure to the maintainer-local notes",
+        "changed": 1,
+        "tests": 199,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 199 test files",
+        "ms": 106
+      },
+      {
+        "sha": "eb1c1089f7",
+        "subject": "ci: release only on workflow_dispatch behind the npm environment (#6569)",
+        "changed": 3,
+        "tests": 199,
+        "run": 199,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 34
+      },
+      {
+        "sha": "741981ffdb",
+        "subject": "perf(compile): for-in record walk, cheaper issue finalization, and a generative compile differential (#6567)",
+        "changed": 9,
+        "tests": 199,
+        "run": 32,
+        "kind": "narrowed",
+        "reason": "selected 32 of 199 test files",
+        "ms": 113
+      },
+      {
+        "sha": "804e0f5227",
+        "subject": "perf: seal the CommonJS exports so require(\"zod\") stops reading through a getter (#6564)",
+        "changed": 5,
+        "tests": 198,
+        "run": 198,
+        "kind": "all",
+        "reason": "selected 198 of 198 test files",
+        "ms": 113
+      },
+      {
+        "sha": "6f0483671e",
+        "subject": "fix(v4): derive JSON Schema constraints by folding checks in the converter (#6554)",
+        "changed": 12,
+        "tests": 198,
+        "run": 34,
+        "kind": "narrowed",
+        "reason": "selected 34 of 198 test files",
+        "ms": 119
+      },
+      {
+        "sha": "e4d67f3ea4",
+        "subject": "Migrate development and CI to Nub (#6562)",
+        "changed": 57,
+        "tests": 198,
+        "run": 198,
+        "kind": "all",
+        "reason": ".github/workflows/lockstep.yml changed",
+        "ms": 37
+      },
+      {
+        "sha": "7a00236683",
+        "subject": "fix(v4): don't let format checks overwrite tighter min/max bounds (#6553)",
+        "changed": 3,
+        "tests": 198,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 198 test files",
+        "ms": 112
+      },
+      {
+        "sha": "5489a532e6",
+        "subject": "test(v4): pin the check-chain case that keeps compiled validate's definite guard (#6551)",
+        "changed": 2,
+        "tests": 198,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 198 test files",
+        "ms": 119
+      },
+      {
+        "sha": "e760471780",
+        "subject": "docs: attribute the compiled failure cost to the fallback, not the double pass",
+        "changed": 1,
+        "tests": 198,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 198 test files",
+        "ms": 108
+      },
+      {
+        "sha": "764ac59f1a",
+        "subject": "perf(v4): settle z.validate on the first failure in parse order (#6544)",
+        "changed": 5,
+        "tests": 198,
+        "run": 31,
+        "kind": "narrowed",
+        "reason": "selected 31 of 198 test files",
+        "ms": 110
+      },
+      {
+        "sha": "07917f4cb3",
+        "subject": "test(v4): pin the lazy safeParse error's stack behavior (#6548)",
+        "changed": 1,
+        "tests": 198,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 198 test files",
+        "ms": 107
+      },
+      {
+        "sha": "62e6624bc7",
+        "subject": "feat(v4): add .validate() and .validateAsync() to Zod Classic (#6547)",
+        "changed": 3,
+        "tests": 198,
+        "run": 19,
+        "kind": "narrowed",
+        "reason": "selected 19 of 198 test files",
+        "ms": 111
+      },
+      {
+        "sha": "cafbee4772",
+        "subject": "fix(v4): parse recursive schemas built by a factory (#6530)",
+        "changed": 7,
+        "tests": 198,
+        "run": 31,
+        "kind": "narrowed",
+        "reason": "selected 31 of 198 test files",
+        "ms": 110
+      },
+      {
+        "sha": "4d7308828b",
+        "subject": "Release the parsed input once a failing safeParse builds its error (#6543)",
+        "changed": 2,
+        "tests": 198,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 198 test files",
+        "ms": 108
+      },
+      {
+        "sha": "90269c601a",
+        "subject": "Keep a numeric TS enum's reverse-mapping keys out of `.options` (#6542)",
+        "changed": 4,
+        "tests": 198,
+        "run": 25,
+        "kind": "narrowed",
+        "reason": "selected 25 of 198 test files",
+        "ms": 108
+      },
+      {
+        "sha": "18e71c71da",
+        "subject": "Rename the JSON Schema `process` helper so bundler polyfills cannot collide (#6541)",
+        "changed": 4,
+        "tests": 198,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 198 test files",
+        "ms": 109
+      },
+      {
+        "sha": "68aca3dc40",
+        "subject": "docs: cover the 4.5 API surface that never made it into the reference",
+        "changed": 1,
+        "tests": 197,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 197 test files",
+        "ms": 107
+      },
+      {
+        "sha": "eca9687153",
+        "subject": "fix(v4): enforce the six JSON Schema keywords fromJSONSchema silently dropped (#6535)",
+        "changed": 2,
+        "tests": 197,
+        "run": 18,
+        "kind": "narrowed",
+        "reason": "selected 18 of 197 test files",
+        "ms": 109
+      },
+      {
+        "sha": "81ded9918f",
+        "subject": "perf: answer z.validate from the compiled fast path on invalid input (#6538)",
+        "changed": 5,
+        "tests": 197,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 197 test files",
+        "ms": 108
+      },
+      {
+        "sha": "51caf01038",
+        "subject": "refactor: collapse cachedInternal back into cached (#6540)",
+        "changed": 3,
+        "tests": 197,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 197 test files",
+        "ms": 108
+      },
+      {
+        "sha": "abfb38977d",
+        "subject": "feat(v4): make z.properties() a schema, and give z.instanceof() a .properties() method (#6536)",
+        "changed": 17,
+        "tests": 197,
+        "run": 33,
+        "kind": "narrowed",
+        "reason": "selected 33 of 197 test files",
+        "ms": 117
+      },
+      {
+        "sha": "69f2a7ff20",
+        "subject": "Collapse toZod's normalizer and move its docs to the API reference (#6539)",
+        "changed": 4,
+        "tests": 196,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 196 test files",
+        "ms": 108
+      },
+      {
+        "sha": "bf9902164b",
+        "subject": "perf: move util.cached's accessor to a prototype (#6537)",
+        "changed": 3,
+        "tests": 196,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 196 test files",
+        "ms": 110
+      },
+      {
+        "sha": "bec73bea5a",
+        "subject": "perf(v4): build the safeParse error on first read (#6519)",
+        "changed": 6,
+        "tests": 195,
+        "run": 33,
+        "kind": "narrowed",
+        "reason": "selected 33 of 195 test files",
+        "ms": 108
+      },
+      {
+        "sha": "07c43e2a08",
+        "subject": "Keep the runtime base64 regexes linear so composed parse paths cannot overflow (#6534)",
+        "changed": 4,
+        "tests": 195,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 195 test files",
+        "ms": 107
+      },
+      {
+        "sha": "bc1157e717",
+        "subject": "docs: use a Response example for z.properties()",
+        "changed": 2,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 108
+      },
+      {
+        "sha": "2ec972ecc5",
+        "subject": "refactor: collapse toZod's enum leaf normalizer to a dummy union (#6533)",
+        "changed": 2,
+        "tests": 195,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 195 test files",
+        "ms": 106
+      },
+      {
+        "sha": "68a609ac9b",
+        "subject": "Widen literal inputs in property check types (#6520)",
+        "changed": 6,
+        "tests": 195,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 195 test files",
+        "ms": 110
+      },
+      {
+        "sha": "0227e53d03",
+        "subject": "docs: bump the star pill's GitHub mark to 20px",
+        "changed": 1,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 109
+      },
+      {
+        "sha": "84dd3b0fc6",
+        "subject": "perf: build literal and enum pattern regexes lazily (#6531)",
+        "changed": 1,
+        "tests": 195,
+        "run": 29,
+        "kind": "narrowed",
+        "reason": "selected 29 of 195 test files",
+        "ms": 107
+      },
+      {
+        "sha": "f83ab51129",
+        "subject": "fix(v4): reject component-only strings from z.emoji() (#6532)",
+        "changed": 4,
+        "tests": 195,
+        "run": 31,
+        "kind": "narrowed",
+        "reason": "selected 31 of 195 test files",
+        "ms": 107
+      },
+      {
+        "sha": "74f9a6d3f2",
+        "subject": "docs: drop the toZod enum block from basics and pin the page's curation rule in a comment",
+        "changed": 1,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 106
+      },
+      {
+        "sha": "a2a019a57e",
+        "subject": "Accept enum-typed targets in z.toZod (#6528)",
+        "changed": 3,
+        "tests": 195,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 195 test files",
+        "ms": 107
+      },
+      {
+        "sha": "319f47f44f",
+        "subject": "Emit a length-aware base64url pattern in toJSONSchema (#6527)",
+        "changed": 4,
+        "tests": 195,
+        "run": 30,
+        "kind": "narrowed",
+        "reason": "selected 30 of 195 test files",
+        "ms": 107
+      },
+      {
+        "sha": "08ba069e29",
+        "subject": "perf(v4): read Luhn digits with charCodeAt instead of string indexing (#6529)",
+        "changed": 1,
+        "tests": 195,
+        "run": 29,
+        "kind": "narrowed",
+        "reason": "selected 29 of 195 test files",
+        "ms": 108
+      },
+      {
+        "sha": "1ec6b7c5ec",
+        "subject": "docs: add an RSS feed to the blog at /blog/rss.xml",
+        "changed": 3,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 106
+      },
+      {
+        "sha": "b801439b5f",
+        "subject": "bench: add typebox (compiled and dynamic) to the moltar cross-library harness",
+        "changed": 3,
+        "tests": 195,
+        "run": 195,
+        "kind": "all",
+        "reason": "selected 195 of 195 test files",
+        "ms": 113
+      },
+      {
+        "sha": "7ae49d64d5",
+        "subject": "docs: drop the circle around the star pill's GitHub mark and center it on the pill's arc",
+        "changed": 1,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 105
+      },
+      {
+        "sha": "93f3ab3212",
+        "subject": "docs: replace the blog navbar's GitHub icon with a star-count pill",
+        "changed": 4,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 105
+      },
+      {
+        "sha": "fb2fedfd98",
+        "subject": "docs: tighten the memory chart callout, pad the canvas, say \"less memory\"",
+        "changed": 4,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 107
+      },
+      {
+        "sha": "ff56a551b5",
+        "subject": "docs: center the memory chart callout labels and pad them off the number",
+        "changed": 2,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 106
+      },
+      {
+        "sha": "8cd1250f0e",
+        "subject": "docs: center the memory chart callout labels",
+        "changed": 2,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 105
+      },
+      {
+        "sha": "3195ed0107",
+        "subject": "docs: label the memory chart like the compile chart",
+        "changed": 4,
+        "tests": 195,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 195 test files",
+        "ms": 106
+      },
+      {
+        "sha": "a6b4939070",
+        "subject": "Mark the compile internals @internal instead of hiding them (#6518)",
+        "changed": 11,
+        "tests": 195,
+        "run": 29,
+        "kind": "narrowed",
+        "reason": "selected 29 of 195 test files",
+        "ms": 113
+      },
+      {
+        "sha": "40b4d0b34d",
+        "subject": "fix(ci): read zod's latest version with npm view when picking the backfill dist-tag",
+        "changed": 1,
+        "tests": 195,
+        "run": 195,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 31
+      }
+    ]
+  },
+  "composer": {
+    "repo": "https://github.com/composer/composer",
+    "head": "28145ca91e",
+    "commits": 100,
+    "excluded": [],
+    "testFiles": 186,
+    "medianSelected": 1,
+    "meanSelected": 0.8700030030030029,
+    "shareNone": 0.12,
+    "shareNarrowed": 0.02,
+    "shareAll": 0.86,
+    "decisionMsP50": 216,
+    "decisionMsP95": 233,
+    "measured": "2026-10-18",
+    "runs": [
+      {
+        "sha": "28145ca91e",
+        "subject": "RuleWatchGraph: Reduce getRule() calls (#13124)",
+        "changed": 1,
+        "tests": 186,
+        "run": 186,
+        "kind": "all",
+        "reason": "selected 186 of 186 test files",
+        "ms": 272
+      },
+      {
+        "sha": "9d8a1c2604",
+        "subject": "Move getVersion() call out of loop (#13123)",
+        "changed": 1,
+        "tests": 186,
+        "run": 186,
+        "kind": "all",
+        "reason": "selected 186 of 186 test files",
+        "ms": 239
+      },
+      {
+        "sha": "43f7451702",
+        "subject": "Make outdated and show --latest respect the cooldown policy (#13102)",
+        "changed": 12,
+        "tests": 186,
+        "run": 186,
+        "kind": "all",
+        "reason": "selected 186 of 186 test files",
+        "ms": 235
+      },
+      {
+        "sha": "72b511ab7e",
+        "subject": "Bump shivammathur/setup-php from 2.37.2 to 2.40.0 (#13114)",
+        "changed": 7,
+        "tests": 186,
+        "run": 186,
+        "kind": "all",
+        "reason": ".github/workflows/autoloader.yml changed",
+        "ms": 31
+      },
+      {
+        "sha": "b187adbb70",
+        "subject": "Fix JsonManipulator::addSubNode modifying a nested key with the same name (#13109)",
+        "changed": 2,
+        "tests": 186,
+        "run": 186,
+        "kind": "all",
+        "reason": "selected 186 of 186 test files",
+        "ms": 230
+      },
+      {
+        "sha": "d95679dd08",
+        "subject": "Load package metadata in parallel before outdated/show --latest lookups (#13113)",
+        "changed": 3,
+        "tests": 186,
+        "run": 186,
+        "kind": "all",
+        "reason": "selected 186 of 186 test files",
+        "ms": 233
+      },
+      {
+        "sha": "bce9495257",
+        "subject": "Clarify which config keys support --json and --merge (#13111)",
+        "changed": 2,
+        "tests": 185,
+        "run": 185,
+        "kind": "all",
+        "reason": "selected 185 of 185 test files",
+        "ms": 230
+      },
+      {
+        "sha": "560806f892",
+        "subject": "Parse package release/published dates lazily (#13103)",
+        "changed": 4,
+        "tests": 185,
+        "run": 185,
+        "kind": "all",
+        "reason": "selected 185 of 185 test files",
+        "ms": 225
+      },
+      {
+        "sha": "e9e8482d83",
+        "subject": "Add pool build time to debug output",
+        "changed": 1,
+        "tests": 185,
+        "run": 185,
+        "kind": "all",
+        "reason": "selected 185 of 185 test files",
+        "ms": 240
+      },
+      {
+        "sha": "f003231e93",
+        "subject": "Fail install when composer.lock has a content-hash merge conflict (#13105)",
+        "changed": 4,
+        "tests": 185,
+        "run": 185,
+        "kind": "all",
+        "reason": "selected 185 of 185 test files",
+        "ms": 227
+      },
+      {
+        "sha": "498dd67fc5",
+        "subject": "Add Sentry to sponsors in README (#13104)",
+        "changed": 1,
+        "tests": 185,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 185 test files",
+        "ms": 218
+      },
+      {
+        "sha": "3a5137b86c",
+        "subject": "Improve test performance on Windows (#13101)",
+        "changed": 3,
+        "tests": 185,
+        "run": 183,
+        "kind": "narrowed",
+        "reason": "selected 183 of 185 test files",
+        "ms": 224
+      },
+      {
+        "sha": "8d71acb561",
+        "subject": "Track why policies removed each version in one map on the pool (#13100)",
+        "changed": 24,
+        "tests": 185,
+        "run": 185,
+        "kind": "all",
+        "reason": "selected 185 of 185 test files",
+        "ms": 228
+      },
+      {
+        "sha": "dfda78af1e",
+        "subject": "Cooldown policy follow-up fixes, part 2 (#13099)",
+        "changed": 8,
+        "tests": 184,
+        "run": 184,
+        "kind": "all",
+        "reason": "selected 184 of 184 test files",
+        "ms": 223
+      },
+      {
+        "sha": "213b1ea0ed",
+        "subject": "Cooldown policy follow-up fixes (#13098)",
+        "changed": 9,
+        "tests": 184,
+        "run": 184,
+        "kind": "all",
+        "reason": "selected 184 of 184 test files",
+        "ms": 224
+      },
+      {
+        "sha": "4bddcad1c7",
+        "subject": "Add cooldown policy config to filter newly released packages (#12692)",
+        "changed": 63,
+        "tests": 184,
+        "run": 184,
+        "kind": "all",
+        "reason": "selected 184 of 184 test files",
+        "ms": 227
+      },
+      {
+        "sha": "8c46dd4018",
+        "subject": "Fix vendor dir exclusion tests on Windows (#13097)",
+        "changed": 1,
+        "tests": 180,
+        "run": 2,
+        "kind": "narrowed",
+        "reason": "selected 2 of 180 test files",
+        "ms": 224
+      },
+      {
+        "sha": "8a2b3ede4a",
+        "subject": "Stop requesting HTTP/3, as hosts Composer talks to do not support it yet (#13096)",
+        "changed": 1,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 220
+      },
+      {
+        "sha": "b4cda8defe",
+        "subject": "Custom policies: add block-scope config option to block during composer install (#12990)",
+        "changed": 10,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 218
+      },
+      {
+        "sha": "c0fc7bd40e",
+        "subject": "Bump deps",
+        "changed": 1,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 225
+      },
+      {
+        "sha": "9c0fc6997c",
+        "subject": "Escape package controlled data interpolated into the generated bin proxies (#13056)",
+        "changed": 7,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 221
+      },
+      {
+        "sha": "c4ee141830",
+        "subject": "Retry downloads of truncated zip archives (#13094)",
+        "changed": 3,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 218
+      },
+      {
+        "sha": "6712f83974",
+        "subject": "Fix handling of GitLab CI job token auth (#12916)",
+        "changed": 4,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 221
+      },
+      {
+        "sha": "5122c62ead",
+        "subject": "Update deps",
+        "changed": 1,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 215
+      },
+      {
+        "sha": "957b0155ce",
+        "subject": "Merge branch '2.10'",
+        "changed": 2,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 215
+      },
+      {
+        "sha": "6fa7707e04",
+        "subject": "Fix suggest filtering for non-installed packages (#12992) (#13014)",
+        "changed": 2,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 218
+      },
+      {
+        "sha": "59a8a802ca",
+        "subject": "feat: add `strict-psr-autoloader` to options (#12893)",
+        "changed": 9,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 220
+      },
+      {
+        "sha": "0fc32b949a",
+        "subject": "Exclude the vendor dir from root classmap scanning (#13018)",
+        "changed": 2,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 221
+      },
+      {
+        "sha": "1e619740d6",
+        "subject": "Report the GitHub API rate limit when the clone fallback fails (#13059)",
+        "changed": 2,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 227
+      },
+      {
+        "sha": "2561201835",
+        "subject": "Merge branch '2.10'",
+        "changed": 10,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 220
+      },
+      {
+        "sha": "4cec96ea69",
+        "subject": "Share the repeated warning dedup across all outputWarnings() callers (#13090)",
+        "changed": 10,
+        "tests": 180,
+        "run": 180,
+        "kind": "all",
+        "reason": "selected 180 of 180 test files",
+        "ms": 218
+      },
+      {
+        "sha": "cee1698f49",
+        "subject": "Avoid repeated invariant constraint checks in pool optimization (#13071)",
+        "changed": 1,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 219
+      },
+      {
+        "sha": "c783931672",
+        "subject": "Url: preserve SSH user in stripCredentials() (#13081)",
+        "changed": 2,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 217
+      },
+      {
+        "sha": "f406c1723a",
+        "subject": "Reuse version lists within pool optimizer package groups (#13072)",
+        "changed": 1,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 230
+      },
+      {
+        "sha": "8df7fac1aa",
+        "subject": "Remove source-fallback option that was added in 2.10 as a stop-gap measure (#13050)",
+        "changed": 4,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 226
+      },
+      {
+        "sha": "d25ce76a06",
+        "subject": "fix: update package version constraints link (#13080)",
+        "changed": 1,
+        "tests": 179,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 179 test files",
+        "ms": 217
+      },
+      {
+        "sha": "4b72d5d764",
+        "subject": "Bump plugin API version to 2.11",
+        "changed": 2,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 221
+      },
+      {
+        "sha": "249394b09f",
+        "subject": "Clarify terminology and references in caching article (#13091)",
+        "changed": 1,
+        "tests": 179,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 179 test files",
+        "ms": 216
+      },
+      {
+        "sha": "a5055dad05",
+        "subject": "Replace generated files instead of rewriting them in place (#13069)",
+        "changed": 10,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 217
+      },
+      {
+        "sha": "6ac030329c",
+        "subject": "docs: add Composer caching best practices (#13083)",
+        "changed": 3,
+        "tests": 179,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 179 test files",
+        "ms": 218
+      },
+      {
+        "sha": "2f27c61a92",
+        "subject": "Pass along agent name as well as agent (#13087)",
+        "changed": 4,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 216
+      },
+      {
+        "sha": "cc85480881",
+        "subject": "Send AI agent info as part of user agent (#13073)",
+        "changed": 4,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 215
+      },
+      {
+        "sha": "a971f4e8cb",
+        "subject": "Warn about paths only differing in casing in optimized autoload dumps (#13085)",
+        "changed": 5,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 218
+      },
+      {
+        "sha": "63908779ac",
+        "subject": "Merge branch '2.10'",
+        "changed": 1,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 217
+      },
+      {
+        "sha": "d77ba288b6",
+        "subject": "Support retrying requests honoring their retry-after header (#13082)",
+        "changed": 6,
+        "tests": 179,
+        "run": 179,
+        "kind": "all",
+        "reason": "selected 179 of 179 test files",
+        "ms": 217
+      },
+      {
+        "sha": "0d9139e63c",
+        "subject": "Bump packagist/conductor-github-action from 1.6.1 to 1.7.0 (#13066)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/conductor.yaml changed",
+        "ms": 34
+      },
+      {
+        "sha": "f494abb8f9",
+        "subject": "Merge branch '2.10'",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 213
+      },
+      {
+        "sha": "61f86fa905",
+        "subject": "Bump zizmorcore/zizmor-action from 0.6.2 to 0.6.4 (#13076)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/zizmor.yml changed",
+        "ms": 36
+      },
+      {
+        "sha": "56a26ff6ad",
+        "subject": "CI: Speedup PHPStan analysis (#13070)",
+        "changed": 3,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/phpstan.yml changed",
+        "ms": 31
+      },
+      {
+        "sha": "85ae025152",
+        "subject": "Add installed version to sub-dependencies in show --tree JSON output (#13049)",
+        "changed": 2,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 214
+      },
+      {
+        "sha": "573b17584c",
+        "subject": "Document the six composer.json fields missing from the schema chapter (#13058)",
+        "changed": 1,
+        "tests": 178,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 178 test files",
+        "ms": 218
+      },
+      {
+        "sha": "640375fc88",
+        "subject": "Fix repo docs gaps",
+        "changed": 2,
+        "tests": 178,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 178 test files",
+        "ms": 225
+      },
+      {
+        "sha": "2616959b47",
+        "subject": "Add php8.6 to CI (#13054)",
+        "changed": 3,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/continuous-integration.yml changed",
+        "ms": 32
+      },
+      {
+        "sha": "1ff9cd279a",
+        "subject": "Fix: an empty command in a script should always be a NO-OP (#13053)",
+        "changed": 2,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 213
+      },
+      {
+        "sha": "53e6ddca87",
+        "subject": "Add batching to the security advisories API queries for projects with very large dep count (#13051)",
+        "changed": 2,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 216
+      },
+      {
+        "sha": "b7abcc3c3f",
+        "subject": "Switch target version to 2.11",
+        "changed": 3,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 213
+      },
+      {
+        "sha": "cd7457dbe5",
+        "subject": "Bump deps",
+        "changed": 2,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 215
+      },
+      {
+        "sha": "3d172baf55",
+        "subject": "Reverting release version changes",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 215
+      },
+      {
+        "sha": "f0de0bf902",
+        "subject": "Release 2.10.3",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 214
+      },
+      {
+        "sha": "f2477583b0",
+        "subject": "Update changelog",
+        "changed": 1,
+        "tests": 178,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 178 test files",
+        "ms": 211
+      },
+      {
+        "sha": "0aac50528e",
+        "subject": "Merge commit from fork",
+        "changed": 4,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 215
+      },
+      {
+        "sha": "53b8bb4c24",
+        "subject": "Merge commit from fork",
+        "changed": 5,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 216
+      },
+      {
+        "sha": "24e396b527",
+        "subject": "Make it possible to pass transport options to FilterListApiClient (#13040)",
+        "changed": 4,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 219
+      },
+      {
+        "sha": "f383d2318c",
+        "subject": "Do not use a conflicted content-hash as the autoloader suffix (#13048)",
+        "changed": 2,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 213
+      },
+      {
+        "sha": "ada00550c3",
+        "subject": "Mask URL credentials anywhere in a string, not just at its start (#13044)",
+        "changed": 5,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 212
+      },
+      {
+        "sha": "cd19785d71",
+        "subject": "Prevent curl SSL version parsing across lines (#13046)",
+        "changed": 2,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 214
+      },
+      {
+        "sha": "eba7baa59e",
+        "subject": "Fix `Url::getOrigin` prefix-matching a host against `gitlab-domains` (#12988)",
+        "changed": 2,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 221
+      },
+      {
+        "sha": "5e9f655ba7",
+        "subject": "Include the failed URL in max-file-size and content-length errors (#13041)",
+        "changed": 3,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 216
+      },
+      {
+        "sha": "f600f9a1c5",
+        "subject": "Bump actions/attest from 4.2.1 to 4.2.2 (#13033)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 33
+      },
+      {
+        "sha": "ab70897ec3",
+        "subject": "Bump zizmorcore/zizmor-action from 0.6.1 to 0.6.2 (#13032)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/zizmor.yml changed",
+        "ms": 30
+      },
+      {
+        "sha": "6987fe5a4d",
+        "subject": "Replace deprecated spl_object_hash with spl_object_id, fixes #13027 (#13028)",
+        "changed": 13,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 216
+      },
+      {
+        "sha": "c435d285c9",
+        "subject": "Bump actions/attest from 4.2.0 to 4.2.1 (#13020)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 30
+      },
+      {
+        "sha": "7f3245b35a",
+        "subject": "Bump actions/stale from 10.4.0 to 11.0.0 (#13019)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/close-stale-support.yml changed",
+        "ms": 30
+      },
+      {
+        "sha": "6ffc117740",
+        "subject": "Update `composer-plugin-api` to 2.9.0 in documentation (#13016)",
+        "changed": 1,
+        "tests": 178,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 178 test files",
+        "ms": 214
+      },
+      {
+        "sha": "b73133523a",
+        "subject": "Bump actions/checkout from 7.0.0 to 7.0.1 (#13008)",
+        "changed": 8,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/autoloader.yml changed",
+        "ms": 32
+      },
+      {
+        "sha": "70d07574be",
+        "subject": "Bump zizmorcore/zizmor-action from 0.6.0 to 0.6.1 (#13009)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/zizmor.yml changed",
+        "ms": 32
+      },
+      {
+        "sha": "a271c92bae",
+        "subject": "feat: #13002 Improve logging of failed download URLs by adding filename to message (#13006)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 216
+      },
+      {
+        "sha": "bd9d7f3430",
+        "subject": "Add sponsors section to README (#13004)",
+        "changed": 1,
+        "tests": 178,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 178 test files",
+        "ms": 213
+      },
+      {
+        "sha": "1fcf791133",
+        "subject": "Bump zizmorcore/zizmor-action from 0.5.7 to 0.6.0 (#12996)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/zizmor.yml changed",
+        "ms": 32
+      },
+      {
+        "sha": "68dcf526b5",
+        "subject": "Bump actions/attest from 4.1.1 to 4.2.0 (#12995)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 33
+      },
+      {
+        "sha": "bb38c69cac",
+        "subject": "Policies: show which source blocked a package version as part of the filter list pool filter (#12993)",
+        "changed": 12,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 215
+      },
+      {
+        "sha": "138899a081",
+        "subject": "Bump actions/stale from 10.3.0 to 10.4.0 (#12985)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/close-stale-support.yml changed",
+        "ms": 35
+      },
+      {
+        "sha": "2ce09be45d",
+        "subject": "Docs: add missing request/response example for custom policies (#12983)",
+        "changed": 1,
+        "tests": 178,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 178 test files",
+        "ms": 212
+      },
+      {
+        "sha": "1f54358cf8",
+        "subject": "Avoid a race condition in `ensureDirectoryExists` (#12977)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 214
+      },
+      {
+        "sha": "f1d3ad1aef",
+        "subject": "Bump actions/attest from 4.1.0 to 4.1.1 (#12979)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/release.yml changed",
+        "ms": 33
+      },
+      {
+        "sha": "8fbad13554",
+        "subject": "Clarify the limitations of pinning an explicit commit reference (#12965)",
+        "changed": 1,
+        "tests": 178,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 178 test files",
+        "ms": 212
+      },
+      {
+        "sha": "8624fd5066",
+        "subject": "Bump actions/cache from 5.0.5 to 6.1.0 (#12970)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/phpstan.yml changed",
+        "ms": 35
+      },
+      {
+        "sha": "cfe63554d2",
+        "subject": "Bump zizmorcore/zizmor-action from 0.5.6 to 0.5.7 (#12969)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/zizmor.yml changed",
+        "ms": 34
+      },
+      {
+        "sha": "ada2556220",
+        "subject": "Fix forgejo driver to handle empty repos better (#12968)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 233
+      },
+      {
+        "sha": "c6c9144f1b",
+        "subject": "Add missing exts to the requirements",
+        "changed": 2,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 216
+      },
+      {
+        "sha": "118acf3cb5",
+        "subject": "Fix/ignore MB_ONIGURUMA_VERSION deprecation, fixes #12967",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 216
+      },
+      {
+        "sha": "15352a5938",
+        "subject": "Reverting release version changes",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 214
+      },
+      {
+        "sha": "8d4439f572",
+        "subject": "Release 2.10.2",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 216
+      },
+      {
+        "sha": "79d92f047d",
+        "subject": "Update changelog",
+        "changed": 1,
+        "tests": 178,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 178 test files",
+        "ms": 215
+      },
+      {
+        "sha": "8887ad76fb",
+        "subject": "Merge commit from fork",
+        "changed": 7,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 213
+      },
+      {
+        "sha": "502c6c4f69",
+        "subject": "Merge commit from fork",
+        "changed": 6,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 223
+      },
+      {
+        "sha": "145e74d325",
+        "subject": "Update deps",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 214
+      },
+      {
+        "sha": "e42b4f1215",
+        "subject": "Retry downloads failing with HTTP 400 on a fresh connection (#12962)",
+        "changed": 1,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 217
+      },
+      {
+        "sha": "8c3eba87d2",
+        "subject": "Add basic command level telemetry (#12952)",
+        "changed": 7,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": "selected 178 of 178 test files",
+        "ms": 225
+      },
+      {
+        "sha": "c5f92a0ea9",
+        "subject": "Bump actions/checkout from 6.0.3 to 7.0.0 (#12949)",
+        "changed": 8,
+        "tests": 178,
+        "run": 178,
+        "kind": "all",
+        "reason": ".github/workflows/autoloader.yml changed",
+        "ms": 32
+      }
+    ]
+  },
+  "framework": {
+    "repo": "https://github.com/laravel/framework",
+    "head": "0fd0747167",
+    "commits": 100,
+    "excluded": [],
+    "testFiles": 1008,
+    "medianSelected": 0.9970149253731343,
+    "meanSelected": 0.917512372493078,
+    "shareNone": 0.05,
+    "shareNarrowed": 0.9,
+    "shareAll": 0.05,
+    "decisionMsP50": 748,
+    "decisionMsP95": 1011,
+    "measured": "2026-10-18",
+    "runs": [
+      {
+        "sha": "0fd0747167",
+        "subject": "Fix whereBetween and whereNotBetween with collection bounds (#62062)",
+        "changed": 2,
+        "tests": 1008,
+        "run": 1005,
+        "kind": "narrowed",
+        "reason": "selected 1005 of 1008 test files",
+        "ms": 773
+      },
+      {
+        "sha": "4145fdea5a",
+        "subject": "Let child Connection attribute override inherited connection property (#62065)",
+        "changed": 2,
+        "tests": 1008,
+        "run": 1005,
+        "kind": "narrowed",
+        "reason": "selected 1005 of 1008 test files",
+        "ms": 687
+      },
+      {
+        "sha": "8a8401e926",
+        "subject": "Reset NotificationFailed flag before each channel send (#62074)",
+        "changed": 2,
+        "tests": 1008,
+        "run": 1005,
+        "kind": "narrowed",
+        "reason": "selected 1005 of 1008 test files",
+        "ms": 925
+      },
+      {
+        "sha": "6823482a9d",
+        "subject": "Fix mode() with float values (#62063)",
+        "changed": 2,
+        "tests": 1008,
+        "run": 1005,
+        "kind": "narrowed",
+        "reason": "selected 1005 of 1008 test files",
+        "ms": 669
+      },
+      {
+        "sha": "326f8064a5",
+        "subject": "Run Memcached cache lock and tagged cache tests (#62069)",
+        "changed": 3,
+        "tests": 1008,
+        "run": 2,
+        "kind": "narrowed",
+        "reason": "selected 2 of 1008 test files",
+        "ms": 685
+      },
+      {
+        "sha": "e355670673",
+        "subject": "Use namespaced Cloud JSON formatter again (#62068)",
+        "changed": 4,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 745
+      },
+      {
+        "sha": "e51b5fe16d",
+        "subject": "[13.x] Make health route compatible with route caching across machines (#62049)",
+        "changed": 3,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 690
+      },
+      {
+        "sha": "6f2b5b77e6",
+        "subject": "feat(queue): support CountCrashesAsExceptions on queued listeners, mailables and notifications (#62048)",
+        "changed": 7,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 709
+      },
+      {
+        "sha": "f72822e5b8",
+        "subject": "Fix existence and aggregate queries on self-referencing one-of-many relations (#62043)",
+        "changed": 4,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 730
+      },
+      {
+        "sha": "e0b81354b3",
+        "subject": "[13.x] Fix ofMany() alias inside closures (#62051)",
+        "changed": 2,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 804
+      },
+      {
+        "sha": "8998ef4555",
+        "subject": "Remove until from higher order collection proxies (#62057)",
+        "changed": 3,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 694
+      },
+      {
+        "sha": "67905cc363",
+        "subject": "Allow float values in Unique rule (#62059)",
+        "changed": 2,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 951
+      },
+      {
+        "sha": "86864f3dcf",
+        "subject": "Update CHANGELOG",
+        "changed": 1,
+        "tests": 1007,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 1007 test files",
+        "ms": 664
+      },
+      {
+        "sha": "685f8d6c2a",
+        "subject": "Update version to v13.37.0",
+        "changed": 1,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 669
+      },
+      {
+        "sha": "af81bbbc15",
+        "subject": "[13.x] Improve exception reporting (#62047)",
+        "changed": 4,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 699
+      },
+      {
+        "sha": "fbc2b3e944",
+        "subject": "Release the unique lock when pushing a queued listener fails (#62045)",
+        "changed": 2,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 709
+      },
+      {
+        "sha": "6d2eefbb14",
+        "subject": "[13.x] Suppress teardown warnings when disconnecting dead connections (#62042)",
+        "changed": 2,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 682
+      },
+      {
+        "sha": "ff0d6b967f",
+        "subject": "[13.x] Don't report skipped migrations as pending in migrate:status (#61989)",
+        "changed": 7,
+        "tests": 1007,
+        "run": 1004,
+        "kind": "narrowed",
+        "reason": "selected 1004 of 1007 test files",
+        "ms": 749
+      },
+      {
+        "sha": "bff5d2a24e",
+        "subject": "[13.x] Fix cached `Attribute` accessors returning stale values after setting the attribute (#62035)",
+        "changed": 2,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 705
+      },
+      {
+        "sha": "940f3452ab",
+        "subject": "add Stringable to the parameter types in Rule::when() and Rule::unless() (#62030)",
+        "changed": 1,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 753
+      },
+      {
+        "sha": "c413cff982",
+        "subject": "[13.x] Fix `DynamoDbStore::many()` returning values under the wrong keys for numeric keys (#62029)",
+        "changed": 2,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 731
+      },
+      {
+        "sha": "9bfc37320a",
+        "subject": "Add strict option to Rule::numeric() (#62031)",
+        "changed": 3,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 775
+      },
+      {
+        "sha": "da949b41e4",
+        "subject": "[13.x] Fix `encrypted:object` and `encrypted:collection` casts always being dirty (#62032)",
+        "changed": 2,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 691
+      },
+      {
+        "sha": "531cd578bd",
+        "subject": "Mark RedirectResponse as Responsable (#62036)",
+        "changed": 3,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 670
+      },
+      {
+        "sha": "a02558ef15",
+        "subject": "[13.x] Qualify attribute columns in through relation firstOrNew(), firstOrCreate() and createOrFirst() (#62038)",
+        "changed": 3,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 737
+      },
+      {
+        "sha": "42e87f0c9c",
+        "subject": "Support selecting columns in withWhereHas with a callback (#62039)",
+        "changed": 2,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 735
+      },
+      {
+        "sha": "840b2a96a6",
+        "subject": "Fix has() on self-referencing through one-of-many relations (#62040)",
+        "changed": 2,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 729
+      },
+      {
+        "sha": "f43d77daf2",
+        "subject": "[13.x] Add JPEG XL (JXL) support to the Image API (#62019)",
+        "changed": 7,
+        "tests": 1006,
+        "run": 1006,
+        "kind": "all",
+        "reason": "selected 1006 of 1006 test files",
+        "ms": 661
+      },
+      {
+        "sha": "957afcdc93",
+        "subject": "Release unique queued listener locks in Queue::fake() (#62025)",
+        "changed": 2,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 809
+      },
+      {
+        "sha": "c4340e646a",
+        "subject": "[13.x] Qualify the default `latest()` and `oldest()` column on queries with joins (#62024)",
+        "changed": 2,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 692
+      },
+      {
+        "sha": "6ea1b32090",
+        "subject": "Fix mergeWhen() in JSON:API resource attributes (#62023)",
+        "changed": 2,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 1007
+      },
+      {
+        "sha": "c3e586825b",
+        "subject": "[13.x] Allow queue:forget to accept multiple IDs (#61901)",
+        "changed": 3,
+        "tests": 1006,
+        "run": 1003,
+        "kind": "narrowed",
+        "reason": "selected 1003 of 1006 test files",
+        "ms": 1013
+      },
+      {
+        "sha": "c90a0c8d51",
+        "subject": "13.x allow detectMimeTypeUsingPath for sftp/ftp (#61972)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 732
+      },
+      {
+        "sha": "5cc36e3233",
+        "subject": "Add generic return type to InvokableComponentVariable (#62018)",
+        "changed": 3,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 842
+      },
+      {
+        "sha": "c1e3626ae0",
+        "subject": "Fix Collection findOrFail with a model instance (#61999)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 811
+      },
+      {
+        "sha": "ce7a0de5ae",
+        "subject": "Fix restore on queries with joins (#61998)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 785
+      },
+      {
+        "sha": "9b4b444019",
+        "subject": "[13.x] Fix incrementOrCreate() on through relations (#61997)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 778
+      },
+      {
+        "sha": "04c07c33d9",
+        "subject": "Fix N+1 queries on nested JSON:API includes (#62000)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 1029
+      },
+      {
+        "sha": "43a4488e5f",
+        "subject": "Avoid extra model instances in cursor (#62001)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 706
+      },
+      {
+        "sha": "3727a91780",
+        "subject": "include runtime in ScheduledTaskFailed (#61970)",
+        "changed": 3,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 1014
+      },
+      {
+        "sha": "b597847d46",
+        "subject": "[13.x] Add `--queue` option in queue:failed (#61971)",
+        "changed": 3,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 1011
+      },
+      {
+        "sha": "78a5c48ea3",
+        "subject": "Fix whereBelongsTo and whereAttachedTo collection types (#62002)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 734
+      },
+      {
+        "sha": "a0d6db3446",
+        "subject": "[13.x] Fix `has()` and `withCount()` on self-referencing one-of-many relations (#62009)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 758
+      },
+      {
+        "sha": "8a58e4696c",
+        "subject": "[13.x] Release the unique lock when pushing a job to the queue fails (#62010)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 667
+      },
+      {
+        "sha": "f9aed736a8",
+        "subject": "[13.x] Improve getForeignKeys performance on MariaDB/MySQL on servers with many databases (#62014)",
+        "changed": 3,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 794
+      },
+      {
+        "sha": "6168f60d55",
+        "subject": "Respect faked Sleep in limiter block() timeout (#62017)",
+        "changed": 4,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 817
+      },
+      {
+        "sha": "0fd73881de",
+        "subject": "fix: check event mutex without acquiring the lock (#62007)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 802
+      },
+      {
+        "sha": "d63eca049e",
+        "subject": "Update CHANGELOG",
+        "changed": 1,
+        "tests": 1005,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 1005 test files",
+        "ms": 684
+      },
+      {
+        "sha": "e5626e3813",
+        "subject": "Update version to v13.36.0",
+        "changed": 1,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 681
+      },
+      {
+        "sha": "9bbacaf625",
+        "subject": "[13.x] Fix extra attributes skipping casts when incrementing or decrementing a model (#61991)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 668
+      },
+      {
+        "sha": "7b8a685ab0",
+        "subject": "Skip contextual binding lookup when none are registered (#61993)",
+        "changed": 1,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 681
+      },
+      {
+        "sha": "686f6bf4d1",
+        "subject": "Prevent recursive reconnects while a connection is reconnecting (#61995)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 701
+      },
+      {
+        "sha": "84744cdc2f",
+        "subject": "[13.x] Fix the FrankenPHP Mercure hub in the CLI and broadcast Mercure events synchronously by default (#61977)",
+        "changed": 5,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 797
+      },
+      {
+        "sha": "631f8a6e68",
+        "subject": "Fix sub-second process timeouts given as a CarbonInterval (#61979)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 832
+      },
+      {
+        "sha": "14e4c05951",
+        "subject": "fix(broadcasting): recognize UniqueFor attributes on events (#61981)",
+        "changed": 3,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 936
+      },
+      {
+        "sha": "3c775493cf",
+        "subject": "Update UniqueJobTest.php (#61985)",
+        "changed": 1,
+        "tests": 1005,
+        "run": 1,
+        "kind": "narrowed",
+        "reason": "selected 1 of 1005 test files",
+        "ms": 698
+      },
+      {
+        "sha": "f20aadb0cb",
+        "subject": "Bump the github-actions group with 3 updates (#61990)",
+        "changed": 3,
+        "tests": 1005,
+        "run": 1005,
+        "kind": "all",
+        "reason": ".github/workflows/install-nightly.yml changed",
+        "ms": 34
+      },
+      {
+        "sha": "88aadc10c5",
+        "subject": "[13.x] Fix unique queued listener locks not being released when the transaction is rolled back (#61974)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 749
+      },
+      {
+        "sha": "1adc68b20f",
+        "subject": "[13.x] Fix scheduled callbacks rethrowing a previous exception on later runs (#61973)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 771
+      },
+      {
+        "sha": "4008fb3620",
+        "subject": "Remove duplicate and unused code from View tests (#61976)",
+        "changed": 8,
+        "tests": 1005,
+        "run": 8,
+        "kind": "narrowed",
+        "reason": "selected 8 of 1005 test files",
+        "ms": 661
+      },
+      {
+        "sha": "e8b96d9369",
+        "subject": "Apply fixes from StyleCI (#61969)",
+        "changed": 1,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 822
+      },
+      {
+        "sha": "479bd9f5c3",
+        "subject": "[13.x] Repeat less in `setTrustedProxyIpAddresses()` (#61963)",
+        "changed": 1,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 818
+      },
+      {
+        "sha": "3496cdf700",
+        "subject": "[13.x] Batch Redis queue notification pushes (#61965)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 1030
+      },
+      {
+        "sha": "83bf547da6",
+        "subject": "Restore iterable short-circuiting in Arr::first() (#61957)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 666
+      },
+      {
+        "sha": "1ee6d193db",
+        "subject": "[13.x] Fix `Notification::locale()` being applied to later notifications (#61959)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 785
+      },
+      {
+        "sha": "f618f7911d",
+        "subject": "Fix JSON path updates being lost after reading an Attribute accessor (#61962)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 690
+      },
+      {
+        "sha": "f33f395826",
+        "subject": "[13.x] Make `Schema::getColumn()` case insensitive (#61967)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 681
+      },
+      {
+        "sha": "73a25a4ad3",
+        "subject": "[13.x] Improve BelongsToMany collection return types (#61954)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 685
+      },
+      {
+        "sha": "01ac36d93a",
+        "subject": "Fix Context::pop() not throwing RuntimeException for missing keys (#61936)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 688
+      },
+      {
+        "sha": "a9c22e409e",
+        "subject": "Update Worker.php (#61940)",
+        "changed": 1,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 775
+      },
+      {
+        "sha": "224c7e6a57",
+        "subject": "[13.x] Fix reference cycle from MorphTo soft delete constraints (#61944)",
+        "changed": 2,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 859
+      },
+      {
+        "sha": "3517d4dbb2",
+        "subject": "[13.x] Fix touch() query generation on HasOneOrManyThrough relations (#61942)",
+        "changed": 3,
+        "tests": 1005,
+        "run": 1002,
+        "kind": "narrowed",
+        "reason": "selected 1002 of 1005 test files",
+        "ms": 875
+      },
+      {
+        "sha": "17bc0b1378",
+        "subject": "Support phpstan/phpstan 2.3.1 (#61939)",
+        "changed": 3,
+        "tests": 1005,
+        "run": 1005,
+        "kind": "all",
+        "reason": "selected 1005 of 1005 test files",
+        "ms": 678
+      },
+      {
+        "sha": "848f3edfc0",
+        "subject": "Merge branch '12.x' into 13.x",
+        "changed": 8,
+        "tests": 1005,
+        "run": 1005,
+        "kind": "all",
+        "reason": "selected 1005 of 1005 test files",
+        "ms": 669
+      },
+      {
+        "sha": "40c0d0b1d5",
+        "subject": "[13.x] Release persistent phpredis socket before rebuilding client (#61919)",
+        "changed": 2,
+        "tests": 1004,
+        "run": 1001,
+        "kind": "narrowed",
+        "reason": "selected 1001 of 1004 test files",
+        "ms": 771
+      },
+      {
+        "sha": "dc3455f165",
+        "subject": "[13.x] Add validation rule builders for remaining validation rules (#61833)",
+        "changed": 41,
+        "tests": 1004,
+        "run": 1001,
+        "kind": "narrowed",
+        "reason": "selected 1001 of 1004 test files",
+        "ms": 775
+      },
+      {
+        "sha": "68e78fe401",
+        "subject": "[13.x] add IsVitess() and olap() to MySqlConnection (#61932)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 870
+      },
+      {
+        "sha": "d73760a879",
+        "subject": "Prevent escaping from bypassing protection (#61755)",
+        "changed": 4,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 863
+      },
+      {
+        "sha": "355d1e1e3a",
+        "subject": "[13.x] Fix eventStream() messages containing line breaks (#61923)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 757
+      },
+      {
+        "sha": "847f73b00d",
+        "subject": "Fix mail failover and roundrobin transports ignoring retry_after (#61927)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 724
+      },
+      {
+        "sha": "09c6dc3d90",
+        "subject": "Fix Number::pairs() dropping the upper bound when it starts a new pair (#61921)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 678
+      },
+      {
+        "sha": "7ee7a6467b",
+        "subject": "[13.x] Preserve numeric keys in JSON translation files loaded by `FileLoader` (#61925)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 953
+      },
+      {
+        "sha": "c7deadb839",
+        "subject": "Keep the console kernel's own commands on the kernel instance (#61931)",
+        "changed": 3,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 750
+      },
+      {
+        "sha": "65c4898b78",
+        "subject": "Update contact email for reporting vulnerabilities",
+        "changed": 1,
+        "tests": 1003,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 1003 test files",
+        "ms": 652
+      },
+      {
+        "sha": "a979d096df",
+        "subject": "[13.x] Include queue and connection in queue:work --json stop output (#61858)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 965
+      },
+      {
+        "sha": "38006c1ca5",
+        "subject": "Recognize PgBouncer SSL EOF lost connection variants (#61918)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 782
+      },
+      {
+        "sha": "d1df8eef5c",
+        "subject": "[13.x] Resolve morph map aliases in `constrain()`, `morphWith()` and `loadMorph()` (#61898)",
+        "changed": 6,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 671
+      },
+      {
+        "sha": "ca8cc85f47",
+        "subject": "[13.x] Fix Notification::locale() being ignored after a notification was sent (#61904)",
+        "changed": 3,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 809
+      },
+      {
+        "sha": "24fd84e62d",
+        "subject": "Fix memory leak in test suites caused by Prompts (#61872)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1003,
+        "kind": "all",
+        "reason": "selected 1003 of 1003 test files",
+        "ms": 669
+      },
+      {
+        "sha": "b5fdb3b4e5",
+        "subject": "add connection the the status json output (#61896)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 966
+      },
+      {
+        "sha": "594f3a8da3",
+        "subject": "[13.x] Rebuild the phpredis client when no cluster node is reachable (#61911)",
+        "changed": 2,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 803
+      },
+      {
+        "sha": "aec7a75e78",
+        "subject": "[13.x] Support `DeleteWhenMissingModels` and `FailOnTimeout` on queued mailables (#61899)",
+        "changed": 3,
+        "tests": 1003,
+        "run": 1000,
+        "kind": "narrowed",
+        "reason": "selected 1000 of 1003 test files",
+        "ms": 871
+      },
+      {
+        "sha": "b99fa54475",
+        "subject": "Allow null in TestResponse::$streamedContent docblock (#61914)",
+        "changed": 1,
+        "tests": 1002,
+        "run": 999,
+        "kind": "narrowed",
+        "reason": "selected 999 of 1002 test files",
+        "ms": 969
+      },
+      {
+        "sha": "01ad26596c",
+        "subject": "[13.x] Allow queue workers to flush sticky connections between jobs (#61915)",
+        "changed": 3,
+        "tests": 1002,
+        "run": 999,
+        "kind": "narrowed",
+        "reason": "selected 999 of 1002 test files",
+        "ms": 748
+      },
+      {
+        "sha": "ff9b93b19a",
+        "subject": "Add background connection to the default queue config (#61917)",
+        "changed": 1,
+        "tests": 1002,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 1002 test files",
+        "ms": 703
+      },
+      {
+        "sha": "725381d29c",
+        "subject": "Update CHANGELOG",
+        "changed": 1,
+        "tests": 1002,
+        "run": 0,
+        "kind": "none",
+        "reason": "selected 0 of 1002 test files",
+        "ms": 671
+      },
+      {
+        "sha": "a413a9da94",
+        "subject": "Update version to v13.35.0",
+        "changed": 1,
+        "tests": 1002,
+        "run": 999,
+        "kind": "narrowed",
+        "reason": "selected 999 of 1002 test files",
+        "ms": 669
+      },
+      {
+        "sha": "2e172fca85",
+        "subject": "Fix withCasts on cloned query affecting the original (#61883)",
+        "changed": 2,
+        "tests": 1002,
+        "run": 999,
+        "kind": "narrowed",
+        "reason": "selected 999 of 1002 test files",
+        "ms": 682
+      },
+      {
+        "sha": "998623efd5",
+        "subject": "Ignore _token and _method in FormRequest strict mode (#61891)",
+        "changed": 2,
+        "tests": 1002,
+        "run": 999,
+        "kind": "narrowed",
+        "reason": "selected 999 of 1002 test files",
+        "ms": 986
+      },
+      {
+        "sha": "d302e39a70",
+        "subject": "Don't expand URL templates without URL parameters (#61893)",
+        "changed": 2,
+        "tests": 1002,
+        "run": 999,
+        "kind": "narrowed",
+        "reason": "selected 999 of 1002 test files",
+        "ms": 797
+      }
+    ]
+  }
+}

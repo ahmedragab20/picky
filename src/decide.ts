@@ -52,7 +52,7 @@ export interface ModelUsage {
 export const THRESHOLD = 0.15;
 const DEFAULT_BUDGET_SECONDS = 30;
 const MAX_STATE_CHARS = 200_000;
-const TEST_GLOBS = ['**/*.{test,spec}.{ts,tsx,mts,cts,js,jsx,mjs,cjs}', '**/*Test.php'];
+export const TEST_GLOBS = ['**/*.{test,spec}.{ts,tsx,mts,cts,js,jsx,mjs,cjs}', '**/*Test.php'];
 /** Changes here can alter anything: every marked command runs in full. */
 const FULL_RUN_GLOBS = ['.picky.yml', '.github/workflows/**', '.github/picky/**'];
 /** Changes here can alter any result in one ecosystem: its commands run in full. */
