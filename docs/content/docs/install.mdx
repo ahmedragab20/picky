@@ -1,0 +1,60 @@
+---
+title: Install
+description: One file, vendored into your repo. Nothing is downloaded at CI time.
+---
+
+<Tabs items={['Any repo', 'Enterprise']}>
+<Tab value="Any repo">
+
+```bash
+curl -fsSLO https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/picky.mjs
+node picky.mjs init           # review the diff
+node picky.mjs init --write   # apply it
+rm picky.mjs
+```
+
+Needs Node 20+ on your machine and on the runners. Then add the `PICKY_API_KEY` secret and commit.
+
+</Tab>
+<Tab value="Enterprise">
+
+```bash
+gh release download v0.1.0-rc -R ahmedragab20/picky -p 'picky.mjs*'
+sha256sum -c picky.mjs.sha256        # macOS: shasum -a 256 -c picky.mjs.sha256
+node picky.mjs init                  # review the diff, then --write
+```
+
+| Concern | How picky handles it |
+|---|---|
+| Supply chain | One auditable file, a published SHA-256, pinned by your own git history |
+| Network at CI time | None to fetch picky. The only call is the model API, and `model: none` removes it |
+| Third-party actions | None. `init` adds a local action and the official `upload-artifact`/`download-artifact` |
+| Review | `init` prints every change as a diff before `--write` |
+| Blast radius | Fail-open: an error runs the original command. Shadow mode runs everything |
+
+</Tab>
+</Tabs>
+
+<Accordions>
+<Accordion title="Zero-egress mode">
+
+Set `model: none` in `.picky.yml`. picky then only uses the dependency graph, and no diff leaves the runner. Tests the graph can't link are skipped in this mode, so keep shadow mode on longer. See [limits](/docs/limits).
+
+</Accordion>
+<Accordion title="Allowlisting the model API">
+
+With `model: jev`, picky sends HTTPS requests to `api.typesafe.ai` only while deciding: a few per decision (questions are batched), plus retries on 429/5xx. They carry the diff and test names. Details in [Security and data](/docs/security).
+
+</Accordion>
+<Accordion title="Self-hosted runners and GitHub Enterprise Server">
+
+Verified on GitHub-hosted runners (Ubuntu, Windows, `node:22-alpine` and `composer:2` containers). Self-hosted runners and GitHub Enterprise Server are not verified yet. On GHES, `upload-artifact@v4` may be unavailable; without the shared artifact each job decides on its own, which still works.
+
+</Accordion>
+<Accordion title="Upgrading and removing">
+
+- **Upgrade:** download a newer `picky.mjs` and run `init --write` again. It replaces the vendored bundle.
+- **Remove:** delete `.github/picky/`, `.picky.yml`, the `BASH_ENV` line, the `picky` job and any `shell: picky … {0}`. Leftover `# picky` comments do nothing without the hook.
+
+</Accordion>
+</Accordions>

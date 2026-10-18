@@ -1,0 +1,40 @@
+---
+title: How it works
+description: Gates, then the graph, then the model. Any doubt runs everything.
+---
+
+<Pipeline />
+
+<Accordions>
+<Accordion title="1. Diff">
+
+Merge-base diff against the PR base (GitHub's merge commit when there is one), `PICKY_BASE`, or the default branch. Renames and deletions are tracked.
+
+</Accordion>
+<Accordion title="2. Gates">
+
+Some changes can alter any result. These run everything: `.picky.yml`, workflows, `critical` paths, any non-PR event. Lockfiles and runner configs run their own ecosystem in full and leave the other one narrowed. See [the full list](/docs/config).
+
+</Accordion>
+<Accordion title="3. Graph floor">
+
+Tests that always run: changed tests, `critical` tests, and every test that reaches a changed file through imports.
+
+- **JS/TS:** relative imports, `.js` → `.ts`, index files, tsconfig `paths`, workspace packages, dynamic imports, re-exports.
+- **PHP:** every declared class and function is indexed (PSR-4, classmaps, custom autoloaders), then `use` statements, same-namespace names, class names in docblocks and strings, `require`/`include`. `Pest.php` and the `phpunit.xml` bootstrap link to every test under them.
+- Tests that still use a deleted file or class are selected.
+
+</Accordion>
+<Accordion title="4. Jev judge">
+
+Every other test becomes one yes/no question: *could this change alter this test's result?* The model sees the whole diff with zero context lines, plus the test's names and imports. A test is kept when p ≥ 0.15.
+
+On a 429 or 5xx, picky retries within a 30 s budget. A failed call, a missing answer or a diff over 200,000 characters runs the test. With `model: none`, these tests are skipped instead.
+
+</Accordion>
+<Accordion title="5. Run">
+
+The decision is cached per commit and reused by every step, and by every job through `picky decide`. It's printed to the log and to the job summary.
+
+</Accordion>
+</Accordions>

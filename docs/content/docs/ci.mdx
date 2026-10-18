@@ -1,0 +1,97 @@
+---
+title: CI setup
+description: Mark a command with `# picky`. Everything else runs untouched.
+---
+
+```yaml title=".github/workflows/ci.yml"
+env:
+  BASH_ENV: ${{ github.workspace }}/.github/picky/hook.sh
+  PICKY_API_KEY: ${{ secrets.PICKY_API_KEY }}
+steps:
+  - uses: actions/checkout@v4
+  - run: npm ci                 # skipped when every marked step skips
+  - run: npx eslint .   # picky
+  - run: npx vitest run # picky
+```
+
+`picky init` writes all of this. Each marked line is **skipped**, **narrowed** or **run in full**. If picky fails, the original line runs.
+
+<Tabs items={['bash (default)', 'Windows, containers, sh/pwsh', 'Several jobs']}>
+<Tab value="bash (default)">
+
+Bash sources the hook before every `run:` step. The marker works as the YAML comment of a one-line `run:` and on any line of a block script.
+
+```yaml
+- run: |
+    composer install
+    vendor/bin/phpunit   # picky
+```
+
+</Tab>
+<Tab value="Windows, containers, sh/pwsh">
+
+The hook needs bash on the host, so these steps run through picky as their shell:
+
+```yaml
+- uses: ./.github/picky        # puts picky on PATH
+- run: npx vitest run
+  shell: picky pwsh {0}
+```
+
+`picky {0}` uses GitHub's default shell. `picky bash|sh|pwsh|powershell {0}` picks one. Without node, the step runs unchanged.
+
+</Tab>
+<Tab value="Several jobs">
+
+A small `picky` job decides once. Every other job downloads the decision, so they all act on the same answer.
+
+```yaml
+jobs:
+  picky:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        continue-on-error: true
+      - run: .github/picky/picky decide
+        continue-on-error: true
+      - uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with: { name: picky-decision, path: "${{ runner.temp }}/picky", retention-days: 7 }
+  test:
+    needs: picky
+    steps:
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with: { name: picky-decision, path: "${{ runner.temp }}/picky" }
+      - uses: actions/checkout@v4
+      - run: npx vitest run # picky
+```
+
+Cost: the `picky` job takes 7–12 s before the other jobs start. It never fails the run.
+
+</Tab>
+</Tabs>
+
+<Accordions>
+<Accordion title="Install steps (npm ci, composer install)">
+
+Install commands are skipped when every other command in the job is a marked command that skips. Any unmarked command, non-bash step or non-passive `uses:` step keeps them.
+
+Recognized: `npm ci`/`install`, `pnpm install`, `yarn`, `bun install`, `composer install`, `npx playwright install`.
+
+</Accordion>
+<Accordion title="Commands run outside CI">
+
+```bash
+picky explain                 # print the decision for this branch
+picky -- npx vitest run       # run a command narrowed to the change
+PICKY_BASE=origin/main picky explain
+```
+
+</Accordion>
+<Accordion title="Which events are narrowed?">
+
+Only `pull_request`. Pushes, schedules and every other event run everything.
+
+</Accordion>
+</Accordions>

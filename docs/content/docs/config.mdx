@@ -1,0 +1,41 @@
+---
+title: Configuration
+description: One optional file. Every key has a safe default.
+---
+
+```yaml title=".picky.yml"
+mode: shadow                               # shadow | enforce
+model: jev                                 # jev | typesafe/<jev-version> | none
+critical: ["db/**", "test/security/**"]    # a change here, or a test here, always runs
+low: ["docs/**", "**/*.md"]                # changes here never trigger tests
+```
+
+<TypeTable
+  type={{
+    mode: { type: '"shadow" | "enforce"', default: '"shadow"', description: 'Shadow decides and logs but runs everything.' },
+    model: { type: '"jev" | "typesafe/<version>" | "none"', default: '"jev"', description: 'none = graph only, no network call.' },
+    critical: { type: 'glob[]', default: '[]', description: 'Changed files here run everything. Tests here always run.' },
+    low: { type: 'glob[]', default: '["**/*.md", "**/*.mdx", "docs/**", "LICENSE*"]', description: 'Changes here never select tests on their own.' },
+  }}
+/>
+
+<Accordions>
+<Accordion title="Environment variables">
+
+| Variable | Use |
+|---|---|
+| `PICKY_API_KEY` | model API key (`TYPESAFE_API_KEY` also works) |
+| `PICKY_MODE`, `PICKY_MODEL` | override `mode` and `model` |
+| `PICKY_BASE` | compare against this ref instead of the PR base |
+| `PICKY_BUDGET_SECONDS` | model time budget, default 30 |
+
+</Accordion>
+<Accordion title="What always runs everything">
+
+- A change to `.picky.yml`, `.github/workflows/**`, `.github/picky/**` or a `critical` path.
+- Any event other than `pull_request`.
+- A missing API key with `model: jev`, an unknown key or `extends` in `.picky.yml`.
+- Per ecosystem: `package.json`, lockfiles, `tsconfig*.json` or vitest/vite/jest config run JS in full; `composer.json`, `composer.lock` or `phpunit.xml` run PHP in full.
+
+</Accordion>
+</Accordions>

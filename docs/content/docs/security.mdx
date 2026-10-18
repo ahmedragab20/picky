@@ -1,0 +1,29 @@
+---
+title: Security and data
+description: What leaves the runner, and what never does.
+---
+
+| | `model: jev` | `model: none` |
+|---|---|---|
+| Diff of changed files (zero context, `low` paths excluded) | sent to `api.typesafe.ai` | stays on the runner |
+| Changed file names, test file names, test names, imports | sent | stays |
+| Source files that didn't change | never sent | stays |
+| API key | `Authorization` header only, never logged | not used |
+
+<Accordions>
+<Accordion title="Pull requests from forks">
+
+picky isn't designed for `pull_request_target`. A fork PR doesn't get your secrets, so it has no API key and runs everything.
+
+</Accordion>
+<Accordion title="What the model can and can't do">
+
+The model only adds tests on top of the graph floor. It can't remove a test the graph selected, can't skip a gate, and a failed or missing answer runs the test.
+
+</Accordion>
+<Accordion title="Reporting a vulnerability">
+
+Open a [private security advisory](https://github.com/ahmedragab20/picky/security/advisories/new) instead of an issue.
+
+</Accordion>
+</Accordions>

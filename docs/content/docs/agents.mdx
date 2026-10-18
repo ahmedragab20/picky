@@ -1,0 +1,120 @@
+---
+title: Use with AI agents
+description: Paste one prompt, or install the picky skill, and a coding agent sets picky up for you.
+---
+
+A coding agent can install picky and migrate your workflows. Give it the picky instructions first, so it doesn't guess flags.
+
+## Paste this prompt
+
+Paste it into Claude Code, Cursor, Codex or any coding agent, from the root of your repo.
+
+```text title="Prompt"
+Install picky in this repo and migrate its GitHub Actions workflows to it.
+picky runs only the tests, lint and type checks a pull request can affect.
+
+1. Read the instructions first. Do not guess flags or behavior.
+   - Skill: https://raw.githubusercontent.com/ahmedragab20/picky/main/skills/picky/SKILL.md
+   - If you cannot fetch it, use the full docs: https://ahmedragab20.github.io/picky/llms-full.txt
+2. Download picky.mjs and picky.mjs.sha256 from
+   https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/
+   and verify the checksum. Stop if it fails.
+3. Run `node picky.mjs init` (a dry run). Show me the full diff and the notes it
+   prints, and explain anything it skipped.
+4. Wait for my OK. Then run `node picky.mjs init --write` and delete the downloaded files.
+5. Keep `mode: shadow` in .picky.yml. Do not switch to enforce.
+6. Do not change or delete any test. Do not remove existing path filters or
+   --changedSince-style flags without asking me. Do not mark commands picky does not recognize.
+7. Do not commit, push or open a PR unless I ask.
+8. Finish with a list of what I must do myself. At minimum: add the PICKY_API_KEY
+   repository secret (Settings -> Secrets and variables -> Actions), or set
+   `model: none` for graph-only mode.
+```
+
+<Callout title="You add the secret">
+  An agent can't add `PICKY_API_KEY`. Add it yourself under **Settings → Secrets and variables → Actions**. Until it exists, picky runs everything.
+</Callout>
+
+## Install the skill
+
+The skill is a single file of instructions: install, migrate, debug and tune. With it installed, an agent can set up picky or debug a shadow miss without a prompt.
+
+<Tabs items={['Claude Code', 'Other agents']}>
+<Tab value="Claude Code">
+
+For this repo:
+
+```bash
+mkdir -p .claude/skills/picky
+curl -fsSL https://raw.githubusercontent.com/ahmedragab20/picky/main/skills/picky/SKILL.md \
+  -o .claude/skills/picky/SKILL.md
+```
+
+For all your projects, use `~/.claude/skills/picky/SKILL.md` instead.
+
+</Tab>
+<Tab value="Other agents">
+
+Most coding agents read `AGENTS.md`. Add this to it:
+
+```md title="AGENTS.md"
+## picky
+
+Before installing or changing picky (CI test selection), read
+https://raw.githubusercontent.com/ahmedragab20/picky/main/skills/picky/SKILL.md
+```
+
+Or download the file into the folder your agent loads skills or rules from.
+
+</Tab>
+</Tabs>
+
+## For machines
+
+| URL | What it is |
+|---|---|
+| [`/llms.txt`](https://ahmedragab20.github.io/picky/llms.txt) | index of the docs, with links to the markdown of each page |
+| [`/llms-full.txt`](https://ahmedragab20.github.io/picky/llms-full.txt) | every page in one markdown file |
+| [`/skill/SKILL.md`](https://ahmedragab20.github.io/picky/skill/SKILL.md) | the agent skill |
+| `/llms.mdx/docs/<page>/content.md` | one page as markdown, for example [install](https://ahmedragab20.github.io/picky/llms.mdx/docs/install/content.md) |
+
+<Accordions>
+<Accordion title="What the agent changes">
+
+- Writes `.picky.yml` in shadow mode, if there is none.
+- Adds `.github/picky/`: the hook, a wrapper, a local action and the bundle.
+- In each workflow that runs on `pull_request`: 2 `env` lines and a `# picky` marker on each recognized command.
+- With several jobs or a matrix: a `picky` job that decides once, plus `needs: picky` and a download step in each job.
+- For Windows, container and `sh`/`pwsh` jobs: `shell: picky {0}`.
+
+The PR that adds picky changes workflows, so it runs everything. Savings start on the PRs after it.
+
+</Accordion>
+<Accordion title="What the agent can't do">
+
+- Add the `PICKY_API_KEY` secret. It tells you where to add it.
+- Decide to go zero-egress. `model: none` is graph-only: no diff leaves the runner, but tests the graph can't link are skipped. It's your call.
+- Switch to `enforce`. That needs PRs that show no real `picky shadow miss`, and your OK.
+
+</Accordion>
+<Accordion title="How to review the agent's work">
+
+1. `.picky.yml` says `mode: shadow`.
+2. The diff of each workflow only adds `env` lines, `# picky` markers, `shell: picky {0}`, and the `picky` job with its `needs` and download step.
+3. No test file changed.
+4. Existing path filters and `--changedSince`-style flags are still there, unless you said to remove them.
+5. No `picky.mjs` or `picky.mjs.sha256` at the repo root.
+
+</Accordion>
+<Accordion title="A prompt for a shadow miss">
+
+```text title="Prompt"
+A CI run shows a "picky shadow miss". Read the picky skill:
+https://raw.githubusercontent.com/ahmedragab20/picky/main/skills/picky/SKILL.md
+Check out the PR's branch, find the failing step, run `picky explain` with PICKY_BASE set
+to the PR's base, and tell me why picky would have skipped or narrowed it. Do not change tests or switch to enforce.
+Propose a fix to .picky.yml (for example a `critical` path) and wait for my OK.
+```
+
+</Accordion>
+</Accordions>

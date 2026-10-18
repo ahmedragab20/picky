@@ -1,0 +1,47 @@
+---
+title: Benchmarks
+description: What picky selected on recent real commits from 4 open-source repos.
+---
+
+<BenchExplorer />
+
+<LatencyChart />
+
+<Callout type="warn" title="What this measures">
+  How many test files picky's **graph floor** selects (`model: none`). With Jev on, tests the graph can't link may be added,
+  so real selections are the same or larger. It does not measure CI minutes or recall: no tests were run.
+</Callout>
+
+<Accordions>
+<Accordion title="Method">
+
+1. Clone the repo and take the last 100 first-parent commits of its default branch. Each one is a merged PR or a squashed commit.
+2. Check out each commit and run picky's decision with its first parent as the base: `PICKY_MODEL=none`, `PICKY_MODE=enforce`, no cache.
+3. Count the test files it selects. A full-run gate (lockfile, workflow, `package.json`) counts as all of them.
+4. A run where git itself failed (for example a fetch that timed out) is left out, and counted under **Excluded** in the raw numbers.
+
+Reproduce it:
+
+```bash
+git clone --depth 102 https://github.com/honojs/hono /tmp/hono
+node bench/selection.ts /tmp/hono hono 100
+```
+
+The script is [`bench/selection.ts`](https://github.com/ahmedragab20/picky/blob/main/bench/selection.ts). It writes `bench/results.json`, which this page reads at build time.
+
+</Accordion>
+<Accordion title="Raw numbers">
+
+<BenchTable />
+
+</Accordion>
+<Accordion title="From the live CI fixture">
+
+On GitHub-hosted runners, with Jev, in the e2e fixture runs of 2026-10-17 (a private test repo):
+
+- A decision takes 0.6–1.1 s.
+- A model call uses about 700 input tokens and takes 200–400 ms.
+- The shared `picky` job takes 7–12 s before the other jobs start.
+
+</Accordion>
+</Accordions>

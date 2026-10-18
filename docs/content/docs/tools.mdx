@@ -1,0 +1,31 @@
+---
+title: Supported tools
+description: What picky does to each marked command.
+---
+
+| Tool | What picky does |
+|---|---|
+| **vitest, jest, `node --test`** | runs only the affected test files |
+| **PHPUnit, Pest** | runs only the affected test files |
+| **ESLint** (flat config) | lints changed files and every file that imports them |
+| **Prettier** | checks only changed files |
+| **tsc, vue-tsc, svelte-check, biome** | skips when no changed file can matter, otherwise runs in full |
+| **phpstan, psalm, phpcs, php-cs-fixer, pint, rector** | skips when no changed file can matter, otherwise runs in full |
+
+They're also recognized through `npm`/`pnpm`/`yarn run` and `composer` scripts. Any other marked command runs in full.
+
+<Accordions>
+<Accordion title="What counts as a test file?">
+
+`*.test.*` and `*.spec.*` (ts, tsx, js, jsx, mts, cts, mjs, cjs), and `*Test.php`. Files under `node_modules/` and `vendor/` are ignored.
+
+</Accordion>
+<Accordion title="Edge cases">
+
+- **PHPUnit 9** ignores every path but the first, so it's narrowed only when a single file is selected.
+- **Legacy `.eslintrc`** and `import/no-unused-modules`: skip or run in full, never narrowed.
+- A change to a linter's config, or a file it imports, runs that linter in full.
+- **`php artisan test`** always runs in full in this version.
+
+</Accordion>
+</Accordions>

@@ -1,0 +1,19 @@
+{
+  "pages": [
+    "index",
+    "install",
+    "---Use it---",
+    "ci",
+    "tools",
+    "config",
+    "shadow-mode",
+    "agents",
+    "---Under the hood---",
+    "how-it-works",
+    "benchmarks",
+    "security",
+    "limits",
+    "---Project---",
+    "changelog"
+  ]
+}

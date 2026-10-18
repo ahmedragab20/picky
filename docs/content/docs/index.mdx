@@ -1,0 +1,89 @@
+---
+title: Quick start
+description: Set up picky in an existing GitHub Actions repo, in about 2 minutes.
+---
+
+<Terminal />
+
+<Tabs items={['Do it myself', 'Let an agent do it']}>
+<Tab value="Do it myself">
+
+<Steps>
+<Step>
+
+### Download and set up
+
+Run this in your repo. Without `--write`, `init` only prints the diff.
+
+```bash
+curl -fsSLO https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/picky.mjs
+node picky.mjs init --write && rm picky.mjs
+```
+
+</Step>
+<Step>
+
+### Add the API key
+
+Add `PICKY_API_KEY` under **Settings → Secrets and variables → Actions**. No key? Set `model: none` in `.picky.yml` for graph-only mode.
+
+</Step>
+<Step>
+
+### Commit and open a PR
+
+```bash
+git add .picky.yml .github && git commit -m "ci: add picky" && git push
+```
+
+picky starts in **shadow mode**: everything still runs, and the job summary shows what picky would have skipped.
+
+</Step>
+<Step>
+
+### Enforce
+
+When PRs go by with no `picky shadow miss` warnings, set `mode: enforce` in `.picky.yml`.
+
+</Step>
+</Steps>
+
+</Tab>
+<Tab value="Let an agent do it">
+
+Paste this into Claude Code, Cursor, Codex or any coding agent, from the root of your repo. It installs picky in shadow mode, shows you the diff and waits for your OK. The prompt and the agent skill are also on [Use with AI agents](/docs/agents).
+
+<AgentPrompt />
+
+You still add the `PICKY_API_KEY` secret yourself, under **Settings → Secrets and variables → Actions**.
+
+</Tab>
+</Tabs>
+
+<Cards>
+  <Card title="Enterprise install" href="/docs/install" description="Checksums, no runtime download, zero-egress mode." />
+  <Card title="Benchmarks" href="/docs/benchmarks" description="What picky selected on real commits from 4 repos." />
+</Cards>
+
+<Accordions>
+<Accordion title="What does init change?">
+
+- Writes `.picky.yml` in shadow mode, if there is none.
+- Vendors `.github/picky/`: the hook, a wrapper, a local action and the bundle (one 3.8 MB file).
+- In every workflow that runs on `pull_request`: adds 2 `env` lines and a `# picky` marker on each command it recognizes.
+- With several jobs or a matrix, adds a small `picky` job that decides once for all of them.
+
+It runs again safely and never adds anything twice. To upgrade, run it again with a newer `picky.mjs`.
+
+</Accordion>
+<Accordion title="Try it locally first">
+
+```bash
+git clone https://github.com/ahmedragab20/picky && cd picky
+npm install && npm run demo
+```
+
+The demo builds a small repo and runs 4 PRs through the hook: a source change, a docs-only change, a `package.json` change and shadow mode.
+
+</Accordion>
+</Accordions>

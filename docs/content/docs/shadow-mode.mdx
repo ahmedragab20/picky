@@ -1,0 +1,24 @@
+---
+title: Shadow mode
+description: The default. Everything runs, and picky reports what it would have missed.
+---
+
+| When a marked command fails and enforce mode would have… | Result |
+|---|---|
+| **skipped it** | `picky shadow miss` |
+| **narrowed it**, and the narrowed run passes | `picky shadow miss` |
+| **narrowed it**, and the narrowed run fails too | caught: no miss |
+
+A miss shows as a warning on the run and in the job summary. It never changes the step's result.
+
+<Callout title="When to switch to enforce">
+  When PRs go by without real misses, set `mode: enforce`. A flaky test or a runner problem can look like a miss, so read the failure first.
+</Callout>
+
+<Accordions>
+<Accordion title="How the narrowed check runs">
+
+Only after a failure. picky reruns the narrowed command in the step's own shell, inside a collapsed log group, then reports. It works in the bash hook, `shell: picky {0}` and `picky --`.
+
+</Accordion>
+</Accordions>

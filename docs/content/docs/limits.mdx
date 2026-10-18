@@ -1,0 +1,22 @@
+---
+title: Limits and roadmap
+description: What v0.1.0-rc doesn't do yet.
+---
+
+<Callout type="warn" title="Known limits">
+- **Code generated during the job** (e.g. TS types built from PHP classes) can make a skipped type check wrong. Put those sources under `critical`.
+- **Graph-only mode** skips tests the graph can't link, such as Laravel feature tests that depend only on a route file. With Jev, those tests are judged.
+</Callout>
+
+| Not yet | Today |
+|---|---|
+| Go and Rust | JS/TS and PHP only |
+| Other model providers | Jev only |
+| Symbol-level analysis | file level (JS/TS), class level (PHP) |
+| Context packing for diffs over 200k chars | every candidate test runs |
+| History and coverage signals | graph and model only |
+| `extends` presets | a config with `extends` runs everything |
+| `cmd` and custom shells in `shell: picky …` | bash, sh, pwsh, powershell |
+| `php artisan test` | runs in full |
+| Recall measured across runs | each shadow run reports its own misses |
+| Verified on GHES and self-hosted runners | GitHub-hosted runners |
