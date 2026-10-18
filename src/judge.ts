@@ -55,9 +55,7 @@ async function askBatch(
   const body = JSON.stringify({
     model: opts.model,
     state,
-    questions: Object.fromEntries(
-      batch.map((q) => [q.id, { type: 'noul', instructions: q.instructions, criteria: CRITERIA }]),
-    ),
+    questions: Object.fromEntries(batch.map((q) => [q.id, { type: 'noul', instructions: q.instructions, criteria: CRITERIA }])),
   });
 
   for (let attempt = 0; ; attempt++) {

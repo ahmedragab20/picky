@@ -23,7 +23,10 @@ const NAME = /\\?[A-Za-z_\x80-￿][\w\x80-￿]*(?:\\[A-Za-z_\x80-￿][\w\x80-￿
 // Statements start a line, or follow `;`, a brace or the open tag: `<?php namespace App; final class Money {}`.
 const STATEMENT = String.raw`(?:^|[;{}]|<\?php)\s*`;
 const NAMESPACE = new RegExp(String.raw`${STATEMENT}namespace\s+([\w\\]+)\s*[;{]`, 'gm');
-const DECLARATION = new RegExp(String.raw`${STATEMENT}(?:(?:abstract|final|readonly)\s+)*(?:class|interface|trait|enum)\s+([A-Za-z_]\w*)`, 'gm');
+const DECLARATION = new RegExp(
+  String.raw`${STATEMENT}(?:(?:abstract|final|readonly)\s+)*(?:class|interface|trait|enum)\s+([A-Za-z_]\w*)`,
+  'gm',
+);
 const FUNCTION = new RegExp(String.raw`${STATEMENT}function\s+&?\s*([A-Za-z_]\w*)\s*\(`, 'gm');
 const USE = new RegExp(String.raw`${STATEMENT}use\s+(function\s+|const\s+)?([^;]+);`, 'gm');
 const INCLUDE =

@@ -53,7 +53,7 @@ export function tokenize(line: string): string[] | null {
 }
 
 export function quote(word: string): string {
-  return /^[A-Za-z0-9_\/.,:=@%+-]+$/.test(word) ? word : `'${word.replace(/'/g, `'\\''`)}'`;
+  return /^[A-Za-z0-9_/.,:=@%+-]+$/.test(word) ? word : `'${word.replace(/'/g, `'\\''`)}'`;
 }
 
 /** Quotes argv for bash, keeping leading `NAME=value` words as assignments. */

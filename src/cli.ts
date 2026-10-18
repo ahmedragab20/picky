@@ -38,9 +38,9 @@ const SELF = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../bin/
 
 async function main(argv: string[]): Promise<number> {
   const [cmd, ...rest] = argv;
-  if (cmd === '--version' || cmd === '-v') return process.stdout.write(`${VERSION}\n`), 0;
+  if (cmd === '--version' || cmd === '-v') return (process.stdout.write(`${VERSION}\n`), 0);
   if (cmd === '--') return runCommand(rest);
-  if (cmd === 'shadow-report') return shadowReport(rest[0], rest[1] ?? '', process.env, log), 0;
+  if (cmd === 'shadow-report') return (shadowReport(rest[0], rest[1] ?? '', process.env, log), 0);
   if (cmd === 'explain') return explain();
   if (cmd === 'decide') return decideOnce();
   if (cmd === 'init') return init(rest.includes('--write'));
@@ -107,7 +107,7 @@ function bundlePath(): string {
 /** `picky init`: prints the changes as a diff; `--write` applies them. */
 function init(write: boolean): number {
   const bundle = bundlePath();
-  if (!existsSync(bundle)) return log(`picky: ${bundle} is missing; run \`npm run build\` first`), 1;
+  if (!existsSync(bundle)) return (log(`picky: ${bundle} is missing; run \`npm run build\` first`), 1);
   const root = repoRoot(process.cwd());
   const { files, notes } = planInit(root, { hook: hookScript(), bundle: readFileSync(bundle) });
   const out = (s: string) => process.stdout.write(`${s}\n`);
@@ -122,17 +122,21 @@ function init(write: boolean): number {
     }
   }
   for (const n of notes) out(`picky: ${n}`);
-  if (files.length === 0) return out('picky: already set up; nothing to change'), 0;
-  if (!write) return out(`picky: ${files.length} file${files.length === 1 ? '' : 's'} would change; run \`picky init --write\` to apply`), 0;
+  if (files.length === 0) return (out('picky: already set up; nothing to change'), 0);
+  if (!write)
+    return (out(`picky: ${files.length} file${files.length === 1 ? '' : 's'} would change; run \`picky init --write\` to apply`), 0);
   out(`picky: wrote ${files.map((f) => f.path).join(', ')}`);
-  const shadow = files.some((f) => f.path === '.picky.yml') ? ' picky starts in shadow mode: it logs what it would skip and runs everything.' : '';
+  const shadow = files.some((f) => f.path === '.picky.yml')
+    ? ' picky starts in shadow mode: it logs what it would skip and runs everything.'
+    : '';
   out(`picky: next, add the PICKY_API_KEY secret, then commit.${shadow}`);
   return 0;
 }
 
 /** A unified diff of one planned file; the bundle is summarized. */
 function diffOf(f: InitFile): string {
-  if (typeof f.after !== 'string') return `${f.before === null ? 'new' : 'updated'} file ${f.path} (${(f.after.length / 1e6).toFixed(1)} MB)`;
+  if (typeof f.after !== 'string')
+    return `${f.before === null ? 'new' : 'updated'} file ${f.path} (${(f.after.length / 1e6).toFixed(1)} MB)`;
   const tmp = mkdtempSync(path.join(tmpdir(), 'picky-init-'));
   try {
     const side = (name: string, text: string | null) => {
@@ -142,7 +146,10 @@ function diffOf(f: InitFile): string {
       writeFileSync(path.join(tmp, file), text);
       return file;
     };
-    const res = spawnSync('git', ['diff', '--no-index', '--no-color', '--no-prefix', '--', side('a', f.before), side('b', f.after)], { cwd: tmp, encoding: 'utf8' });
+    const res = spawnSync('git', ['diff', '--no-index', '--no-color', '--no-prefix', '--', side('a', f.before), side('b', f.after)], {
+      cwd: tmp,
+      encoding: 'utf8',
+    });
     return res.stdout.trimEnd();
   } finally {
     rmSync(tmp, { recursive: true, force: true });
@@ -151,7 +158,7 @@ function diffOf(f: InitFile): string {
 
 /** `picky -- cmd args`: the prefix form for CIs without a step hook. */
 async function runCommand(argv: string[]): Promise<number> {
-  if (argv.length === 0) return log(USAGE), 2;
+  if (argv.length === 0) return (log(USAGE), 2);
   const outcome = await outcomeFor(argv);
   log(`picky: ${outcome.note}`);
   if (outcome.action === 'skip') return 0;
@@ -166,7 +173,7 @@ async function runCommand(argv: string[]): Promise<number> {
 function spawnArgv(argv: string[]): { code: number; failed: boolean } {
   const { env, rest } = splitAssignments(argv);
   const res = spawnSync(rest[0], rest.slice(1), { stdio: 'inherit', env: { ...process.env, ...env } });
-  if (res.error) return log(`picky: ${res.error.message}`), { code: 127, failed: false };
+  if (res.error) return (log(`picky: ${res.error.message}`), { code: 127, failed: false });
   return { code: res.status ?? 1, failed: (res.status ?? 0) !== 0 };
 }
 
@@ -195,7 +202,7 @@ function hookExec(script: string, args: string[]): number {
     log(`picky: could not prepare the step (${(err as Error).message}); running it unchanged`);
   }
   const res = spawnSync('bash', [...flags, target, ...args], { stdio: 'inherit' });
-  if (res.error) return log(`picky: ${res.error.message}`), 127;
+  if (res.error) return (log(`picky: ${res.error.message}`), 127);
   return res.status ?? (res.signal ? 128 : 1);
 }
 
@@ -223,7 +230,7 @@ async function shellExec(named: string | undefined, file: string): Promise<numbe
   const { cmd, args } = invocation(shell, target);
   // The step's own bash must not hand it to picky a second time through the hook.
   const res = spawnSync(cmd, args, { stdio: 'inherit', env: { ...process.env, PICKY_HOOK_ACTIVE: '1' } });
-  if (res.error) return log(`picky: ${res.error.message}`), 127;
+  if (res.error) return (log(`picky: ${res.error.message}`), 127);
   return res.status ?? (res.signal ? 128 : 1);
 }
 
@@ -259,9 +266,7 @@ async function rewrite(args: string[]): Promise<number> {
     return 0;
   }
 
-  const outcome: Outcome = words?.length
-    ? await outcomeFor(words)
-    : { action: 'full', note: 'not a simple command; runs in full' };
+  const outcome: Outcome = words?.length ? await outcomeFor(words) : { action: 'full', note: 'not a simple command; runs in full' };
 
   const label = original.replace(/\s*#\s*picky.*$/, '');
   log(`picky: ${label} -> ${outcome.note}`);

@@ -6,7 +6,12 @@ import { TipScope } from './tip-scope';
 
 // bench/hero.json: what picky's graph ran for 4 real zod commits, file by file. One label per commit, in order.
 const LABELS = ['Schema fix', 'Locale fix', 'Docs edit', 'Lockfile bump'];
-const SUMMARY = ['the tests that import core/schemas.ts', 'only the locale test that changed', 'only an .mdx file changed: nothing to run', 'pnpm-lock.yaml changed: JS runs in full'];
+const SUMMARY = [
+  'the tests that import core/schemas.ts',
+  'only the locale test that changed',
+  'only an .mdx file changed: nothing to run',
+  'pnpm-lock.yaml changed: JS runs in full',
+];
 
 const TOTAL = hero.files.length;
 const repoName = hero.repo.replace('https://github.com/', '');
@@ -44,7 +49,10 @@ export function HeroMatrix() {
 
   return (
     <div className="relative">
-      <div aria-hidden="true" className="pointer-events-none absolute -inset-10 bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--color-rp-iris)_16%,transparent),transparent)]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-10 bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--color-rp-iris)_16%,transparent),transparent)]"
+      />
       <div className="relative overflow-hidden rounded-[20px] border border-rp-hl-med bg-rp-surface shadow-2xl shadow-black/20">
         <div className="flex items-center justify-between gap-3 border-b px-4 py-3 text-[13px]">
           <div className="flex items-center gap-2.5">
@@ -65,7 +73,9 @@ export function HeroMatrix() {
                 setPinned(true);
               }}
               className={`rounded-full border px-3 py-1.5 text-[12.5px] transition-colors ${
-                i === index ? 'border-rp-iris bg-rp-overlay text-fd-foreground' : 'border-rp-hl-med text-fd-muted-foreground hover:border-rp-muted'
+                i === index
+                  ? 'border-rp-iris bg-rp-overlay text-fd-foreground'
+                  : 'border-rp-hl-med text-fd-muted-foreground hover:border-rp-muted'
               }`}
             >
               {x.label}
@@ -82,7 +92,7 @@ export function HeroMatrix() {
             const delay = `${(i % 29) * 9}ms`;
             return (
               <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: one cell per test file, in a fixed order
+                // oxlint-disable-next-line react/no-array-index-key -- one cell per test file, in a fixed order
                 key={i}
                 {...tip({
                   kicker: `test file ${i + 1} of ${TOTAL}`,

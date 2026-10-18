@@ -18,67 +18,68 @@ const zod = repos.find((r) => r.key === 'zod') ?? repos[0];
 const [schema, , docsEdit] = hero.commits;
 const typescript = repos.filter((r) => r.language === 'TypeScript');
 
-const USE_CASES: { icon: typeof FileText; tone: string; dot: string; title: string; body: ReactNode; tip: Omit<Tip, 'title' | 'tone'> }[] = [
-  {
-    icon: FileText,
-    tone: 'text-rp-foam',
-    dot: 'bg-rp-foam',
-    title: 'Docs, assets and CI scripts',
-    body: (
-      <>
-        No test can see the change, so tests, type checks and the <code>npm ci</code> before them all skip.
-      </>
-    ),
-    tip: {
-      rows: repos.map((r): [string, string] => [r.name, `${r.bands[0]} of ${r.ran.length} PRs ran no test`]),
-      note: `Example: zod ${docsEdit.sha} edited one .mdx file, so 0 tests ran.`,
+const USE_CASES: { icon: typeof FileText; tone: string; dot: string; title: string; body: ReactNode; tip: Omit<Tip, 'title' | 'tone'> }[] =
+  [
+    {
+      icon: FileText,
+      tone: 'text-rp-foam',
+      dot: 'bg-rp-foam',
+      title: 'Docs, assets and CI scripts',
+      body: (
+        <>
+          No test can see the change, so tests, type checks and the <code>npm ci</code> before them all skip.
+        </>
+      ),
+      tip: {
+        rows: repos.map((r): [string, string] => [r.name, `${r.bands[0]} of ${r.ran.length} PRs ran no test`]),
+        note: `Example: zod ${docsEdit.sha} edited one .mdx file, so 0 tests ran.`,
+      },
     },
-  },
-  {
-    icon: LayoutGrid,
-    tone: 'text-rp-iris',
-    dot: 'bg-rp-iris',
-    title: 'Big JS/TS test suites',
-    body: (
-      <>
-        A fix in one module runs the tests that import it. Vitest, Jest, <code>node --test</code>, ESLint, Prettier.
-      </>
-    ),
-    tip: {
-      rows: typescript.map((r): [string, string] => [r.name, `${percent(r.skipped)} skipped`]),
-      note: `Example: zod ${schema.sha} changed core/schemas.ts and ran ${Object.keys(schema.run).length} of ${hero.files.length} test files.`,
+    {
+      icon: LayoutGrid,
+      tone: 'text-rp-iris',
+      dot: 'bg-rp-iris',
+      title: 'Big JS/TS test suites',
+      body: (
+        <>
+          A fix in one module runs the tests that import it. Vitest, Jest, <code>node --test</code>, ESLint, Prettier.
+        </>
+      ),
+      tip: {
+        rows: typescript.map((r): [string, string] => [r.name, `${percent(r.skipped)} skipped`]),
+        note: `Example: zod ${schema.sha} changed core/schemas.ts and ran ${Object.keys(schema.run).length} of ${hero.files.length} test files.`,
+      },
     },
-  },
-  {
-    icon: GitBranch,
-    tone: 'text-rp-rose',
-    dot: 'bg-rp-rose',
-    title: 'Matrix and multi-OS jobs',
-    body: 'One decision per PR, shared by every job: Linux, Windows, containers.',
-    tip: {
-      rows: [
-        ['decisions', '1 per PR'],
-        ['bash steps', '# picky'],
-        ['pwsh, sh, containers', 'shell: picky {0}'],
-      ],
-      note: `Deciding took ${seconds(zod.p50)} at the median on zod.`,
+    {
+      icon: GitBranch,
+      tone: 'text-rp-rose',
+      dot: 'bg-rp-rose',
+      title: 'Matrix and multi-OS jobs',
+      body: 'One decision per PR, shared by every job: Linux, Windows, containers.',
+      tip: {
+        rows: [
+          ['decisions', '1 per PR'],
+          ['bash steps', '# picky'],
+          ['pwsh, sh, containers', 'shell: picky {0}'],
+        ],
+        note: `Deciding took ${seconds(zod.p50)} at the median on zod.`,
+      },
     },
-  },
-  {
-    icon: ShieldCheck,
-    tone: 'text-rp-gold',
-    dot: 'bg-rp-gold',
-    title: 'Careful rollouts',
-    body: 'Shadow mode runs everything and flags any failure enforce mode would have missed.',
-    tip: {
-      rows: [
-        ['mode: shadow', 'runs everything, reports misses'],
-        ['mode: enforce', 'skips for real'],
-      ],
-      note: 'Switch to enforce in .picky.yml once shadow reports no misses.',
+    {
+      icon: ShieldCheck,
+      tone: 'text-rp-gold',
+      dot: 'bg-rp-gold',
+      title: 'Careful rollouts',
+      body: 'Shadow mode runs everything and flags any failure enforce mode would have missed.',
+      tip: {
+        rows: [
+          ['mode: shadow', 'runs everything, reports misses'],
+          ['mode: enforce', 'skips for real'],
+        ],
+        note: 'Switch to enforce in .picky.yml once shadow reports no misses.',
+      },
     },
-  },
-];
+  ];
 
 const INSTALL_TABS = [
   {
@@ -112,8 +113,8 @@ export default function HomePage() {
               Stop running tests your PR <span className="text-rp-iris">can’t break.</span>
             </h1>
             <p className="max-w-[520px] text-[19px] leading-relaxed text-pretty text-fd-muted-foreground">
-              picky reads the diff, follows the import graph, and runs only the tests, lint and type checks a change can reach. In JS/TS
-              and PHP. Any doubt runs everything.
+              picky reads the diff, follows the import graph, and runs only the tests, lint and type checks a change can reach. In JS/TS and
+              PHP. Any doubt runs everything.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <Link
@@ -146,8 +147,7 @@ export default function HomePage() {
             <div className="max-w-[640px]">
               <h2 className={h2}>Every column is a real commit.</h2>
               <p className="mt-3 text-[17px] text-fd-muted-foreground">
-                The bright part is what picky skipped. Graph-only mode, so this is the most it can skip; with Jev on, it can only add
-                tests.
+                The bright part is what picky skipped. Graph-only mode, so this is the most it can skip; with Jev on, it can only add tests.
               </p>
             </div>
             <Link href="/docs/benchmarks" className="inline-flex items-center gap-2 font-medium text-rp-iris hover:text-fd-foreground">
@@ -160,7 +160,9 @@ export default function HomePage() {
         <section className="flex flex-col gap-7 pt-28">
           <div className="max-w-[640px]">
             <h2 className={h2}>Cautious by construction.</h2>
-            <p className="mt-3 text-[17px] text-fd-muted-foreground">Every step can only add tests. Nothing it can’t explain gets skipped.</p>
+            <p className="mt-3 text-[17px] text-fd-muted-foreground">
+              Every step can only add tests. Nothing it can’t explain gets skipped.
+            </p>
           </div>
           <Pipeline />
         </section>
@@ -176,7 +178,9 @@ export default function HomePage() {
               >
                 <Icon className={`size-[22px] transition-[scale] duration-200 group-hover:scale-115 ${tone}`} strokeWidth={1.8} />
                 <div className="text-[17px] font-semibold">{title}</div>
-                <div className="text-[14.5px] text-fd-muted-foreground [&_code]:font-mono [&_code]:text-[13px] [&_code]:text-fd-foreground">{body}</div>
+                <div className="text-[14.5px] text-fd-muted-foreground [&_code]:font-mono [&_code]:text-[13px] [&_code]:text-fd-foreground">
+                  {body}
+                </div>
               </div>
             ))}
           </TipScope>
@@ -199,14 +203,17 @@ export default function HomePage() {
                 </>,
                 <>Merge. Shadow mode until no misses, then enforce</>,
               ].map((step, i) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: a fixed list
+                // oxlint-disable-next-line react/no-array-index-key -- a fixed list
                 <li key={i} className="flex items-baseline gap-3 [&_code]:font-mono [&_code]:text-sm">
                   <span className="font-mono text-xs text-rp-iris">{String(i + 1).padStart(2, '0')}</span>
                   <span>{step}</span>
                 </li>
               ))}
             </ol>
-            <Link href="/docs/agents" className="mt-2 inline-flex items-center gap-2 self-start font-medium text-rp-iris hover:text-fd-foreground">
+            <Link
+              href="/docs/agents"
+              className="mt-2 inline-flex items-center gap-2 self-start font-medium text-rp-iris hover:text-fd-foreground"
+            >
               Or let a coding agent do it <ArrowRight className="size-4" />
             </Link>
           </div>

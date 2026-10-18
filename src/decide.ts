@@ -335,7 +335,11 @@ function buildState(ctx: JudgeContext): string {
     const name = c.from ? `${c.from} -> ${c.path}` : c.path;
     return `${c.status} ${name} (+${c.added} -${c.removed})`;
   });
-  const diff = hunks(ctx.root, ctx.range, ctx.relevant.flatMap((c) => (c.from ? [c.from, c.path] : [c.path])));
+  const diff = hunks(
+    ctx.root,
+    ctx.range,
+    ctx.relevant.flatMap((c) => (c.from ? [c.from, c.path] : [c.path])),
+  );
   return [`Code change under review: ${ctx.relevant.length} files.`, ...overview, '', 'Diff (zero context lines):', diff].join('\n');
 }
 

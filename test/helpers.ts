@@ -62,11 +62,14 @@ export const SHOP_PHP: Record<string, string> = {
   'app/Money.php': '<?php\nnamespace App;\n\nfinal class Money\n{\n    public function __construct(public int $cents) {}\n}\n',
   'app/Cart.php': '<?php\nnamespace App;\n\nclass Cart\n{\n    /** @var Money[] */\n    private array $items = [];\n}\n',
   'app/Models/User.php': '<?php\nnamespace App\\Models;\n\nclass User {}\n',
-  'app/helpers.php': "<?php\n\nfunction money_format_cents(int $c): string { return (string) $c; }\n",
+  'app/helpers.php': '<?php\n\nfunction money_format_cents(int $c): string { return (string) $c; }\n',
   'tests/TestCase.php': '<?php\nnamespace Tests;\n\nabstract class TestCase extends \\PHPUnit\\Framework\\TestCase {}\n',
-  'tests/Unit/CartTest.php': '<?php\nnamespace Tests\\Unit;\n\nuse App\\Cart;\nuse Tests\\TestCase;\n\nclass CartTest extends TestCase\n{\n    public function testEmpty(): void {}\n}\n',
-  'tests/Unit/UserTest.php': "<?php\nnamespace Tests\\Unit;\n\nuse App\\Models\\{User};\nuse Tests\\TestCase;\n\nclass UserTest extends TestCase {}\n",
-  'tests/Unit/FormatTest.php': "<?php\nnamespace Tests\\Unit;\n\nrequire_once __DIR__ . '/../../app/helpers.php';\n\nclass FormatTest extends \\Tests\\TestCase {}\n",
+  'tests/Unit/CartTest.php':
+    '<?php\nnamespace Tests\\Unit;\n\nuse App\\Cart;\nuse Tests\\TestCase;\n\nclass CartTest extends TestCase\n{\n    public function testEmpty(): void {}\n}\n',
+  'tests/Unit/UserTest.php':
+    '<?php\nnamespace Tests\\Unit;\n\nuse App\\Models\\{User};\nuse Tests\\TestCase;\n\nclass UserTest extends TestCase {}\n',
+  'tests/Unit/FormatTest.php':
+    "<?php\nnamespace Tests\\Unit;\n\nrequire_once __DIR__ . '/../../app/helpers.php';\n\nclass FormatTest extends \\Tests\\TestCase {}\n",
   'tests/Feature/Pest.php': "<?php\nuses(Tests\\TestCase::class)->in('.');\n",
   'tests/Feature/HomeTest.php': "<?php\ntest('home', function () { expect(true)->toBeTrue(); });\n",
 };

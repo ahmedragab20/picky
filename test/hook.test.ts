@@ -59,7 +59,10 @@ describe('hook (real bash)', () => {
   });
 
   it('keeps -e semantics: a failing selected test fails the step', () => {
-    const failing = { 'test/math.test.ts': "import { test } from 'node:test';\nimport '../src/math.ts';\ntest('math', () => { throw new Error('boom'); });\n" };
+    const failing = {
+      'test/math.test.ts':
+        "import { test } from 'node:test';\nimport '../src/math.ts';\ntest('math', () => { throw new Error('boom'); });\n",
+    };
     const root = repo({ ...SHOP, ...tests, ...GRAPH_ONLY }, { ...failing, ...MATH_CHANGE });
     const r = runStep(root, 'node --test # picky\necho unreachable\n');
     expect(r.code).not.toBe(0);
@@ -78,7 +81,10 @@ describe('hook (real bash)', () => {
   });
 
   it('honors a marker written as a YAML comment on a one-line run step', () => {
-    const wf = { '.github/workflows/ci.yml': 'on: pull_request\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - run: node --test   # picky\n' };
+    const wf = {
+      '.github/workflows/ci.yml':
+        'on: pull_request\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - run: node --test   # picky\n',
+    };
     const root = repo({ ...SHOP, ...tests, ...GRAPH_ONLY, ...wf }, MATH_CHANGE);
     // GitHub hands the step script over without the comment: YAML already dropped it.
     const r = runStep(root, 'node --test\n', { ...gh(root) });
@@ -87,7 +93,10 @@ describe('hook (real bash)', () => {
   });
 
   it('runs unmarked steps of a marked workflow as they are, keeping $0', () => {
-    const wf = { '.github/workflows/ci.yml': 'on: pull_request\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo "$0"\n      - run: node --test # picky\n' };
+    const wf = {
+      '.github/workflows/ci.yml':
+        'on: pull_request\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo "$0"\n      - run: node --test # picky\n',
+    };
     const root = repo({ ...SHOP, ...tests, ...GRAPH_ONLY, ...wf }, MATH_CHANGE);
     const r = runStep(root, 'echo "$0"\n', gh(root));
     expect(r.code).toBe(0);
@@ -127,7 +136,8 @@ describe('hook (real bash)', () => {
 
   describe('shadow mode', () => {
     const SHADOW = { '.picky.yml': 'mode: shadow\nmodel: none\n' };
-    const fail = (name: string) => `import { test } from 'node:test';\nimport '../src/${name}.ts';\ntest('${name}', () => { throw new Error('boom'); });\n`;
+    const fail = (name: string) =>
+      `import { test } from 'node:test';\nimport '../src/${name}.ts';\ntest('${name}', () => { throw new Error('boom'); });\n`;
     const actions = (root: string) => ({ GITHUB_ACTIONS: 'true', GITHUB_STEP_SUMMARY: path.join(root, '.summary.md') });
 
     it('reports a failure in a test enforce mode would have skipped', () => {
@@ -137,7 +147,8 @@ describe('hook (real bash)', () => {
       expect(r.out).not.toContain('unreachable');
       expect(r.err).toContain('picky: node --test -> shadow mode: would run 2 of 3 test files; running in full');
       expect(r.err).toContain('picky: $ node --test test/cart.test.ts test/math.test.ts');
-      const miss = 'enforce mode would have run only `node --test test/cart.test.ts test/math.test.ts` (running 2 of 3 test files), which passes, while the full `node --test` failed';
+      const miss =
+        'enforce mode would have run only `node --test test/cart.test.ts test/math.test.ts` (running 2 of 3 test files), which passes, while the full `node --test` failed';
       expect(r.err).toContain(`picky: SHADOW MISS: ${miss}.`);
       expect(r.out).toContain(`::warning title=picky shadow miss::${miss}\n`);
       expect(r.out).toContain('::group::picky shadow check\n');
@@ -158,7 +169,9 @@ describe('hook (real bash)', () => {
       const res = spawnSync(path.join(HOME, 'bin/picky'), ['--', 'node', '--test'], { cwd: root, encoding: 'utf8', env: cleanEnv() });
       expect(res.status).not.toBe(0);
       expect(res.stderr).toContain('picky: $ node --test test/cart.test.ts test/math.test.ts');
-      expect(res.stderr).toContain('picky: SHADOW MISS: enforce mode would have run only `node --test test/cart.test.ts test/math.test.ts`');
+      expect(res.stderr).toContain(
+        'picky: SHADOW MISS: enforce mode would have run only `node --test test/cart.test.ts test/math.test.ts`',
+      );
     });
 
     it('runs a passing step once, with no check', () => {

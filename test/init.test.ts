@@ -154,10 +154,19 @@ jobs:
         shell: cmd
 `;
     const wf = parse(editWorkflow(src, project()).text);
-    expect(wf.jobs.php.steps.map((s: any) => s.shell ?? s.uses)).toEqual(['actions/checkout@v4', './.github/picky', 'picky {0}', 'picky sh {0}', 'cmd']);
+    expect(wf.jobs.php.steps.map((s: any) => s.shell ?? s.uses)).toEqual([
+      'actions/checkout@v4',
+      './.github/picky',
+      'picky {0}',
+      'picky sh {0}',
+      'cmd',
+    ]);
 
     // Two container jobs share one decision; inside a container the runner's temp dir is /__w/_temp.
-    const shared = parse(editWorkflow(src.replace('jobs:\n', 'jobs:\n  js:\n    runs-on: ubuntu-latest\n    steps:\n      - run: npx vitest run\n'), project()).text);
+    const shared = parse(
+      editWorkflow(src.replace('jobs:\n', 'jobs:\n  js:\n    runs-on: ubuntu-latest\n    steps:\n      - run: npx vitest run\n'), project())
+        .text,
+    );
     expect(shared.jobs.php.steps[0].with.path).toBe('/__w/_temp/picky');
     expect(shared.jobs.js.steps[0].with.path).toBe('${{ runner.temp }}/picky');
   });

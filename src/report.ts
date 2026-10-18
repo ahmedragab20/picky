@@ -48,7 +48,8 @@ export function writeJobSummary(d: Decision, env: NodeJS.ProcessEnv): void {
 /** What a shadow miss on this command says, written when the step is rewritten. */
 export function shadowMissMessage(argv: string[], enforce: Skip | Narrow): string {
   const full = quoteArgv(argv);
-  if (enforce.action === 'skip') return `enforce mode would have skipped \`${full}\` (${enforce.note.replace(/^skip: /, '')}), and it failed`;
+  if (enforce.action === 'skip')
+    return `enforce mode would have skipped \`${full}\` (${enforce.note.replace(/^skip: /, '')}), and it failed`;
   return `enforce mode would have run only \`${quoteArgv(enforce.argv)}\` (${enforce.note}), which passes, while the full \`${full}\` failed`;
 }
 
@@ -77,7 +78,8 @@ export function shadowReport(kind: string, arg: string, env: NodeJS.ProcessEnv, 
  * Goes to the log, a warning annotation on the run, and the job summary.
  */
 function reportShadowMiss(message: string, env: NodeJS.ProcessEnv, log: (msg: string) => void): void {
-  const advice = 'If the failure is unrelated to the change (a flaky test, a runner problem), ignore it; otherwise enforce mode is not safe yet for this change.';
+  const advice =
+    'If the failure is unrelated to the change (a flaky test, a runner problem), ignore it; otherwise enforce mode is not safe yet for this change.';
   log(`picky: SHADOW MISS: ${message}. ${advice}`);
   if (env.GITHUB_ACTIONS === 'true') {
     const escaped = message.replaceAll('%', '%25').replaceAll('\r', '%0D').replaceAll('\n', '%0A');

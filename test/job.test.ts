@@ -27,7 +27,16 @@ async function setupPlan(files: Record<string, string>, change: Record<string, s
 
 describe('isSetupCommand', () => {
   it('recognizes installs, not commands that add packages or run scripts', () => {
-    for (const cmd of ['npm ci', 'npm install --no-audit', 'pnpm i --frozen-lockfile', 'yarn', 'yarn --immutable', 'bun install', 'composer install -n --prefer-dist', 'npx playwright install --with-deps chromium']) {
+    for (const cmd of [
+      'npm ci',
+      'npm install --no-audit',
+      'pnpm i --frozen-lockfile',
+      'yarn',
+      'yarn --immutable',
+      'bun install',
+      'composer install -n --prefer-dist',
+      'npx playwright install --with-deps chromium',
+    ]) {
       expect(isSetupCommand(tokenize(cmd)), cmd).toBe(true);
     }
     for (const cmd of ['npm install lodash', 'npm test', 'yarn test', 'composer require x/y', 'composer update']) {
@@ -38,12 +47,20 @@ describe('isSetupCommand', () => {
 
 describe('planSetup', () => {
   it('skips setup when every marked command in the job skips', async () => {
-    expect(await setupPlan(workflow(STEPS), { 'README.md': '# docs\n' })).toEqual({ skip: true, note: 'skip: all 1 marked commands in this job skip' });
+    expect(await setupPlan(workflow(STEPS), { 'README.md': '# docs\n' })).toEqual({
+      skip: true,
+      note: 'skip: all 1 marked commands in this job skip',
+    });
   });
 
   it('reads markers inside block scripts too', async () => {
-    const block = workflow(STEPS.replace('      - run: node --test # picky', '      - run: |\n          echo testing # picky\n          node --test # picky'));
-    expect(await setupPlan(block, { 'README.md': 'x' })).toMatchObject({ skip: false, note: expect.stringContaining('`echo testing # picky`: command not recognized') });
+    const block = workflow(
+      STEPS.replace('      - run: node --test # picky', '      - run: |\n          echo testing # picky\n          node --test # picky'),
+    );
+    expect(await setupPlan(block, { 'README.md': 'x' })).toMatchObject({
+      skip: false,
+      note: expect.stringContaining('`echo testing # picky`: command not recognized'),
+    });
   });
 
   it('keeps setup when a marked command runs', async () => {
@@ -66,15 +83,29 @@ describe('planSetup', () => {
     expect(await setupPlan(windows, { 'README.md': 'x' })).toEqual({ skip: true, note: 'skip: all 1 marked commands in this job skip' });
 
     // Without picky as its shell, a Windows step is invisible to picky, so setup stays.
-    const plain = { '.github/workflows/ci.yml': windows['.github/workflows/ci.yml'].replace('      - run: node --test\n        shell: picky pwsh {0}\n', '      - run: node --test # picky\n') };
-    expect(await setupPlan(plain, { 'README.md': 'x' })).toMatchObject({ skip: false, note: "setup runs (picky can't decide `node --test` here)" });
+    const plain = {
+      '.github/workflows/ci.yml': windows['.github/workflows/ci.yml'].replace(
+        '      - run: node --test\n        shell: picky pwsh {0}\n',
+        '      - run: node --test # picky\n',
+      ),
+    };
+    expect(await setupPlan(plain, { 'README.md': 'x' })).toMatchObject({
+      skip: false,
+      note: "setup runs (picky can't decide `node --test` here)",
+    });
   });
 
   it('keeps setup when the job does other work', async () => {
     const extra = workflow(`${STEPS}      - run: npm run build\n`);
-    expect(await setupPlan(extra, { 'README.md': 'x' })).toMatchObject({ skip: false, note: 'setup runs (the job also runs `npm run build`)' });
+    expect(await setupPlan(extra, { 'README.md': 'x' })).toMatchObject({
+      skip: false,
+      note: 'setup runs (the job also runs `npm run build`)',
+    });
     const action = workflow(`${STEPS}      - uses: ./.github/actions/e2e\n`);
-    expect(await setupPlan(action, { 'README.md': 'x' })).toMatchObject({ skip: false, note: 'setup runs (step uses ./.github/actions/e2e)' });
+    expect(await setupPlan(action, { 'README.md': 'x' })).toMatchObject({
+      skip: false,
+      note: 'setup runs (step uses ./.github/actions/e2e)',
+    });
   });
 
   it('keeps setup when it cannot match the step to the workflow', async () => {

@@ -46,11 +46,19 @@ describe('recognize', () => {
   });
 
   it('runs PHPUnit and Pest on several paths only from version 10', () => {
-    const lock = (v: string) => ({ 'composer.lock': JSON.stringify({ packages: [], 'packages-dev': [{ name: 'phpunit/phpunit', version: v }] }) });
+    const lock = (v: string) => ({
+      'composer.lock': JSON.stringify({ packages: [], 'packages-dev': [{ name: 'phpunit/phpunit', version: v }] }),
+    });
     const modern = tempDir();
     writeFiles(modern, lock('11.5.3'));
     expect(narrowed(['vendor/bin/phpunit', '--colors=never'], modern)).toEqual(['vendor/bin/phpunit', '--colors=never', ...files]);
-    expect(narrowed(['php', '-d', 'memory_limit=-1', 'vendor/bin/pest'], modern)).toEqual(['php', '-d', 'memory_limit=-1', 'vendor/bin/pest', ...files]);
+    expect(narrowed(['php', '-d', 'memory_limit=-1', 'vendor/bin/pest'], modern)).toEqual([
+      'php',
+      '-d',
+      'memory_limit=-1',
+      'vendor/bin/pest',
+      ...files,
+    ]);
     expect(recognize(['phpunit', '--testsuite=unit'], modern)).toBeNull();
 
     const old = tempDir();
@@ -64,7 +72,9 @@ describe('recognize', () => {
     const cwd = tempDir();
     writeFiles(cwd, {
       'composer.lock': JSON.stringify({ 'packages-dev': [{ name: 'phpunit/phpunit', version: '11.0.0' }] }),
-      'composer.json': JSON.stringify({ scripts: { test: '@php vendor/bin/phpunit', unit: ['phpunit'], ci: '@test', stan: 'phpstan analyse', both: ['phpunit', 'pint'] } }),
+      'composer.json': JSON.stringify({
+        scripts: { test: '@php vendor/bin/phpunit', unit: ['phpunit'], ci: '@test', stan: 'phpstan analyse', both: ['phpunit', 'pint'] },
+      }),
     });
     expect(narrowed(['composer', 'test'], cwd)).toEqual(['composer', 'run-script', 'test', '--', ...files]);
     expect(narrowed(['composer', '-n', 'run', 'unit'], cwd)).toEqual(['composer', '-n', 'run-script', 'unit', '--', ...files]);
@@ -92,7 +102,14 @@ describe('recognize: per-file linters', () => {
     writeFiles(cwd, { 'eslint.config.js': 'export default [];' });
     const c = recognize(['npx', 'eslint', '--max-warnings', '0', 'src', 'test'], cwd);
     expect(c).toMatchObject({ kind: 'files', targets: ['src', 'test'], withDependents: true });
-    expect(c?.kind === 'files' && c.narrow(['src/a.ts'])).toEqual(['npx', 'eslint', '--max-warnings', '0', '--no-warn-ignored', 'src/a.ts']);
+    expect(c?.kind === 'files' && c.narrow(['src/a.ts'])).toEqual([
+      'npx',
+      'eslint',
+      '--max-warnings',
+      '0',
+      '--no-warn-ignored',
+      'src/a.ts',
+    ]);
     expect(recognize(['eslint'], cwd)).toMatchObject({ targets: ['.'] });
   });
 

@@ -5,7 +5,12 @@ import { tip } from '@/lib/tip';
 import { TipScope } from './tip-scope';
 
 const BANDS = [
-  { label: 'ran nothing', className: 'bg-rp-foam text-rp-base', dot: 'bg-rp-foam', note: 'Docs, CI and asset changes: no test file selected.' },
+  {
+    label: 'ran nothing',
+    className: 'bg-rp-foam text-rp-base',
+    dot: 'bg-rp-foam',
+    note: 'Docs, CI and asset changes: no test file selected.',
+  },
   { label: 'ran a slice', className: 'bg-rp-iris text-rp-base', dot: 'bg-rp-iris', note: 'Under half the test files ran.' },
   {
     label: 'ran most or all',
@@ -39,7 +44,11 @@ export function Explorer({ repos }: { repos: RepoBench[] }) {
 
   return (
     <TipScope className="not-prose @container flex flex-col gap-4">
-      <div role="tablist" aria-label="Benchmark repo" className="flex max-w-full flex-wrap gap-1.5 self-start rounded-[14px] border bg-rp-surface p-1.5">
+      <div
+        role="tablist"
+        aria-label="Benchmark repo"
+        className="flex max-w-full flex-wrap gap-1.5 self-start rounded-[14px] border bg-rp-surface p-1.5"
+      >
         {repos.map((x, i) => (
           <button
             key={x.key}
@@ -48,7 +57,9 @@ export function Explorer({ repos }: { repos: RepoBench[] }) {
             aria-selected={i === active}
             onClick={() => setActive(i)}
             className={`flex items-center gap-2 rounded-[10px] border px-3.5 py-2 font-mono text-[13px] transition-colors ${
-              i === active ? 'border-rp-hl-high bg-rp-overlay text-fd-foreground' : 'border-transparent text-fd-muted-foreground hover:text-fd-foreground'
+              i === active
+                ? 'border-rp-hl-high bg-rp-overlay text-fd-foreground'
+                : 'border-transparent text-fd-muted-foreground hover:text-fd-foreground'
             }`}
           >
             <span className={`size-[7px] rounded-full ${x.language === 'PHP' ? 'bg-rp-muted' : 'bg-rp-foam'}`} />
@@ -65,7 +76,11 @@ export function Explorer({ repos }: { repos: RepoBench[] }) {
             note={`Mean over ${commits} commits of the share of ${r.testFiles} test files picky did not run.`}
             tone={skipTone(r)}
           />
-          <Stat value={String(r.bands[0])} label={`of ${commits} PRs ran no test file`} note="Nothing a test can see changed: docs, CI scripts or assets." />
+          <Stat
+            value={String(r.bands[0])}
+            label={`of ${commits} PRs ran no test file`}
+            note="Nothing a test can see changed: docs, CI scripts or assets."
+          />
           <Stat
             value={`${median.toFixed(median > 99 && median < 100 ? 1 : 0)}%`}
             label="median share of test files run"
@@ -91,12 +106,16 @@ export function Explorer({ repos }: { repos: RepoBench[] }) {
           >
             {pct.map((v, i) => (
               <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: one column per commit, in a fixed order
+                // oxlint-disable-next-line react/no-array-index-key -- one column per commit, in a fixed order
                 key={i}
                 {...tip(commitTip(r, i))}
                 className="flex min-w-px flex-1 flex-col justify-end rounded-[3px] transition-[opacity,background-color] duration-150 group-hover/strip:opacity-45 hover:bg-rp-overlay hover:opacity-100!"
               >
-                <div data-tip-anchor className={`min-h-[3px] rounded-[2px] transition-[height] duration-500 ${bandColor(v)}`} style={{ height: `${Math.max(v, 2)}%` }} />
+                <div
+                  data-tip-anchor
+                  className={`min-h-[3px] rounded-[2px] transition-[height] duration-500 ${bandColor(v)}`}
+                  style={{ height: `${Math.max(v, 2)}%` }}
+                />
               </div>
             ))}
           </div>
@@ -173,8 +192,8 @@ export function Explorer({ repos }: { repos: RepoBench[] }) {
             </button>
           ))}
           <p className="border-t pt-3.5 text-[13.5px] text-fd-muted-foreground">
-            TypeScript repos split cleanly along imports. In composer and laravel, the base <code>TestCase</code> imports the whole
-            app, so the class graph reaches nearly every test. Symbol-level analysis is on the roadmap.
+            TypeScript repos split cleanly along imports. In composer and laravel, the base <code>TestCase</code> imports the whole app, so
+            the class graph reaches nearly every test. Symbol-level analysis is on the roadmap.
           </p>
         </section>
 
@@ -182,8 +201,8 @@ export function Explorer({ repos }: { repos: RepoBench[] }) {
           <div>
             <div className="font-semibold">What would that save you?</div>
             <div className="text-[13.5px] text-fd-muted-foreground">
-              An estimate, if your repo behaves like <span className="font-mono text-fd-foreground">{r.name}</span> and test time
-              scales with test files.
+              An estimate, if your repo behaves like <span className="font-mono text-fd-foreground">{r.name}</span> and test time scales
+              with test files.
             </div>
           </div>
           <label className="flex flex-col gap-1.5 text-sm">
@@ -191,14 +210,29 @@ export function Explorer({ repos }: { repos: RepoBench[] }) {
               <span>Test step, minutes per PR</span>
               <span className="font-mono tabular-nums">{minutes} min</span>
             </span>
-            <input type="range" min={1} max={60} value={minutes} onChange={(e) => setMinutes(Number(e.target.value))} className="w-full accent-rp-iris" />
+            <input
+              type="range"
+              min={1}
+              max={60}
+              value={minutes}
+              onChange={(e) => setMinutes(Number(e.target.value))}
+              className="w-full accent-rp-iris"
+            />
           </label>
           <label className="flex flex-col gap-1.5 text-sm">
             <span className="flex justify-between">
               <span>PRs per month</span>
               <span className="font-mono tabular-nums">{prs}</span>
             </span>
-            <input type="range" min={10} max={1000} step={10} value={prs} onChange={(e) => setPrs(Number(e.target.value))} className="w-full accent-rp-iris" />
+            <input
+              type="range"
+              min={10}
+              max={1000}
+              step={10}
+              value={prs}
+              onChange={(e) => setPrs(Number(e.target.value))}
+              className="w-full accent-rp-iris"
+            />
           </label>
           <div
             {...tip({

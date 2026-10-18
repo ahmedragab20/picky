@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "import"],
+  "categories": { "correctness": "error" },
+  "overrides": [
+    {
+      "files": ["docs/**/*.ts", "docs/**/*.tsx"],
+      "plugins": ["eslint", "typescript", "unicorn", "oxc", "import", "react", "nextjs", "jsx-a11y"],
+      "rules": {
+        "react/no-array-index-key": "error",
+        "jsx-a11y/label-has-associated-control": ["error", { "depth": 3 }]
+      }
+    }
+  ]
+}

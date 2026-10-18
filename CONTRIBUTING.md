@@ -9,10 +9,11 @@ git clone https://github.com/ahmedragab20/picky && cd picky
 bun install          # Bun 1.4.3+ runs the tooling; Node 24+ runs the TypeScript source directly
 bun run test         # bun test --check: type checks the tests and what they import, then runs them
 bun run typecheck    # bun check, plus a Node-only check of src/
+bun run lint         # oxlint, and oxfmt --check (bun run format fixes formatting)
 bun run demo         # end-to-end run through the CI hook
 ```
 
-`bin/picky` runs the source on Node, the runtime users have. `bun run build` type checks `src/` and makes the single-file bundle `dist/picky.mjs`, which is what `picky init` vendors into repos. `src/tsconfig.json` leaves out Bun's types, so a Bun-only API in `src/` fails the check.
+`bin/picky` runs the source on Node, the runtime users have. `bun run build` type checks `src/` and makes the single-file bundle `dist/picky.mjs`, which is what `picky init` vendors into repos. `src/tsconfig.json` leaves out Bun's types, so a Bun-only API in `src/` fails the check. Lint and format settings live in `.oxlintrc.json` and `.oxfmtrc.json` at the root and cover `docs/` too; Markdown and MDX are not formatted.
 
 ## Layout
 
@@ -31,7 +32,7 @@ bun run demo         # end-to-end run through the CI hook
 - **Fail open.** Any new path that can error must end in a full run, never a skipped test.
 - **Test observable behavior.** A bug fix comes with a test that fails before the fix.
 - **Keep it small.** No new runtime dependencies without an issue first.
-- Run `bun run test` and `bun run typecheck` before opening a PR. CI runs both, plus the build.
+- Run `bun run test`, `bun run typecheck` and `bun run lint` before opening a PR. CI runs all three, plus the build.
 
 ## Commits and PRs
 

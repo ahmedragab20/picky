@@ -9,9 +9,7 @@
     "prebuild": "bun scripts/sync.mjs",
     "build": "next build",
     "start": "serve out",
-    "types:check": "bun scripts/sync.mjs && next typegen && bun check",
-    "lint": "biome check",
-    "format": "biome format --write"
+    "types:check": "bun scripts/sync.mjs && next typegen && bun check"
   },
   "dependencies": {
     "cn": "^0.4.0",
@@ -32,7 +30,6 @@
     "postcss": "^8.5.28",
     "serve": "^14.2.6",
     "tailwindcss": "^4.3.3",
-    "typescript": "^7.0.2",
-    "@biomejs/biome": "^2.5.15"
+    "typescript": "^7.0.2"
   }
 }

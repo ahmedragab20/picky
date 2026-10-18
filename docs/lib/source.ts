@@ -49,9 +49,7 @@ ${absoluteLinks(withoutVisuals(await page.data.getText('processed')))}`,
 
 /** Pages in the order of the sidebar, grouped by its separators. */
 function sections() {
-  const groups: { title: string; pages: Page[] }[] = [
-    { title: 'Start here', pages: [] },
-  ];
+  const groups: { title: string; pages: Page[] }[] = [{ title: 'Start here', pages: [] }];
   for (const node of source.getPageTree().children) {
     if (node.type === 'separator') {
       // The last sidebar group is the changelog: the llms.txt standard calls skippable links "Optional".

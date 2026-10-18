@@ -38,13 +38,17 @@ const git = (...args: string[]) => execFileSync('git', ['-C', root, ...args], { 
 const isTest = picomatch(TEST_GLOBS, { dot: true });
 
 const branch = git('rev-parse', '--abbrev-ref', 'HEAD');
-const shas = git('rev-list', '--first-parent', '-n', String(Number(count) + 1), 'HEAD').split('\n').slice(0, Number(count));
+const shas = git('rev-list', '--first-parent', '-n', String(Number(count) + 1), 'HEAD')
+  .split('\n')
+  .slice(0, Number(count));
 const runs: Run[] = [];
 const errors: { sha: string; reason: string }[] = [];
 try {
   for (const [i, sha] of shas.entries()) {
     git('checkout', '-q', '--detach', '--force', sha);
-    const tests = git('ls-files').split('\n').filter((f) => isTest(f) && !isVendored(f)).length;
+    const tests = git('ls-files')
+      .split('\n')
+      .filter((f) => isTest(f) && !isVendored(f)).length;
     const d = await decide({ root, env: { PATH: process.env.PATH, PICKY_MODEL: 'none', PICKY_MODE: 'enforce', PICKY_BASE: `${sha}^1` } });
     // A failed git call (e.g. a lazy blob fetch over a flaky network) is the harness failing, not picky deciding.
     if (d.reason.startsWith('internal error')) {
@@ -54,7 +58,16 @@ try {
     }
     const run = d.full ? tests : Object.values(d.tests).filter((t) => t.run).length;
     const kind = run === 0 ? 'none' : run === tests ? 'all' : 'narrowed';
-    runs.push({ sha: sha.slice(0, 10), subject: git('log', '-1', '--format=%s', sha), changed: d.changed.length, tests, run, kind, reason: d.reason, ms: d.ms });
+    runs.push({
+      sha: sha.slice(0, 10),
+      subject: git('log', '-1', '--format=%s', sha),
+      changed: d.changed.length,
+      tests,
+      run,
+      kind,
+      reason: d.reason,
+      ms: d.ms,
+    });
     process.stderr.write(`${name} ${i + 1}/${shas.length} ${sha.slice(0, 10)}: ${run}/${tests} (${d.ms} ms) ${d.reason}\n`);
   }
 } finally {

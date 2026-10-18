@@ -167,11 +167,19 @@ describe('decideCached: one decision per PR', () => {
     let n = 0;
     const event = (dir: string) => {
       // The second job (Windows) gets the same event with a BOM, CRLF and indentation.
-      writeFiles(dir, { 'event.json': n++ === 0 ? '{"pull_request":{"number":7}}' : '\uFEFF{\r\n  "pull_request": {\r\n    "number": 7\r\n  }\r\n}\r\n' });
+      writeFiles(dir, {
+        'event.json': n++ === 0 ? '{"pull_request":{"number":7}}' : '\uFEFF{\r\n  "pull_request": {\r\n    "number": 7\r\n  }\r\n}\r\n',
+      });
       return path.join(dir, 'event.json');
     };
     const env = (job: string, dir: string) =>
-      cleanEnv({ PICKY_API_KEY: 'k', RUNNER_TEMP: runnerTemp, GITHUB_JOB: job, GITHUB_EVENT_NAME: 'pull_request', GITHUB_EVENT_PATH: event(dir) });
+      cleanEnv({
+        PICKY_API_KEY: 'k',
+        RUNNER_TEMP: runnerTemp,
+        GITHUB_JOB: job,
+        GITHUB_EVENT_NAME: 'pull_request',
+        GITHUB_EVENT_PATH: event(dir),
+      });
     const fetchImpl = vi.fn(async () => jevReply({ t0: 0.9 }));
     await decideCached({ root, env: env('picky', tempDir()), fetchImpl });
     expect(await decideCached({ root, env: env('alpine', tempDir()), fetchImpl })).toMatchObject({ cached: true, report: true });
@@ -181,7 +189,8 @@ describe('decideCached: one decision per PR', () => {
   it('ignores CRLF in the config (Windows checkouts), and names the input that differs', async () => {
     const root = repo({ ...SHOP, ...JEV }, { 'src/math.ts': '// x\n' });
     const runnerTemp = tempDir();
-    const env = (job: string, extra: Record<string, string> = {}) => cleanEnv({ PICKY_API_KEY: 'k', RUNNER_TEMP: runnerTemp, GITHUB_JOB: job, ...extra });
+    const env = (job: string, extra: Record<string, string> = {}) =>
+      cleanEnv({ PICKY_API_KEY: 'k', RUNNER_TEMP: runnerTemp, GITHUB_JOB: job, ...extra });
     const fetchImpl = vi.fn(async () => jevReply({ t0: 0.9 }));
     await decideCached({ root, env: env('picky'), fetchImpl });
 

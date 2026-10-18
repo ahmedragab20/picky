@@ -153,7 +153,11 @@ export function ProofStats() {
   return (
     <TipScope className="grid gap-px overflow-hidden rounded-[20px] border bg-fd-border sm:grid-cols-2 lg:grid-cols-4">
       {stats.map((s) => (
-        <div key={s.label} {...tip({ ...s.tip, tone: s.dot })} className="group bg-rp-base px-6 py-7 transition-colors duration-200 hover:bg-rp-surface">
+        <div
+          key={s.label}
+          {...tip({ ...s.tip, tone: s.dot })}
+          className="group bg-rp-base px-6 py-7 transition-colors duration-200 hover:bg-rp-surface"
+        >
           <div
             className={`font-display text-[56px] leading-none font-bold tracking-[-0.04em] tabular-nums transition-[translate] duration-200 group-hover:-translate-y-1 ${s.tone}`}
           >
@@ -202,7 +206,7 @@ export function RepoStrips() {
           <div className="group/strip flex h-14 min-w-0 flex-[999_1_520px] items-stretch gap-px overflow-hidden rounded-lg bg-rp-base p-1">
             {r.ran.map((n, i) => (
               <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: one column per commit, in a fixed order
+                // oxlint-disable-next-line react/no-array-index-key -- one column per commit, in a fixed order
                 key={i}
                 {...tip(commitTip(r, i))}
                 className="flex min-w-px flex-1 flex-col overflow-hidden rounded-[1.5px] transition-[opacity,filter] duration-150 group-hover/strip:opacity-40 hover:opacity-100! hover:brightness-125"
@@ -273,9 +277,15 @@ export function LatencyChart() {
           })}
           className="group/row -mx-2 grid grid-cols-[minmax(0,9rem)_minmax(0,1fr)_6.5rem] items-center gap-3 rounded-[10px] px-2 py-1.5 text-sm transition-colors hover:bg-rp-overlay"
         >
-          <span className="truncate font-mono text-[13px] text-fd-muted-foreground transition-colors group-hover/row:text-fd-foreground">{r.name}</span>
+          <span className="truncate font-mono text-[13px] text-fd-muted-foreground transition-colors group-hover/row:text-fd-foreground">
+            {r.name}
+          </span>
           <div className="relative h-3 rounded-full bg-rp-base transition-[height] duration-200 group-hover/row:h-4">
-            <div data-tip-anchor className="absolute inset-y-0 left-0 rounded-full bg-rp-rose/35" style={{ width: `${(r.p95 / max) * 100}%` }} />
+            <div
+              data-tip-anchor
+              className="absolute inset-y-0 left-0 rounded-full bg-rp-rose/35"
+              style={{ width: `${(r.p95 / max) * 100}%` }}
+            />
             <div
               className="absolute inset-y-0 left-0 rounded-full bg-rp-rose transition-[filter,box-shadow] duration-200 group-hover/row:shadow-[0_0_12px_1px_var(--color-rp-rose)] group-hover/row:brightness-110"
               style={{ width: `${(r.p50 / max) * 100}%` }}
@@ -321,7 +331,7 @@ export function BenchTable() {
             <td>{percent(r.skipped)}</td>
             <td>{percent(r.medianSelected)}</td>
             {r.bands.map((n, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: the three bands, in a fixed order
+              // oxlint-disable-next-line react/no-array-index-key -- the three bands, in a fixed order
               <td key={i}>{n}</td>
             ))}
             <td>

@@ -85,7 +85,9 @@ export function loadJob(root: string, env: NodeJS.ProcessEnv): Job | string {
     const pickyShell = typeof shell === 'string' && /^picky(\s|$)/.test(shell);
     // In a container the hook path (a host path) doesn't exist, and on Windows there's no bash by default.
     const hookable = !job.container && !/windows/i.test(String(job['runs-on']));
-    const dir = String(step['working-directory'] ?? job.defaults?.run?.['working-directory'] ?? workflow.defaults?.run?.['working-directory'] ?? '.');
+    const dir = String(
+      step['working-directory'] ?? job.defaults?.run?.['working-directory'] ?? workflow.defaults?.run?.['working-directory'] ?? '.',
+    );
     return {
       run: typeof step.run === 'string' ? step.run : undefined,
       uses: step.uses === undefined ? undefined : String(step.uses),
@@ -105,12 +107,7 @@ export function currentStep(job: Job, script: string): Step | undefined {
 }
 
 /** Decides one setup line of the current step. `decide` is only called when the job could be skipped. */
-export async function planSetup(
-  script: string,
-  root: string,
-  env: NodeJS.ProcessEnv,
-  decide: () => Promise<Decision>,
-): Promise<JobPlan> {
+export async function planSetup(script: string, root: string, env: NodeJS.ProcessEnv, decide: () => Promise<Decision>): Promise<JobPlan> {
   const keep = (note: string): JobPlan => ({ skip: false, note });
   const job = loadJob(root, env);
   if (typeof job === 'string') return keep(`setup runs (job-level skip: ${job})`);

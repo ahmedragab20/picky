@@ -13,7 +13,11 @@ export type Outcome = { action: 'full'; note: string; enforce?: Skip | Narrow } 
 const DOCS = ['**/*.{md,mdx,txt,rst,adoc}', '**/LICENSE*'];
 const MEDIA = ['**/*.{png,jpg,jpeg,gif,webp,avif,svg,ico,bmp,woff,woff2,ttf,otf,eot,mp3,mp4,wav,webm,pdf}'];
 const STYLES = ['**/*.{css,scss,sass,less,styl,pcss}'];
-const JS = ['**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs,vue,svelte,astro}', '**/{package,package-lock,tsconfig*,jsconfig}.json', '**/{pnpm-lock.yaml,yarn.lock,bun.lock,bun.lockb}'];
+const JS = [
+  '**/*.{ts,tsx,mts,cts,js,jsx,mjs,cjs,vue,svelte,astro}',
+  '**/{package,package-lock,tsconfig*,jsconfig}.json',
+  '**/{pnpm-lock.yaml,yarn.lock,bun.lock,bun.lockb}',
+];
 const PHP = ['**/*.php', '**/composer.{json,lock}', '**/*.neon', '**/*.neon.dist', '**/phpunit*.xml*'];
 const OTHER = ['**/*.{go,rs,py,rb,java,kt,swift,cs,c,h,cpp,hpp}', '**/{go.mod,go.sum,Cargo.toml,Cargo.lock}'];
 

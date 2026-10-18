@@ -38,7 +38,11 @@ const LINES: { text: string; tone?: string; tip?: Tip }[] = [
   {
     text: 'picky: npm test -> running 2 of 3 test files',
     tone: 'text-rp-gold',
-    tip: { title: 'Narrowed', note: 'npm test runs with only the 2 selected files. If picky fails, the original command runs.', tone: 'bg-rp-gold' },
+    tip: {
+      title: 'Narrowed',
+      note: 'npm test runs with only the 2 selected files. If picky fails, the original command runs.',
+      tone: 'bg-rp-gold',
+    },
   },
   { text: '✔ sums the cart', tone: 'text-rp-pine' },
   { text: '✔ adds two numbers', tone: 'text-rp-pine' },

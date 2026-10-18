@@ -44,7 +44,8 @@ exit 127
 `;
 
 /** Windows resolves \`shell: picky {0}\` to this through PATHEXT. */
-export const WRAPPER_CMD = '@echo off\r\nrem Runs the picky bundle vendored next to this file.\r\nnode --no-warnings "%~dp0picky.mjs" %*\r\nexit /b %ERRORLEVEL%\r\n';
+export const WRAPPER_CMD =
+  '@echo off\r\nrem Runs the picky bundle vendored next to this file.\r\nnode --no-warnings "%~dp0picky.mjs" %*\r\nexit /b %ERRORLEVEL%\r\n';
 
 /** \`uses: ./.github/picky\`: puts picky on PATH for \`shell: picky {0}\` steps. */
 export const SETUP_ACTION = `name: picky setup
@@ -89,7 +90,11 @@ export function planInit(root: string, assets: InitAssets): { files: InitFile[];
   add('.github/picky/picky.mjs', assets.bundle);
 
   const dir = path.join(root, '.github/workflows');
-  const workflows = existsSync(dir) ? readdirSync(dir).filter((f) => /\.ya?ml$/.test(f)).sort() : [];
+  const workflows = existsSync(dir)
+    ? readdirSync(dir)
+        .filter((f) => /\.ya?ml$/.test(f))
+        .sort()
+    : [];
   if (workflows.length === 0) notes.push('no workflows in .github/workflows; add `# picky` to a step and the env lines by hand');
   for (const name of workflows) {
     const rel = `.github/workflows/${name}`;
@@ -146,7 +151,9 @@ export function editWorkflow(text: string, root: string): { text: string; notes:
     steps.items.forEach((node, i) => {
       const step = job.steps?.[i];
       if (!isMap(node) || typeof step?.run !== 'string') return;
-      const dir = String(step['working-directory'] ?? job.defaults?.run?.['working-directory'] ?? workflow.defaults?.run?.['working-directory'] ?? '.');
+      const dir = String(
+        step['working-directory'] ?? job.defaults?.run?.['working-directory'] ?? workflow.defaults?.run?.['working-directory'] ?? '.',
+      );
       if (dir.includes('${{')) return;
       const run = node.get('run', true);
       if (!isScalar(run) || !run.range) return;
@@ -172,7 +179,9 @@ export function editWorkflow(text: string, root: string): { text: string; notes:
       // `shell: picky [shell] {0}` runs the whole step; any other custom shell is left alone.
       const inner = shell === undefined ? (windows ? 'pwsh' : '') : String(shell).trim();
       if (inner !== '' && !isShell(inner)) return;
-      const words = scanScript(step.run).flatMap((l) => (l.simple ? [tokenize(l.text)] : [])).filter((w): w is string[] => !!w?.length);
+      const words = scanScript(step.run)
+        .flatMap((l) => (l.simple ? [tokenize(l.text)] : []))
+        .filter((w): w is string[] => !!w?.length);
       const recognized = words.some((w) => recognize(w, cwd) !== null);
       recognizedAny ||= recognized;
       if (recognized || words.some((w) => isSetupCommand(w))) fallback.push({ node, run, inner });
@@ -215,7 +224,9 @@ export function editWorkflow(text: string, root: string): { text: string; notes:
         if (added) edits.push(added);
         else notes.push(`job "${name}": add \`picky\` to its needs by hand`);
       }
-      const downloads = job.steps?.some((s: any) => /^actions\/download-artifact@/.test(String(s?.uses)) && s?.with?.name === 'picky-decision');
+      const downloads = job.steps?.some(
+        (s: any) => String(s?.uses).startsWith('actions/download-artifact@') && s?.with?.name === 'picky-decision',
+      );
       const step = downloads ? null : downloadStep(text, map, Boolean(job.container));
       if (step) edits.push(step);
     }
@@ -229,7 +240,7 @@ const hasSetupAction = (steps: any[] | undefined) => steps?.some((s) => /^\.\/\.
 /** Adds `uses: ./.github/picky` right after checkout. Null when present; undefined when there's no checkout to follow. */
 function setupActionStep(text: string, steps: YAMLSeq, jsSteps: any[]): Edit | null | undefined {
   if (hasSetupAction(jsSteps)) return null;
-  const i = jsSteps.findIndex((s) => /^actions\/checkout@/.test(String(s?.uses)));
+  const i = jsSteps.findIndex((s) => String(s?.uses).startsWith('actions/checkout@'));
   const next = steps.items[i + 1] as any;
   if (i < 0 || !next?.range) return undefined;
   const at = lineStart(text, next.range[0]);

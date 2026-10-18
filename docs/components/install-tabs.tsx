@@ -30,7 +30,9 @@ export function InstallTabs({ tabs }: { tabs: InstallTab[] }) {
           </button>
         ))}
       </div>
-      <pre className="min-h-40 max-h-80 overflow-auto p-5 font-mono text-[13px] leading-[1.8] break-words whitespace-pre-wrap">{tab.code}</pre>
+      <pre className="min-h-40 max-h-80 overflow-auto p-5 font-mono text-[13px] leading-[1.8] break-words whitespace-pre-wrap">
+        {tab.code}
+      </pre>
       <div className="flex flex-wrap items-center justify-between gap-3 border-t bg-rp-base px-5 py-3">
         <span className="text-[13px] text-fd-muted-foreground">{tab.note}</span>
         <CopyButton text={tab.code} />

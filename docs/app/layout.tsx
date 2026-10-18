@@ -9,7 +9,8 @@ const display = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-bric
 
 export const metadata: Metadata = {
   title: { template: '%s · picky', default: 'picky · run only the tests a change can affect' },
-  description: 'picky runs only the tests, lint and type checks a pull request can affect, in JS/TS and PHP. Any doubt means everything runs.',
+  description:
+    'picky runs only the tests, lint and type checks a pull request can affect, in JS/TS and PHP. Any doubt means everything runs.',
 };
 
 export default function Layout({ children }: LayoutProps<'/'>) {

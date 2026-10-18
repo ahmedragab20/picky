@@ -44,13 +44,16 @@ describe('parsePhp', () => {
   });
 
   it('finds class names in docblocks and strings', () => {
-    const php = parsePhp('a.php', "<?php\nnamespace A;\n/** @return \\App\\Dto */\nfunction f() { return app('App\\\\Models\\\\User'); }\n");
+    const php = parsePhp(
+      'a.php',
+      "<?php\nnamespace A;\n/** @return \\App\\Dto */\nfunction f() { return app('App\\\\Models\\\\User'); }\n",
+    );
     expect(php.references).toContain('app\\dto');
     expect(php.references).toContain('app\\models\\user');
   });
 
   it('declares global functions only in files without classes', () => {
-    expect(declaredNames("<?php\nfunction helper() {}\n")).toEqual(['helper']);
+    expect(declaredNames('<?php\nfunction helper() {}\n')).toEqual(['helper']);
     expect(declaredNames('<?php\nnamespace A;\nclass B { function c() {} }\n')).toEqual(['a\\b']);
   });
 });

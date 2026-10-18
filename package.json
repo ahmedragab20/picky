@@ -20,7 +20,9 @@
     "demo": "bash examples/demo.sh",
     "build": "bun --check scripts/build.ts",
     "bench": "bun check bench/selection.ts && node bench/selection.ts",
-    "bench:hero": "bun check bench/hero.ts && node bench/hero.ts"
+    "bench:hero": "bun check bench/hero.ts && node bench/hero.ts",
+    "lint": "oxlint --deny-warnings && oxfmt --check",
+    "format": "oxfmt"
   },
   "dependencies": {
     "picomatch": "^4.0.7",
@@ -30,6 +32,8 @@
   "devDependencies": {
     "@types/bun": "1.4.3",
     "@types/node": "^26.6.5",
-    "@types/picomatch": "^4.0.3"
+    "@types/picomatch": "^4.0.3",
+    "oxfmt": "0.73.0",
+    "oxlint": "1.88.0"
   }
 }

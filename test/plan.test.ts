@@ -34,7 +34,10 @@ describe('planCommand: tests across ecosystems', () => {
   });
 
   it('runs one ecosystem in full when its lockfile changes, and keeps narrowing the other', async () => {
-    const { plan, decision } = await plans({ 'composer.lock': '{}', 'src/math.ts': 'export const add = (a: number, b: number) => b + a;\n' });
+    const { plan, decision } = await plans({
+      'composer.lock': '{}',
+      'src/math.ts': 'export const add = (a: number, b: number) => b + a;\n',
+    });
     expect(decision.full).toBe(false);
     expect(plan('vendor/bin/phpunit')).toEqual({ action: 'full', note: 'full run for php commands: composer.lock changed' });
     expect(plan('node --test')).toMatchObject({ action: 'narrow', argv: ['node', '--test', 'test/cart.test.ts', 'test/math.test.ts'] });
@@ -48,7 +51,10 @@ describe('planCommand: lint and type checks', () => {
       action: 'narrow',
       argv: ['npx', 'eslint', '--no-warn-ignored', 'src/cart.ts', 'src/math.ts', 'test/cart.test.ts', 'test/math.test.ts'],
     });
-    expect(plan('npx prettier --check .')).toMatchObject({ action: 'narrow', argv: ['npx', 'prettier', '--check', '--ignore-unknown', 'src/math.ts'] });
+    expect(plan('npx prettier --check .')).toMatchObject({
+      action: 'narrow',
+      argv: ['npx', 'prettier', '--check', '--ignore-unknown', 'src/math.ts'],
+    });
     expect(plan('npx tsc --noEmit')).toMatchObject({ action: 'full' });
     expect(plan('vendor/bin/phpstan analyse')).toMatchObject({ action: 'skip' });
     expect(plan('vendor/bin/pint --test')).toMatchObject({ action: 'skip' });
@@ -56,7 +62,10 @@ describe('planCommand: lint and type checks', () => {
 
   it('formats docs-only changes and skips everything else', async () => {
     const { plan } = await plans({ 'README.md': '# shop, documented\n' });
-    expect(plan('npx prettier --check .')).toMatchObject({ action: 'narrow', argv: ['npx', 'prettier', '--check', '--ignore-unknown', 'README.md'] });
+    expect(plan('npx prettier --check .')).toMatchObject({
+      action: 'narrow',
+      argv: ['npx', 'prettier', '--check', '--ignore-unknown', 'README.md'],
+    });
     // ESLint gets the file too: markdown plugins lint it, and --no-warn-ignored skips it otherwise.
     expect(plan('npx eslint .')).toMatchObject({ action: 'narrow', argv: ['npx', 'eslint', '--no-warn-ignored', 'README.md'] });
     for (const cmd of ['npx tsc', 'vendor/bin/phpstan', 'vendor/bin/phpunit', 'node --test']) {

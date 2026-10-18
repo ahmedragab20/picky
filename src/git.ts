@@ -121,7 +121,7 @@ export function changedFiles(root: string, range: Range): Change[] {
 
   const fields = git(root, ['diff', '--name-status', '-z', '-M', range.base, range.head]).split('\0');
   const changes: Change[] = [];
-  for (let i = 0; i < fields.length && fields[i]; ) {
+  for (let i = 0; i < fields.length && fields[i];) {
     const status = fields[i][0] as Change['status'];
     if (status === 'R' || status === 'C') {
       const [from, file] = [fields[i + 1], fields[i + 2]];
