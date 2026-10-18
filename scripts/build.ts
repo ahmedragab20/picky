@@ -24,6 +24,7 @@ await build({
   target: 'node20',
   legalComments: 'none',
   plugins: [inlineAssets],
+  define: { __PICKY_VERSION__: JSON.stringify(JSON.parse(readFileSync('package.json', 'utf8')).version) },
   banner: {
     js: [
       "import { createRequire as __cr } from 'node:module';",

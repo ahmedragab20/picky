@@ -13,6 +13,7 @@ import { planCommand, type Narrow, type Outcome, type Skip } from './plan.ts';
 import { formatDecision, shadowMissMessage, shadowReport, writeJobSummary } from './report.ts';
 import { defaultShell, extension, finalize, invocation, isShell, rewriteStep, shadowLine } from './shell.ts';
 import { quoteArgv, splitAssignments, tokenize } from './sh.ts';
+import { VERSION } from './version.ts';
 
 const USAGE = `picky: runs only the tests, lint and type checks a change can affect (JS/TS and PHP)
 
@@ -26,6 +27,7 @@ usage:
   picky rewrite --script <s> --line <n> print the shell text for one marked line
   picky [bash|sh|pwsh|powershell] <script>
                                         run a whole step: \`shell: picky {0}\` in a workflow
+  picky --version                       print the version
 
 environment:
   PICKY_MODE=shadow|enforce   PICKY_MODEL=jev|typesafe/<version>|none
@@ -36,6 +38,7 @@ const SELF = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../bin/
 
 async function main(argv: string[]): Promise<number> {
   const [cmd, ...rest] = argv;
+  if (cmd === '--version' || cmd === '-v') return process.stdout.write(`${VERSION}\n`), 0;
   if (cmd === '--') return runCommand(rest);
   if (cmd === 'shadow-report') return shadowReport(rest[0], rest[1] ?? '', process.env, log), 0;
   if (cmd === 'explain') return explain();
