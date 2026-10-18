@@ -1,7 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 
 const HOME = path.resolve(import.meta.dirname, '..');
 const { version } = JSON.parse(readFileSync(path.join(HOME, 'package.json'), 'utf8'));

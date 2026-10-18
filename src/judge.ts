@@ -3,12 +3,15 @@ export interface Question {
   instructions: string;
 }
 
+/** Only the call signature: Bun's `typeof fetch` adds statics like `preconnect` that a stub doesn't have. */
+export type Fetch = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+
 export interface JudgeOptions {
   apiKey: string;
   model: string;
   /** Epoch ms after which no new attempt starts. */
   deadline: number;
-  fetchImpl?: typeof fetch;
+  fetchImpl?: Fetch;
   endpoint?: string;
   batchSize?: number;
 }

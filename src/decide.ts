@@ -6,7 +6,7 @@ import { loadConfig, type Config, type Mode } from './config.ts';
 import { changedFiles, git, hunks, resolveRange, trackedFiles, type Change, type Range } from './git.ts';
 import { ecosystemOf, type Ecosystem } from './commands.ts';
 import { buildGraph, importersOfMissing, isVendored, phpReferencersOf, transitiveDependents, type Graph } from './graph.ts';
-import { askJev, type Question } from './judge.ts';
+import { askJev, type Fetch, type Question } from './judge.ts';
 import { declaredNames } from './php.ts';
 
 export interface TestDecision {
@@ -76,7 +76,7 @@ const DECISION_SCHEMA = 4;
 export interface DecideOptions {
   root: string;
   env: NodeJS.ProcessEnv;
-  fetchImpl?: typeof fetch;
+  fetchImpl?: Fetch;
 }
 
 export interface CachedDecision {

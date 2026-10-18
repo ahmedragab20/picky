@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { buildGraph, phpReferencersOf, transitiveDependents } from '../src/graph.ts';
 import { declaredNames, parsePhp } from '../src/php.ts';
 import { SHOP_PHP, tempDir, writeFiles } from './helpers.ts';

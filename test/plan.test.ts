@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { decide } from '../src/decide.ts';
 import { planCommand } from '../src/plan.ts';
 import { cleanEnv, repo, SHOP, SHOP_PHP } from './helpers.ts';

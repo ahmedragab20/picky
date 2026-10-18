@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { parse } from 'yaml';
 import { editWorkflow, planInit, SETUP_ACTION } from '../src/init.ts';
 import { SHOP, SHOP_PHP, tempDir, writeFiles } from './helpers.ts';

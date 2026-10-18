@@ -1,14 +1,15 @@
 {
   "name": "picky-docs",
   "private": true,
+  "packageManager": "bun@1.4.3",
   "scripts": {
-    "sync": "node scripts/sync.mjs",
-    "predev": "node scripts/sync.mjs",
+    "sync": "bun scripts/sync.mjs",
+    "predev": "bun scripts/sync.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/sync.mjs",
+    "prebuild": "bun scripts/sync.mjs",
     "build": "next build",
     "start": "serve out",
-    "types:check": "node scripts/sync.mjs && next typegen && tsc --noEmit",
+    "types:check": "bun scripts/sync.mjs && next typegen && bun check",
     "lint": "biome check",
     "format": "biome format --write"
   },

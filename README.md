@@ -65,7 +65,7 @@ low: ["docs/**"]       # changes here never select tests on their own
 
 ```bash
 git clone https://github.com/ahmedragab20/picky && cd picky
-npm install && npm run demo
+bun install && bun run demo
 ```
 
 The demo builds a small repo and runs 4 PRs through the hook: a source change, a docs-only change, a `package.json` change and shadow mode.

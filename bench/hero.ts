@@ -1,7 +1,7 @@
 // Records which test files picky's graph runs, and why, for a few real commits of one repo.
 // The docs landing page draws it as a grid with one cell per test file.
 //
-//   node bench/hero.ts <repo-dir> <sha>...
+//   bun run bench:hero <repo-dir> <sha>...
 //
 // Like selection.ts: graph only (model: none), each commit's first parent is the base, and the
 // repo is checked out at every commit, so use a throwaway clone. Writes bench/hero.json.
@@ -13,7 +13,7 @@ import { decide } from '../src/decide.ts';
 
 const [dir, ...shas] = process.argv.slice(2);
 if (!dir || shas.length === 0) {
-  console.error('usage: node bench/hero.ts <repo-dir> <sha>...');
+  console.error('usage: bun run bench:hero <repo-dir> <sha>...');
   process.exit(2);
 }
 const root = path.resolve(dir);

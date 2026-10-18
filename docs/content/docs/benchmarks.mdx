@@ -24,7 +24,7 @@ Reproduce it:
 
 ```bash
 git clone --depth 102 https://github.com/honojs/hono /tmp/hono
-node bench/selection.ts /tmp/hono hono 100
+bun install && bun run bench /tmp/hono hono 100
 ```
 
 The script is [`bench/selection.ts`](https://github.com/ahmedragab20/picky/blob/main/bench/selection.ts). It writes `bench/results.json`, which this page reads at build time.

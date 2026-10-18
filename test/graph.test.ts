@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { buildGraph, importersOfMissing, transitiveDependents } from '../src/graph.ts';
 import { tempDir, writeFiles } from './helpers.ts';
 

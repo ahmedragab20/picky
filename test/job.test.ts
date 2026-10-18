@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { decide } from '../src/decide.ts';
 import { isSetupCommand, planSetup } from '../src/job.ts';
 import { tokenize } from '../src/sh.ts';

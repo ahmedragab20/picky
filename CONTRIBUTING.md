@@ -6,13 +6,13 @@ Thanks for helping. Bug reports, fixes and new tool recognizers are all welcome.
 
 ```bash
 git clone https://github.com/ahmedragab20/picky && cd picky
-npm install          # Node 24+ (runs the TypeScript source directly)
-npm test             # vitest
-npm run typecheck    # tsc
-npm run demo         # end-to-end run through the CI hook
+bun install          # Bun 1.4.3+ runs the tooling; Node 24+ runs the TypeScript source directly
+bun run test         # bun test --check: type checks the tests and what they import, then runs them
+bun run typecheck    # bun check, plus a Node-only check of src/
+bun run demo         # end-to-end run through the CI hook
 ```
 
-`bin/picky` runs the source directly. `npm run build` makes the single-file bundle `dist/picky.mjs`, which is what `picky init` vendors into repos.
+`bin/picky` runs the source on Node, the runtime users have. `bun run build` type checks `src/` and makes the single-file bundle `dist/picky.mjs`, which is what `picky init` vendors into repos. `src/tsconfig.json` leaves out Bun's types, so a Bun-only API in `src/` fails the check.
 
 ## Layout
 
@@ -31,7 +31,7 @@ npm run demo         # end-to-end run through the CI hook
 - **Fail open.** Any new path that can error must end in a full run, never a skipped test.
 - **Test observable behavior.** A bug fix comes with a test that fails before the fix.
 - **Keep it small.** No new runtime dependencies without an issue first.
-- Run `npm test` and `npm run typecheck` before opening a PR. CI runs both, plus the build.
+- Run `bun run test` and `bun run typecheck` before opening a PR. CI runs both, plus the build.
 
 ## Commits and PRs
 
@@ -42,7 +42,7 @@ Add a line under `## [Unreleased]` in `CHANGELOG.md` for anything users would no
 ## Docs
 
 ```bash
-cd docs && npm install && npm run dev    # http://localhost:3000
+cd docs && bun install && bun run dev    # http://localhost:3000
 ```
 
 Pages are in `docs/content/docs/*.mdx`. Keep them short: a table, a chart or a code block first, with details in an `<Accordion>`.

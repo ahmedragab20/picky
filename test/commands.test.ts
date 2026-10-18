@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { recognize } from '../src/commands.ts';
 import { tempDir, writeFiles } from './helpers.ts';
 

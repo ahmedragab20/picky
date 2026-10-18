@@ -13,11 +13,14 @@
   "engines": {
     "node": ">=24"
   },
+  "packageManager": "bun@1.4.3",
   "scripts": {
-    "test": "vitest run",
-    "typecheck": "tsc --noEmit",
+    "test": "bun test --check",
+    "typecheck": "bun check && bun check -p src",
     "demo": "bash examples/demo.sh",
-    "build": "node scripts/build.ts"
+    "build": "bun --check scripts/build.ts",
+    "bench": "bun check bench/selection.ts && node bench/selection.ts",
+    "bench:hero": "bun check bench/hero.ts && node bench/hero.ts"
   },
   "dependencies": {
     "picomatch": "^4.0.7",
@@ -25,9 +28,8 @@
     "yaml": "^2.9.1"
   },
   "devDependencies": {
+    "@types/bun": "1.4.3",
     "@types/node": "^26.6.5",
-    "@types/picomatch": "^4.0.3",
-    "esbuild": "0.28.2",
-    "vitest": "^5.0.5"
+    "@types/picomatch": "^4.0.3"
   }
 }

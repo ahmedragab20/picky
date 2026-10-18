@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'bun:test';
 import { changedFiles, resolveRange } from '../src/git.ts';
 import { cleanEnv, repo, sh, SHOP, writeFiles } from './helpers.ts';
 

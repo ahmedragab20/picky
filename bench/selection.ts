@@ -2,7 +2,9 @@
 // each change selects. Graph only (model: none): no API key, and the numbers are the floor
 // picky always runs; with Jev, tests outside the graph can be added on top.
 //
-//   node bench/selection.ts <repo-dir> <name> [commits=100]
+//   bun run bench <repo-dir> <name> [commits=100]
+//
+// That type checks this script, then runs it on Node, so the latencies are the ones users get.
 //
 // Each first-parent commit on the checked-out branch is treated as one PR: its first parent is
 // the base. The repo is checked out at every commit, so use a throwaway clone. Results are merged
@@ -28,7 +30,7 @@ interface Run {
 
 const [dir, name, count = '100'] = process.argv.slice(2);
 if (!dir || !name) {
-  console.error('usage: node bench/selection.ts <repo-dir> <name> [commits=100]');
+  console.error('usage: bun run bench <repo-dir> <name> [commits=100]');
   process.exit(2);
 }
 const root = path.resolve(dir);

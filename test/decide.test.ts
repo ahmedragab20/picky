@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'bun:test';
 import { decide, decideCached, THRESHOLD } from '../src/decide.ts';
 import path from 'node:path';
 import { cleanEnv, repo, SHOP, tempDir, writeFiles } from './helpers.ts';
@@ -103,7 +103,7 @@ describe('decide: Jev judge', () => {
     });
     const d = await decide({ root, env: cleanEnv({ PICKY_API_KEY: 'k' }), fetchImpl });
 
-    expect(fetchImpl).toHaveBeenCalledOnce();
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
     const [, init] = fetchImpl.mock.calls[0];
     expect((init!.headers as Record<string, string>).authorization).toBe('Bearer k');
     expect(d.tests['test/strings.test.ts']).toMatchObject({ run: true, reason: 'imports src/strings.ts' });
@@ -158,7 +158,7 @@ describe('decideCached: one decision per PR', () => {
     expect(js.decision.tests).toEqual(first.decision.tests);
     expect((await decideCached({ root, env: env('js'), fetchImpl })).report).toBe(false);
     expect((await decideCached({ root, env: env('picky'), fetchImpl })).report).toBe(false);
-    expect(fetchImpl).toHaveBeenCalledOnce();
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
   });
 
   it('shares the decision with a container job, which sees the same event at another path', async () => {
@@ -175,7 +175,7 @@ describe('decideCached: one decision per PR', () => {
     const fetchImpl = vi.fn(async () => jevReply({ t0: 0.9 }));
     await decideCached({ root, env: env('picky', tempDir()), fetchImpl });
     expect(await decideCached({ root, env: env('alpine', tempDir()), fetchImpl })).toMatchObject({ cached: true, report: true });
-    expect(fetchImpl).toHaveBeenCalledOnce();
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
   });
 
   it('ignores CRLF in the config (Windows checkouts), and names the input that differs', async () => {

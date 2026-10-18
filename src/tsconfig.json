@@ -1,0 +1,6 @@
+{
+  // picky ships to users' runners as a Node bundle: no Bun types in here, so Bun-only APIs fail the check.
+  "extends": "../tsconfig.json",
+  "compilerOptions": { "types": ["node"] },
+  "include": ["."]
+}
