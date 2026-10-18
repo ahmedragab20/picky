@@ -1,8 +1,11 @@
 {
   "name": "picky",
-  "version": "0.2.0",
+  "version": "0.1.0-rc",
   "private": true,
   "description": "Picks which CI tests run for a change: dependency graph first, a model (Jev) for the rest, full run on any doubt.",
+  "license": "MIT",
+  "repository": "github:ahmedragab20/picky",
+  "homepage": "https://ahmedragab20.github.io/picky",
   "type": "module",
   "bin": {
     "picky": "bin/picky"

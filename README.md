@@ -1,181 +1,81 @@
 # picky
 
-Runs only the tests, lint and type checks a change can affect, in JS/TS and PHP.
-- A dependency graph decides what must run.
-- A model (Jev) judges the tests the graph can't link.
-- Any doubt, error or timeout means everything runs.
+[![CI](https://github.com/ahmedragab20/picky/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmedragab20/picky/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-c4a7e7)](LICENSE)
 
-Status: **v0.2, a working slice of [PLAN.md](PLAN.md)** (see its "Build status" section). It has been verified end to end on GitHub-hosted runners with a private fixture repo.
+**Run only the tests your PR can affect.** picky reads the diff, follows the import graph, and runs only the tests, lint and type checks a change can reach, in GitHub Actions, for JS/TS and PHP. Any doubt runs everything.
 
-## Try it
+[Docs](https://ahmedragab20.github.io/picky/) · [Benchmarks](https://ahmedragab20.github.io/picky/docs/benchmarks/) · [For agents](https://ahmedragab20.github.io/picky/docs/agents/) · [Changelog](CHANGELOG.md)
+
+## Benchmarks
+
+The last 100 commits of 4 open-source repos, each replayed as a PR through picky in graph-only mode (`model: none`, no cache):
+
+| Repo | Test files | Test files skipped (avg) | PRs that ran no test | Time to decide (p50) |
+|---|---:|---:|---:|---:|
+| [colinhacks/zod](https://github.com/colinhacks/zod) | 202 | **72%** | 32 of 100 | 108 ms |
+| [honojs/hono](https://github.com/honojs/hono) | 160 | **45%** | 4 of 100 | 93 ms |
+| [composer/composer](https://github.com/composer/composer) | 186 | 13% | 12 of 100 | 216 ms |
+| [laravel/framework](https://github.com/laravel/framework) | 1,008 | 8% | 5 of 100 | 748 ms |
+
+TypeScript repos split cleanly along imports. In the two PHP repos, the base `TestCase` imports the whole app, so the class graph reaches almost every test; symbol-level analysis is next. These are graph-only numbers: with the Jev model on, picky can only add tests. Method and per-commit data: [`bench/`](bench/) and the [benchmarks page](https://ahmedragab20.github.io/picky/docs/benchmarks/).
+
+## Install
 
 ```bash
-npm install
-npm run demo                              # graph-only, no API key needed
-PICKY_API_KEY=<typesafe key> npm run demo # adds Jev for tests outside the graph
+curl -fsSLO https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/picky.mjs
+node picky.mjs init           # prints every change as a diff
+node picky.mjs init --write   # applies it
+rm picky.mjs
 ```
 
-The demo builds a small TypeScript repo and runs a CI step through the picky hook, exactly the way GitHub Actions runs `run:` steps. It covers 4 scenarios: a source change, a docs-only change, a `package.json` change and shadow mode.
+Then add the `PICKY_API_KEY` repository secret (or set `model: none`), commit, and open a PR. Needs Node 20+.
 
-## Use it in a repo
+- **Vendored:** `init` puts one 3.8 MB file in `.github/picky/`. CI downloads nothing, and git pins the version.
+- **Safe rollout:** it starts in shadow mode. Everything still runs, and picky reports any failure enforce mode would have missed.
+- **Enterprise:** checksum-verified downloads, no third-party actions, and a zero-egress mode. See [Install](https://ahmedragab20.github.io/picky/docs/install/).
+- **With a coding agent:** paste [one prompt](https://ahmedragab20.github.io/picky/docs/agents/) into Claude Code, Cursor or Codex, or install the [picky skill](skills/picky/SKILL.md).
+
+## Where it pays off
+
+- **Docs, assets and CI-script PRs:** no test can see the change, so tests, type checks and the `npm ci` before them all skip.
+- **Big JS/TS suites:** a fix in one module runs the tests that import it. Vitest, Jest, `node --test`, ESLint, Prettier.
+- **PHP projects:** PHPUnit and Pest narrowed by the class graph; phpstan, psalm, phpcs, pint and rector skip when nothing they check changed.
+- **Matrix and multi-OS jobs:** one decision per PR, shared by every job on Linux, Windows and containers.
+
+## How it decides
+
+1. **Diff** against the PR base.
+2. **Gates:** a change to `.picky.yml`, workflows or `critical` paths runs everything. A lockfile or `package.json` change runs that ecosystem in full.
+3. **Graph:** every test that reaches a changed file through imports runs.
+4. **Jev:** a model judges the tests the graph can't link. Unsure means run.
+5. **Run:** each command marked `# picky` is skipped, narrowed or run in full.
+
+Any error, timeout, missing key or config picky can't honor runs everything. If picky itself breaks, the original command runs.
 
 ```yaml
 # .picky.yml (every key is optional)
-mode: enforce          # shadow (default): decide and log, but run everything
-model: jev             # jev | typesafe/<jev-version> | none (graph only)
-critical: ["db/**", "test/security/**"]   # a change here, or a test here, always runs
-low: ["docs/**", "**/*.md"]               # changes here never trigger tests
+mode: shadow           # shadow | enforce
+model: jev             # jev | none (graph only, no network)
+critical: ["db/**"]    # a change here always runs everything
+low: ["docs/**"]       # changes here never select tests on their own
 ```
+
+## Try it locally
 
 ```bash
-export PICKY_API_KEY=...                 # TYPESAFE_API_KEY also works
-bin/picky explain                        # show the decision for this branch
-bin/picky -- npx vitest run              # run narrowed to the affected test files
+git clone https://github.com/ahmedragab20/picky && cd picky
+npm install && npm run demo
 ```
 
-### Set up a repo: `picky init`
+The demo builds a small repo and runs 4 PRs through the hook: a source change, a docs-only change, a `package.json` change and shadow mode.
 
-```bash
-npm run build                      # dist/picky.mjs, one 3.8 MB file (Node 20+)
-cd ~/code/my-repo
-node ~/code/picky/dist/picky.mjs init           # shows every change as a diff
-node ~/code/picky/dist/picky.mjs init --write   # applies it
-```
+## Limits
 
-`init`:
-- writes `.picky.yml` (shadow mode) if there is none
-- vendors `.github/picky/` (the hook, a `picky` wrapper and the bundle); git pins the version, so there's no download at run time
-- in each workflow that runs on `pull_request`: adds the 2 env lines and puts `# picky` on every command it recognizes
-- when several jobs (or a matrix) use picky, adds the decide job and the download step (below)
+- GitHub Actions only, on `pull_request` events. JS/TS and PHP only.
+- Verified on GitHub-hosted runners. Self-hosted runners and GitHub Enterprise Server are not verified yet.
+- More in [Limits](https://ahmedragab20.github.io/picky/docs/limits/).
 
-It runs again safely: it never adds anything twice. To upgrade picky, rerun it with a newer bundle. Then add the `PICKY_API_KEY` secret and commit.
+## Contributing
 
-### Shadow mode first
-
-In shadow mode every marked command runs in full, and picky logs what it would have done. When a command fails, picky checks whether enforce mode would have caught the failure:
-- **Would have skipped it:** a miss.
-- **Would have narrowed it:** picky runs the narrowed command too (in a collapsed log group). If that passes, it's a miss; if it fails too, enforce mode would have caught it.
-
-A miss shows as a `picky shadow miss` warning on the run and in the job summary, and never changes the step's result. A flaky test or a runner problem can look like a miss, so read the failure. When PRs go by without real misses, set `mode: enforce`.
-
-### In a CI step: the `# picky` marker
-
-```yaml
-env:
-  BASH_ENV: ${{ github.workspace }}/.github/picky/hook.sh
-  PICKY_API_KEY: ${{ secrets.PICKY_API_KEY }}
-steps:
-  - uses: actions/checkout@v4
-  - run: npm ci                     # skipped when every marked step below skips
-  - run: npx eslint .        # picky
-  - run: npx vitest run      # picky
-  - run: |
-      vendor/bin/phpunit     # picky
-```
-
-A marker works as the YAML comment of a one-line `run:` and inside a block script. YAML drops the one-line comment, so picky reads it from the workflow file.
-
-Bash sources the hook before every step:
-- **Steps without a marker or an install command:** run untouched.
-- **Marked lines** are skipped, narrowed or run in full:
-
-| Command | What picky does |
-|---|---|
-| vitest, jest, `node --test`, PHPUnit, Pest | runs only the affected test files |
-| ESLint (flat config) | lints the changed files and every file that imports them |
-| Prettier | checks only the changed files |
-| tsc, vue-tsc, svelte-check, biome, phpstan, psalm, phpcs, php-cs-fixer, pint, rector | skips when no changed file can matter to it; otherwise runs in full |
-
-  These commands are also recognized through npm/pnpm/yarn and composer scripts.
-- **Install commands** (`npm ci`, `pnpm install`, `composer install`, `npx playwright install`, …) are skipped when every other command in the job is a marked command that skips.
-- **If picky fails**, the original line runs.
-
-### Windows, containers and other shells: `shell: picky {0}`
-
-The hook needs bash and a host path, so it can't reach Windows jobs, container jobs, or `sh`/`pwsh` steps. There, picky runs the whole step as its shell:
-
-```yaml
-  windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/picky              # puts picky on PATH (vendored by init)
-      - run: npm ci
-        shell: picky pwsh {0}
-      - run: npx vitest run
-        shell: picky pwsh {0}
-```
-
-- `picky {0}` uses GitHub's default shell (pwsh on Windows; bash, else sh, elsewhere). `picky bash|sh|pwsh|powershell {0}` names one.
-- Every command in the step is decided. Setup commands follow the job-level rule, and everything else runs as written, with GitHub's own flags for that shell.
-- In a container without node, picky uses the runner's own node. Without any node, or on any error, the step runs unchanged.
-- `init` sets this up for these jobs (it needs `actions/checkout` before the setup step) and leaves `cmd` and custom shells alone.
-
-### Several jobs: one decision per PR
-
-Model answers vary slightly between calls, so jobs that decide on their own can disagree about a test near the threshold. `init` makes the decision once and shares it:
-
-```yaml
-jobs:
-  picky:                                          # every step continue-on-error: it never fails the run
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        continue-on-error: true
-      - run: .github/picky/picky decide
-        continue-on-error: true
-      - uses: actions/upload-artifact@v4
-        continue-on-error: true
-        with: { name: picky-decision, path: "${{ runner.temp }}/picky", retention-days: 7 }
-  test:
-    needs: picky
-    steps:
-      - uses: actions/download-artifact@v4
-        continue-on-error: true                   # without the artifact, the job decides on its own
-        with: { name: picky-decision, path: "${{ runner.temp }}/picky" }
-      - uses: actions/checkout@v4
-      - run: npx vitest run # picky
-```
-
-The model is called once per PR, and every job acts on the same answers. The cost is the `picky` job: about 10 s before the other jobs start.
-
-## What v0.2 does
-
-- **Diff:** merge-base diff against `main`, a PR's base, or `PICKY_BASE`, with renames and deletions.
-- **Full-run gates:**
-  - `.picky.yml`, workflows or `critical` paths changed: everything runs.
-  - A JS lockfile, `package.json`, `tsconfig` or runner config changed: JS commands run in full.
-  - `composer.json`, `composer.lock` or `phpunit.xml` changed: PHP commands run in full.
-  - Any non-PR event in Actions, a missing key, or config picky can't honor (e.g. `extends`): everything runs.
-- **JS/TS import graph:** relative imports, `.js` → `.ts`, index files, tsconfig `paths`, workspace packages, dynamic imports and re-exports. Tests that still import a deleted file are selected.
-- **PHP class graph:**
-  - Every declared class and function is indexed, so PSR-4, classmaps and custom autoloaders all resolve.
-  - It follows `use` (aliases, groups), same-namespace names, class names in docblocks and strings, and `require`/`include`.
-  - `Pest.php` and the `phpunit.xml` bootstrap link to every test under them.
-  - Users of a deleted class are selected.
-  - PHPUnit 9 ignores all but the first path, so it's only narrowed to a single file.
-- **Jev judge:**
-  - One `noul` question per test outside the graph floor; a test is kept if p ≥ 0.15.
-  - The model sees the full zero-context diff.
-  - On 429/5xx it retries within a 30s budget; on failure, a missing answer or an oversized diff, the test runs.
-- **Decision reuse and summary:** one decision per commit, cached and shared across steps, and across jobs with `picky decide`. It's printed to the log and to the GitHub job summary.
-
-## Known limits
-
-- **Code generated during the job:** a step that generates code from files picky considers irrelevant (e.g. TS types generated from PHP classes) can make a skipped type check wrong. Put those source files under `critical`.
-- **Graph-only mode (`model: none`):** it skips tests the graph can't link, such as Laravel feature tests that depend only on a route file. With Jev, those tests are judged.
-
-## Not yet (see PLAN.md "Build status")
-
-- **Not in v0.2:**
-  - a pinned download instead of the vendored bundle
-  - `cmd` and custom shells in `shell: picky …`
-  - recall measured across runs (each shadow run reports its own misses)
-  - `extends` presets
-  - other model providers
-  - Go and Rust
-  - symbol-level analysis
-  - context packing for huge diffs
-  - history and coverage
-  - `php artisan test` (it runs in full)
-- **Verified live:** Jev on GitHub runners, about 700 input tokens and 200–400 ms per PR in the fixture repo.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Licensed under [MIT](LICENSE).
