@@ -1,0 +1,37 @@
+[package]
+name = "picky"
+version = "0.2.0-rc"
+edition = "2024"
+rust-version = "1.88"
+description = "Picks which CI tests run for a change: dependency graph first, a model (Jev) for the rest, full run on any doubt."
+license = "MIT"
+repository = "https://github.com/ahmedragab20/picky"
+homepage = "https://ahmedragab20.github.io/picky"
+publish = false
+
+[dependencies]
+fancy-regex = "0.19.2"
+indexmap = { version = "2.14.2", features = ["serde"] }
+regex = "1.13.1"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = { version = "1.0.154", features = ["preserve_order"] }
+sha2 = "0.10.9"
+ureq = { version = "3.4.2", default-features = false, features = ["rustls"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+# Benchmarks over real repos' history: `cargo run --release --example selection -- <repo> <name>`.
+[[example]]
+name = "selection"
+path = "bench/selection.rs"
+
+[[example]]
+name = "hero"
+path = "bench/hero.rs"
