@@ -1,32 +1,38 @@
 ---
 title: Install
-description: One file, vendored into your repo. Nothing is downloaded at CI time.
+description: One self-contained binary, vendored into your repo. Nothing is downloaded at CI time.
 ---
 
 <Tabs items={['Any repo', 'Enterprise']}>
 <Tab value="Any repo">
 
 ```bash
-curl -fsSLO https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/picky.mjs
-node picky.mjs init           # review the diff
-node picky.mjs init --write   # apply it
-rm picky.mjs
+os=$(uname -s | tr A-Z a-z); cpu=$(uname -m | sed 's/x86_64/x64/; s/aarch64/arm64/')
+curl -fsSL -o picky https://github.com/ahmedragab20/picky/releases/download/v0.2.0-rc/picky-$os-$cpu
+chmod +x picky
+./picky init           # review the diff
+./picky init --write   # apply it
+rm picky
 ```
 
-Needs Node 20+ on your machine and on the runners. Then add the `PICKY_API_KEY` secret and commit.
+On Windows, download `picky-windows-x64.exe`. No runtime is needed on your machine or the runners. `init` vendors the binary for each runner OS your workflows use, from the same release, checked against its `SHA256SUMS`. Then add the `PICKY_API_KEY` secret and commit.
 
 </Tab>
 <Tab value="Enterprise">
 
 ```bash
-gh release download v0.1.0-rc -R ahmedragab20/picky -p 'picky.mjs*'
-sha256sum -c picky.mjs.sha256        # macOS: shasum -a 256 -c picky.mjs.sha256
-node picky.mjs init                  # review the diff, then --write
+gh release download v0.2.0-rc -R ahmedragab20/picky -D picky-dist
+cd picky-dist && sha256sum -c SHA256SUMS && cd ..   # macOS: shasum -a 256 -c SHA256SUMS
+chmod +x picky-dist/picky-*
+os=$(uname -s | tr A-Z a-z); cpu=$(uname -m | sed 's/x86_64/x64/; s/aarch64/arm64/')
+picky-dist/picky-$os-$cpu init --dist picky-dist    # review the diff, then --write
 ```
+
+With `--dist`, `init` takes every binary from that directory and makes no network call.
 
 | Concern | How picky handles it |
 |---|---|
-| Supply chain | One auditable file, a published SHA-256, pinned by your own git history |
+| Supply chain | One self-contained binary per runner OS (static on Linux), published `SHA256SUMS`, pinned by your own git history |
 | Network at CI time | None to fetch picky. The only call is the model API, and `model: none` removes it |
 | Third-party actions | None. `init` adds a local action and the official `upload-artifact`/`download-artifact` |
 | Review | `init` prints every change as a diff before `--write` |
@@ -48,12 +54,12 @@ With `model: jev`, picky sends HTTPS requests to `api.typesafe.ai` only while de
 </Accordion>
 <Accordion title="Self-hosted runners and GitHub Enterprise Server">
 
-Verified on GitHub-hosted runners (Ubuntu, Windows, `node:22-alpine` and `composer:2` containers). Self-hosted runners and GitHub Enterprise Server are not verified yet. On GHES, `upload-artifact@v4` may be unavailable; without the shared artifact each job decides on its own, which still works.
+Verified on GitHub-hosted runners (Ubuntu, Windows, `node:22-alpine` and `composer:2` containers). The Linux binaries are static (musl), so they run in Alpine and glibc containers alike. A runner with no matching binary (for example a self-hosted FreeBSD or RISC-V machine) runs every step unchanged. Self-hosted runners and GitHub Enterprise Server are not verified yet. On GHES, `upload-artifact@v4` may be unavailable; without the shared artifact each job decides on its own, which still works.
 
 </Accordion>
 <Accordion title="Upgrading and removing">
 
-- **Upgrade:** download a newer `picky.mjs` and run `init --write` again. It replaces the vendored bundle.
+- **Upgrade:** download a newer binary and run `init --write` again. It replaces the vendored binaries. Upgrading from 0.1.0-rc removes the old `picky.mjs` bundle.
 - **Remove:** delete `.github/picky/`, `.picky.yml`, the `BASH_ENV` line, the `picky` job and any `shell: picky … {0}`. Leftover `# picky` comments do nothing without the hook.
 
 </Accordion>

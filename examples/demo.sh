@@ -10,6 +10,8 @@
 set -euo pipefail
 
 PICKY_HOME="$(cd "$(dirname "$0")/.." && pwd)"
+cargo build --release --quiet --manifest-path "$PICKY_HOME/Cargo.toml"
+PICKY="$PICKY_HOME/target/release/picky"
 DEMO="$(mktemp -d "${TMPDIR:-/tmp}/picky-demo.XXXXXX")"
 MODEL="none"
 [ -n "${PICKY_API_KEY:-}${TYPESAFE_API_KEY:-}" ] && MODEL="jev"
@@ -81,7 +83,7 @@ STEP
 run_step() {
   # GitHub Actions runs each `run:` step as: bash --noprofile --norc -eo pipefail <script>
   # Each scenario is its own CI run, so each gets its own runner temp (where decisions are cached).
-  env ${2:+PICKY_MODE="$2"} BASH_ENV="$PICKY_HOME/hook/hook.sh" PICKY_BIN="$PICKY_HOME/bin/picky" RUNNER_TEMP="$DEMO/.git/runner-$1" \
+  env ${2:+PICKY_MODE="$2"} BASH_ENV="$PICKY_HOME/hook/hook.sh" PICKY_BIN="$PICKY" RUNNER_TEMP="$DEMO/.git/runner-$1" \
     bash --noprofile --norc -eo pipefail "$DEMO/.step.sh" 2>&1 | grep -Ev '^ℹ (tests|suites|pass|fail|cancelled|skipped|todo|duration_ms) ' || true
 }
 
@@ -185,4 +187,4 @@ for i in "${!TITLES[@]}"; do
 done
 
 printf '\n %srepo%s  %s\n' "$MUTED" "$RESET" "$DEMO"
-printf ' %stry%s   %scd %s && git checkout feature/math && %s/bin/picky explain%s\n\n' "$MUTED" "$RESET" "$IRIS" "$DEMO" "$PICKY_HOME" "$RESET"
+printf ' %stry%s   %scd %s && git checkout feature/math && %s explain%s\n\n' "$MUTED" "$RESET" "$IRIS" "$DEMO" "$PICKY" "$RESET"

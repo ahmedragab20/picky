@@ -13,25 +13,27 @@ The last 100 commits of 4 open-source repos, each replayed as a PR through picky
 
 | Repo | Test files | Test files skipped (avg) | PRs that ran no test | Time to decide (p50) |
 |---|---:|---:|---:|---:|
-| [colinhacks/zod](https://github.com/colinhacks/zod) | 202 | **72%** | 32 of 100 | 108 ms |
-| [honojs/hono](https://github.com/honojs/hono) | 160 | **45%** | 4 of 100 | 93 ms |
-| [composer/composer](https://github.com/composer/composer) | 186 | 13% | 12 of 100 | 216 ms |
-| [laravel/framework](https://github.com/laravel/framework) | 1,008 | 8% | 5 of 100 | 748 ms |
+| [colinhacks/zod](https://github.com/colinhacks/zod) | 202 | **72%** | 32 of 100 | 55 ms |
+| [honojs/hono](https://github.com/honojs/hono) | 160 | **45%** | 4 of 100 | 51 ms |
+| [composer/composer](https://github.com/composer/composer) | 186 | 13% | 12 of 100 | 92 ms |
+| [laravel/framework](https://github.com/laravel/framework) | 1,008 | 8% | 5 of 100 | 328 ms |
 
-TypeScript repos split cleanly along imports. In the two PHP repos, the base `TestCase` imports the whole app, so the class graph reaches almost every test; symbol-level analysis is next. These are graph-only numbers: with the Jev model on, picky can only add tests. Method and per-commit data: [`bench/`](bench/) and the [benchmarks page](https://ahmedragab20.github.io/picky/docs/benchmarks/).
+TypeScript repos split cleanly along imports. In the two PHP repos, the base `TestCase` imports the whole app, so the class graph reaches almost every test; symbol-level analysis is next. These are graph-only numbers: with the Jev model on, picky can only add tests. picky 0.2 is a Rust binary: it selects the same tests as the TypeScript version on all 400 commits, about twice as fast (TypeScript: 93–711 ms at p50). Method and per-commit data: [`bench/`](bench/) and the [benchmarks page](https://ahmedragab20.github.io/picky/docs/benchmarks/).
 
 ## Install
 
 ```bash
-curl -fsSLO https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/picky.mjs
-node picky.mjs init           # prints every change as a diff
-node picky.mjs init --write   # applies it
-rm picky.mjs
+os=$(uname -s | tr A-Z a-z); cpu=$(uname -m | sed 's/x86_64/x64/; s/aarch64/arm64/')
+curl -fsSL -o picky https://github.com/ahmedragab20/picky/releases/download/v0.2.0-rc/picky-$os-$cpu
+chmod +x picky
+./picky init           # prints every change as a diff
+./picky init --write   # applies it
+rm picky
 ```
 
-Then add the `PICKY_API_KEY` repository secret (or set `model: none`), commit, and open a PR. Needs Node 20+.
+Then add the `PICKY_API_KEY` repository secret (or set `model: none`), commit, and open a PR. On Windows, download `picky-windows-x64.exe` instead. picky is one self-contained binary: no Node, PHP, JVM or Rust toolchain needed on your machine or the runners.
 
-- **Vendored:** `init` puts one 3.8 MB file in `.github/picky/`. CI downloads nothing, and git pins the version.
+- **Vendored:** `init` puts the binary for each runner OS your workflows use (about 5 MB each) in `.github/picky/bin/`, checked against the release's `SHA256SUMS`. CI downloads nothing, and git pins the version.
 - **Safe rollout:** it starts in shadow mode. Everything still runs, and picky reports any failure enforce mode would have missed.
 - **Enterprise:** checksum-verified downloads, no third-party actions, and a zero-egress mode. See [Install](https://ahmedragab20.github.io/picky/docs/install/).
 - **With a coding agent:** paste [one prompt](https://ahmedragab20.github.io/picky/docs/agents/) into Claude Code, Cursor or Codex, or install the [picky skill](skills/picky/SKILL.md).
@@ -67,7 +69,7 @@ low: ["docs/**"]       # changes here never select tests on their own
 
 ```bash
 git clone https://github.com/ahmedragab20/picky && cd picky
-bun install && bun run demo
+bash examples/demo.sh    # builds picky with cargo; the demo repo's tests run on Node
 ```
 
 The demo builds a small repo and runs 4 PRs through the hook: a source change, a docs-only change, a `package.json` change and shadow mode.

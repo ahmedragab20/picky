@@ -9,7 +9,9 @@
     "prebuild": "bun scripts/sync.mjs",
     "build": "next build",
     "start": "serve out",
-    "types:check": "bun scripts/sync.mjs && next typegen && bun check"
+    "types:check": "bun scripts/sync.mjs && next typegen && bun check",
+    "lint": "oxlint --deny-warnings && oxfmt --check",
+    "format": "oxfmt"
   },
   "dependencies": {
     "cn": "^0.4.0",
@@ -27,6 +29,8 @@
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "oxfmt": "0.73.0",
+    "oxlint": "1.88.0",
     "postcss": "^8.5.28",
     "serve": "^14.2.6",
     "tailwindcss": "^4.3.3",

@@ -10,7 +10,7 @@ import { TipScope } from '@/components/tip-scope';
 import hero from '@/data/hero.json';
 import { agentPrompt } from '@/lib/agent-prompt';
 import { percent, seconds } from '@/lib/bench-format';
-import { basePath, releaseUrl, repoUrl, version } from '@/lib/shared';
+import { basePath, platformShell, releaseUrl, repoUrl, version } from '@/lib/shared';
 import { type Tip, tip } from '@/lib/tip';
 
 // Tooltip examples come from the benchmark data: bench/results.json and bench/hero.json (zod).
@@ -84,12 +84,12 @@ const USE_CASES: { icon: typeof FileText; tone: string; dot: string; title: stri
 const INSTALL_TABS = [
   {
     label: 'Any repo',
-    code: `curl -fsSLO ${releaseUrl}/picky.mjs\nnode picky.mjs init           # review the diff\nnode picky.mjs init --write   # apply it\nrm picky.mjs`,
-    note: 'Node 20+. Starts in shadow mode.',
+    code: `${platformShell}\ncurl -fsSL -o picky ${releaseUrl}/picky-$os-$cpu && chmod +x picky\n./picky init           # review the diff\n./picky init --write   # apply it\nrm picky`,
+    note: 'One self-contained binary: Linux, macOS, Windows. Starts in shadow mode.',
   },
   {
     label: 'Enterprise',
-    code: `gh release download v${version} -R ahmedragab20/picky -p 'picky.mjs*'\nsha256sum -c picky.mjs.sha256\nnode picky.mjs init           # review, then --write\n# zero egress: model: none in .picky.yml`,
+    code: `gh release download v${version} -R ahmedragab20/picky -D picky-dist\n(cd picky-dist && sha256sum -c SHA256SUMS && chmod +x picky-*)\n${platformShell}\npicky-dist/picky-$os-$cpu init --dist picky-dist   # review, then --write\n# zero egress: model: none in .picky.yml`,
     note: 'Checksum-verified. Nothing fetched at CI time.',
   },
   { label: 'With an agent', code: agentPrompt, note: 'Paste into Claude Code, Cursor or Codex.' },
@@ -107,14 +107,14 @@ export default function HomePage() {
               href="/docs/changelog"
               className="inline-flex items-center gap-2 self-start rounded-full border border-rp-hl-med bg-rp-surface px-3 py-1 text-[13px] text-fd-muted-foreground hover:text-fd-foreground"
             >
-              <span className="size-[7px] rounded-full bg-rp-foam" />v{version} · first public release candidate · MIT
+              <span className="size-[7px] rounded-full bg-rp-foam" />v{version} · release candidate · MIT
             </Link>
             <h1 className="font-display text-[clamp(44px,6vw,76px)] leading-[0.98] font-bold tracking-[-0.035em] text-balance">
               Stop running tests your PR <span className="text-rp-iris">can’t break.</span>
             </h1>
             <p className="max-w-[520px] text-[19px] leading-relaxed text-pretty text-fd-muted-foreground">
-              picky reads the diff, follows the import graph, and runs only the tests, lint and type checks a change can reach. In JS/TS and
-              PHP. Any doubt runs everything.
+              picky reads the diff, follows the import graph, and runs only the tests, lint and type checks a change can reach. In JS/TS,
+              PHP, Kotlin and Rust. Any doubt runs everything.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <Link
@@ -125,12 +125,15 @@ export default function HomePage() {
                 <ArrowRight className="size-4" />
               </Link>
               <div className="inline-flex items-center gap-2.5 rounded-xl border border-rp-hl-med py-1.5 pr-1.5 pl-4 font-mono text-[13.5px]">
-                <span className="text-fd-muted-foreground">$</span> node picky.mjs init
-                <CopyButton text={`curl -fsSLO ${releaseUrl}/picky.mjs && node picky.mjs init`} className="border-transparent" />
+                <span className="text-fd-muted-foreground">$</span> ./picky init
+                <CopyButton
+                  text={`${platformShell}; curl -fsSL -o picky ${releaseUrl}/picky-$os-$cpu && chmod +x picky && ./picky init`}
+                  className="border-transparent"
+                />
               </div>
             </div>
             <div className="flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-fd-muted-foreground">
-              {['one vendored file', 'nothing downloaded in CI', 'fails open'].map((t) => (
+              {['one vendored binary', 'nothing downloaded in CI', 'fails open'].map((t) => (
                 <span key={t} className="inline-flex items-center gap-1.5">
                   <span className="text-rp-foam">✓</span> {t}
                 </span>

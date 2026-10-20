@@ -9,17 +9,72 @@ permissions:
 
 jobs:
   test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - run: rustup toolchain install stable --profile minimal --component clippy,rustfmt && rustup default stable
+      # The hook tests run real `node --test` steps through bash.
+      - uses: actions/setup-node@v7
+        with: { node-version: 24 }
+      - if: runner.os == 'Linux'
+        run: cargo fmt --check
+      - run: cargo clippy --all-targets --locked -- -D warnings
+      - run: cargo test --locked --no-fail-fast
+      - run: cargo build --release --locked
+      # What a Windows job runs: `shell: picky pwsh {0}` resolves to the vendored picky.cmd.
+      - name: Windows wrapper
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $dist = New-Item -ItemType Directory -Force (Join-Path $env:RUNNER_TEMP dist)
+          Copy-Item target\release\picky.exe (Join-Path $dist picky-windows-x64.exe)
+          $repo = New-Item -ItemType Directory -Force (Join-Path $env:RUNNER_TEMP repo)
+          Set-Location $repo
+          git init -q
+          New-Item -ItemType Directory -Force .github\workflows | Out-Null
+          "on: pull_request`njobs:`n  test:`n    runs-on: windows-latest`n    steps:`n      - uses: actions/checkout@v4`n      - run: npx vitest run`n" | Set-Content .github\workflows\ci.yml
+          & (Join-Path $dist picky-windows-x64.exe) init --write --dist $dist
+          if ($LASTEXITCODE -ne 0) { throw 'init failed' }
+          $version = cmd /c '.github\picky\picky.cmd --version'
+          if ($version -notmatch '^\d+\.\d+\.\d+') { throw "--version printed: $version" }
+          "Write-Output 'ran the step'" | Set-Content (Join-Path $env:RUNNER_TEMP step)
+          $out = cmd /c ".github\picky\picky.cmd pwsh `"$env:RUNNER_TEMP\step`" 2>&1" | Out-String
+          if ($LASTEXITCODE -ne 0 -or $out -notmatch 'ran the step') { throw "step: $out" }
+          # Without a binary, the step still runs, unchanged.
+          Remove-Item -Recurse .github\picky\bin
+          $out = cmd /c ".github\picky\picky.cmd pwsh `"$env:RUNNER_TEMP\step`" 2>&1" | Out-String
+          if ($LASTEXITCODE -ne 0 -or $out -notmatch 'no picky binary' -or $out -notmatch 'ran the step') { throw "fallback: $out" }
+
+  # The release's Linux binaries: static, so they run in any container.
+  linux-static:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      # Bun runs the tooling. Node runs what users run: the CLI under test and the bundle.
+      - run: sudo apt-get update -q && sudo apt-get install -yq musl-tools
+      - run: rustup toolchain install stable --profile minimal --target x86_64-unknown-linux-musl && rustup default stable
+      - run: cargo build --release --locked --target x86_64-unknown-linux-musl
+      - run: docker run --rm -v "$PWD/target/x86_64-unknown-linux-musl/release:/picky:ro" alpine:3 /picky/picky --version
+
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: rustup toolchain install 1.88 --profile minimal
+      - run: cargo +1.88 check --all-targets --locked
+
+  docs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
-        with: { bun-version-file: package.json }
-      - uses: actions/setup-node@v7
-        with: { node-version: 24 }
+        with: { bun-version-file: docs/package.json }
       - run: bun install --frozen-lockfile
       - run: bun run lint
-      - run: bun run typecheck
-      - run: bun run test
-      - run: bun run build
-      - run: node dist/picky.mjs --version

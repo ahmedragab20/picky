@@ -10,9 +10,9 @@
     "shareNone": 0.04,
     "shareNarrowed": 0.51,
     "shareAll": 0.45,
-    "decisionMsP50": 93,
-    "decisionMsP95": 99,
-    "measured": "2026-10-18",
+    "decisionMsP50": 51,
+    "decisionMsP95": 61,
+    "measured": "2026-10-20",
     "runs": [
       {
         "sha": "5ca49b0720",
@@ -22,7 +22,7 @@
         "run": 4,
         "kind": "narrowed",
         "reason": "selected 4 of 160 test files",
-        "ms": 146
+        "ms": 55
       },
       {
         "sha": "e9c01079a9",
@@ -32,7 +32,7 @@
         "run": 83,
         "kind": "narrowed",
         "reason": "selected 83 of 160 test files",
-        "ms": 106
+        "ms": 54
       },
       {
         "sha": "08807ce12a",
@@ -42,7 +42,7 @@
         "run": 72,
         "kind": "narrowed",
         "reason": "selected 72 of 160 test files",
-        "ms": 100
+        "ms": 57
       },
       {
         "sha": "e77c7c8eb9",
@@ -52,7 +52,7 @@
         "run": 3,
         "kind": "narrowed",
         "reason": "selected 3 of 160 test files",
-        "ms": 96
+        "ms": 53
       },
       {
         "sha": "d54720da80",
@@ -62,7 +62,7 @@
         "run": 3,
         "kind": "narrowed",
         "reason": "selected 3 of 160 test files",
-        "ms": 97
+        "ms": 55
       },
       {
         "sha": "ae401f0800",
@@ -72,7 +72,7 @@
         "run": 4,
         "kind": "narrowed",
         "reason": "selected 4 of 160 test files",
-        "ms": 94
+        "ms": 67
       },
       {
         "sha": "2013fed5b2",
@@ -82,7 +82,7 @@
         "run": 4,
         "kind": "narrowed",
         "reason": "selected 4 of 160 test files",
-        "ms": 95
+        "ms": 63
       },
       {
         "sha": "43379d93e2",
@@ -92,7 +92,7 @@
         "run": 22,
         "kind": "narrowed",
         "reason": "selected 22 of 160 test files",
-        "ms": 95
+        "ms": 71
       },
       {
         "sha": "3362244401",
@@ -102,7 +102,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 96
+        "ms": 58
       },
       {
         "sha": "588ec13fa6",
@@ -112,7 +112,7 @@
         "run": 3,
         "kind": "narrowed",
         "reason": "selected 3 of 160 test files",
-        "ms": 95
+        "ms": 56
       },
       {
         "sha": "552ea02425",
@@ -122,7 +122,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 160 test files",
-        "ms": 93
+        "ms": 53
       },
       {
         "sha": "f78a245abc",
@@ -132,7 +132,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 95
+        "ms": 56
       },
       {
         "sha": "decda78a36",
@@ -142,7 +142,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 92
+        "ms": 50
       },
       {
         "sha": "d22fd95c18",
@@ -152,7 +152,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 96
+        "ms": 55
       },
       {
         "sha": "afe57ddeeb",
@@ -162,7 +162,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 96
+        "ms": 53
       },
       {
         "sha": "0b9134e2b2",
@@ -172,7 +172,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 96
+        "ms": 52
       },
       {
         "sha": "f0ea83e77d",
@@ -182,7 +182,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 98
+        "ms": 51
       },
       {
         "sha": "c9bfef0a13",
@@ -192,7 +192,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 95
+        "ms": 49
       },
       {
         "sha": "8d0f24be49",
@@ -202,7 +202,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 94
+        "ms": 54
       },
       {
         "sha": "3c42c647bc",
@@ -212,7 +212,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 97
+        "ms": 48
       },
       {
         "sha": "da54a6bd7e",
@@ -222,7 +222,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 93
+        "ms": 53
       },
       {
         "sha": "5f36607f67",
@@ -232,7 +232,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 160 test files",
-        "ms": 92
+        "ms": 55
       },
       {
         "sha": "d4542eeb11",
@@ -242,7 +242,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 160 test files",
-        "ms": 94
+        "ms": 51
       },
       {
         "sha": "08a023cbfd",
@@ -252,7 +252,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 95
+        "ms": 50
       },
       {
         "sha": "ae595de8ae",
@@ -262,7 +262,7 @@
         "run": 160,
         "kind": "all",
         "reason": "selected 160 of 160 test files",
-        "ms": 95
+        "ms": 51
       },
       {
         "sha": "f23b146afc",
@@ -272,7 +272,7 @@
         "run": 22,
         "kind": "narrowed",
         "reason": "selected 22 of 159 test files",
-        "ms": 96
+        "ms": 53
       },
       {
         "sha": "6d73a74f97",
@@ -282,7 +282,7 @@
         "run": 82,
         "kind": "narrowed",
         "reason": "selected 82 of 159 test files",
-        "ms": 95
+        "ms": 50
       },
       {
         "sha": "deff529656",
@@ -292,7 +292,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 159 test files",
-        "ms": 92
+        "ms": 51
       },
       {
         "sha": "6abd35b0a5",
@@ -302,7 +302,7 @@
         "run": 159,
         "kind": "all",
         "reason": "selected 159 of 159 test files",
-        "ms": 91
+        "ms": 50
       },
       {
         "sha": "95eb860473",
@@ -312,7 +312,7 @@
         "run": 159,
         "kind": "all",
         "reason": "selected 159 of 159 test files",
-        "ms": 93
+        "ms": 53
       },
       {
         "sha": "afb2068c1c",
@@ -322,7 +322,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 159 test files",
-        "ms": 95
+        "ms": 52
       },
       {
         "sha": "e5bb2062a3",
@@ -332,7 +332,7 @@
         "run": 23,
         "kind": "narrowed",
         "reason": "selected 23 of 159 test files",
-        "ms": 94
+        "ms": 51
       },
       {
         "sha": "c3053ccf14",
@@ -342,7 +342,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 159 test files",
-        "ms": 91
+        "ms": 54
       },
       {
         "sha": "c437d75692",
@@ -352,7 +352,7 @@
         "run": 159,
         "kind": "all",
         "reason": "selected 159 of 159 test files",
-        "ms": 93
+        "ms": 55
       },
       {
         "sha": "be1f7498fe",
@@ -362,7 +362,7 @@
         "run": 157,
         "kind": "all",
         "reason": "selected 157 of 157 test files",
-        "ms": 95
+        "ms": 54
       },
       {
         "sha": "37ce06904e",
@@ -372,7 +372,7 @@
         "run": 157,
         "kind": "all",
         "reason": "selected 157 of 157 test files",
-        "ms": 91
+        "ms": 51
       },
       {
         "sha": "1e1207cabf",
@@ -382,7 +382,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 157 test files",
-        "ms": 96
+        "ms": 50
       },
       {
         "sha": "8b05c774ef",
@@ -392,7 +392,7 @@
         "run": 3,
         "kind": "narrowed",
         "reason": "selected 3 of 157 test files",
-        "ms": 95
+        "ms": 52
       },
       {
         "sha": "18331a905e",
@@ -402,7 +402,7 @@
         "run": 157,
         "kind": "all",
         "reason": "selected 157 of 157 test files",
-        "ms": 93
+        "ms": 53
       },
       {
         "sha": "6cd583bd48",
@@ -412,7 +412,7 @@
         "run": 157,
         "kind": "all",
         "reason": "selected 157 of 157 test files",
-        "ms": 90
+        "ms": 52
       },
       {
         "sha": "271dd0b1e8",
@@ -422,7 +422,7 @@
         "run": 157,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 32
+        "ms": 30
       },
       {
         "sha": "ae93026fe5",
@@ -432,7 +432,7 @@
         "run": 157,
         "kind": "all",
         "reason": "selected 157 of 157 test files",
-        "ms": 89
+        "ms": 55
       },
       {
         "sha": "72f0d8d58e",
@@ -442,7 +442,7 @@
         "run": 157,
         "kind": "all",
         "reason": "selected 157 of 157 test files",
-        "ms": 91
+        "ms": 56
       },
       {
         "sha": "f3d5e88562",
@@ -452,7 +452,7 @@
         "run": 157,
         "kind": "all",
         "reason": "selected 157 of 157 test files",
-        "ms": 99
+        "ms": 51
       },
       {
         "sha": "645ddd6e6c",
@@ -462,7 +462,7 @@
         "run": 157,
         "kind": "all",
         "reason": ".github/workflows/ci-adapters.yml changed",
-        "ms": 36
+        "ms": 40
       },
       {
         "sha": "1c6e060d13",
@@ -472,7 +472,7 @@
         "run": 154,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 33
+        "ms": 36
       },
       {
         "sha": "b877827fcc",
@@ -482,7 +482,7 @@
         "run": 154,
         "kind": "all",
         "reason": "selected 154 of 154 test files",
-        "ms": 100
+        "ms": 68
       },
       {
         "sha": "4d9f2a2ed4",
@@ -492,7 +492,7 @@
         "run": 140,
         "kind": "all",
         "reason": "selected 140 of 140 test files",
-        "ms": 93
+        "ms": 61
       },
       {
         "sha": "fc2343dbad",
@@ -502,7 +502,7 @@
         "run": 140,
         "kind": "all",
         "reason": ".github/workflows/ci-adapters.yml changed",
-        "ms": 34
+        "ms": 35
       },
       {
         "sha": "d7fb697292",
@@ -512,7 +512,7 @@
         "run": 137,
         "kind": "all",
         "reason": "selected 137 of 137 test files",
-        "ms": 92
+        "ms": 56
       },
       {
         "sha": "52f6c7ec86",
@@ -522,7 +522,7 @@
         "run": 137,
         "kind": "all",
         "reason": ".github/workflows/cr.yml changed",
-        "ms": 32
+        "ms": 31
       },
       {
         "sha": "f69c1a525c",
@@ -532,7 +532,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 137 test files",
-        "ms": 87
+        "ms": 48
       },
       {
         "sha": "ee0622e144",
@@ -542,7 +542,7 @@
         "run": 137,
         "kind": "all",
         "reason": "selected 137 of 137 test files",
-        "ms": 94
+        "ms": 52
       },
       {
         "sha": "90d02fb164",
@@ -552,7 +552,7 @@
         "run": 87,
         "kind": "narrowed",
         "reason": "selected 87 of 139 test files",
-        "ms": 92
+        "ms": 53
       },
       {
         "sha": "5f31392d72",
@@ -572,7 +572,7 @@
         "run": 139,
         "kind": "all",
         "reason": "selected 139 of 139 test files",
-        "ms": 92
+        "ms": 54
       },
       {
         "sha": "859e2c2bd0",
@@ -582,7 +582,7 @@
         "run": 63,
         "kind": "narrowed",
         "reason": "selected 63 of 139 test files",
-        "ms": 90
+        "ms": 56
       },
       {
         "sha": "57ba76a2a4",
@@ -592,7 +592,7 @@
         "run": 139,
         "kind": "all",
         "reason": "selected 139 of 139 test files",
-        "ms": 92
+        "ms": 51
       },
       {
         "sha": "8dcd52b92b",
@@ -602,7 +602,7 @@
         "run": 139,
         "kind": "all",
         "reason": "selected 139 of 139 test files",
-        "ms": 94
+        "ms": 52
       },
       {
         "sha": "a79a8048b6",
@@ -612,7 +612,7 @@
         "run": 139,
         "kind": "all",
         "reason": "selected 139 of 139 test files",
-        "ms": 87
+        "ms": 47
       },
       {
         "sha": "535ae553fd",
@@ -632,7 +632,7 @@
         "run": 139,
         "kind": "all",
         "reason": "selected 139 of 139 test files",
-        "ms": 90
+        "ms": 48
       },
       {
         "sha": "6cadf75373",
@@ -642,7 +642,7 @@
         "run": 3,
         "kind": "narrowed",
         "reason": "selected 3 of 139 test files",
-        "ms": 90
+        "ms": 53
       },
       {
         "sha": "de310ac063",
@@ -652,7 +652,7 @@
         "run": 3,
         "kind": "narrowed",
         "reason": "selected 3 of 139 test files",
-        "ms": 88
+        "ms": 50
       },
       {
         "sha": "28e8572cd2",
@@ -662,7 +662,7 @@
         "run": 4,
         "kind": "narrowed",
         "reason": "selected 4 of 139 test files",
-        "ms": 90
+        "ms": 48
       },
       {
         "sha": "0d86899d28",
@@ -672,7 +672,7 @@
         "run": 4,
         "kind": "narrowed",
         "reason": "selected 4 of 139 test files",
-        "ms": 89
+        "ms": 49
       },
       {
         "sha": "52febbcc30",
@@ -682,7 +682,7 @@
         "run": 7,
         "kind": "narrowed",
         "reason": "selected 7 of 139 test files",
-        "ms": 89
+        "ms": 51
       },
       {
         "sha": "f950277cd3",
@@ -692,7 +692,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 139 test files",
-        "ms": 90
+        "ms": 49
       },
       {
         "sha": "00ee875728",
@@ -702,7 +702,7 @@
         "run": 8,
         "kind": "narrowed",
         "reason": "selected 8 of 139 test files",
-        "ms": 93
+        "ms": 52
       },
       {
         "sha": "f5a53463ad",
@@ -712,7 +712,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 139 test files",
-        "ms": 93
+        "ms": 48
       },
       {
         "sha": "cb5bea3614",
@@ -722,7 +722,7 @@
         "run": 20,
         "kind": "narrowed",
         "reason": "selected 20 of 139 test files",
-        "ms": 94
+        "ms": 49
       },
       {
         "sha": "098e11912a",
@@ -732,7 +732,7 @@
         "run": 139,
         "kind": "all",
         "reason": "selected 139 of 139 test files",
-        "ms": 92
+        "ms": 53
       },
       {
         "sha": "e8c8c21244",
@@ -742,7 +742,7 @@
         "run": 22,
         "kind": "narrowed",
         "reason": "selected 22 of 139 test files",
-        "ms": 93
+        "ms": 50
       },
       {
         "sha": "8755b17fbc",
@@ -752,7 +752,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 139 test files",
-        "ms": 91
+        "ms": 50
       },
       {
         "sha": "edd138ee30",
@@ -762,7 +762,7 @@
         "run": 87,
         "kind": "narrowed",
         "reason": "selected 87 of 139 test files",
-        "ms": 94
+        "ms": 50
       },
       {
         "sha": "9b4e9c2864",
@@ -772,7 +772,7 @@
         "run": 5,
         "kind": "narrowed",
         "reason": "selected 5 of 139 test files",
-        "ms": 92
+        "ms": 48
       },
       {
         "sha": "65cff90e15",
@@ -782,7 +782,7 @@
         "run": 5,
         "kind": "narrowed",
         "reason": "selected 5 of 139 test files",
-        "ms": 91
+        "ms": 49
       },
       {
         "sha": "f147de5ea1",
@@ -792,7 +792,7 @@
         "run": 2,
         "kind": "narrowed",
         "reason": "selected 2 of 139 test files",
-        "ms": 92
+        "ms": 52
       },
       {
         "sha": "90e1b94846",
@@ -802,7 +802,7 @@
         "run": 4,
         "kind": "narrowed",
         "reason": "selected 4 of 139 test files",
-        "ms": 90
+        "ms": 50
       },
       {
         "sha": "7792f5dc14",
@@ -812,7 +812,7 @@
         "run": 22,
         "kind": "narrowed",
         "reason": "selected 22 of 138 test files",
-        "ms": 93
+        "ms": 50
       },
       {
         "sha": "e7b38ee42b",
@@ -822,7 +822,7 @@
         "run": 106,
         "kind": "narrowed",
         "reason": "selected 106 of 138 test files",
-        "ms": 96
+        "ms": 52
       },
       {
         "sha": "eebdf7be39",
@@ -832,7 +832,7 @@
         "run": 138,
         "kind": "all",
         "reason": "selected 138 of 138 test files",
-        "ms": 90
+        "ms": 46
       },
       {
         "sha": "2b8ed402cd",
@@ -842,7 +842,7 @@
         "run": 23,
         "kind": "narrowed",
         "reason": "selected 23 of 138 test files",
-        "ms": 92
+        "ms": 49
       },
       {
         "sha": "cac0c4d3fe",
@@ -852,7 +852,7 @@
         "run": 138,
         "kind": "all",
         "reason": "selected 138 of 138 test files",
-        "ms": 93
+        "ms": 51
       },
       {
         "sha": "dac5d5794c",
@@ -862,7 +862,7 @@
         "run": 86,
         "kind": "narrowed",
         "reason": "selected 86 of 138 test files",
-        "ms": 92
+        "ms": 53
       },
       {
         "sha": "ec648d6837",
@@ -872,7 +872,7 @@
         "run": 138,
         "kind": "all",
         "reason": "selected 138 of 138 test files",
-        "ms": 91
+        "ms": 50
       },
       {
         "sha": "e2740d5a1b",
@@ -882,7 +882,7 @@
         "run": 86,
         "kind": "narrowed",
         "reason": "selected 86 of 138 test files",
-        "ms": 92
+        "ms": 52
       },
       {
         "sha": "499c35ebda",
@@ -892,7 +892,7 @@
         "run": 22,
         "kind": "narrowed",
         "reason": "selected 22 of 138 test files",
-        "ms": 92
+        "ms": 51
       },
       {
         "sha": "50b8788cf5",
@@ -902,7 +902,7 @@
         "run": 22,
         "kind": "narrowed",
         "reason": "selected 22 of 138 test files",
-        "ms": 93
+        "ms": 51
       },
       {
         "sha": "06880c4a2b",
@@ -912,7 +912,7 @@
         "run": 138,
         "kind": "all",
         "reason": "selected 138 of 138 test files",
-        "ms": 98
+        "ms": 51
       },
       {
         "sha": "531e9c5a3a",
@@ -922,7 +922,7 @@
         "run": 86,
         "kind": "narrowed",
         "reason": "selected 86 of 138 test files",
-        "ms": 92
+        "ms": 50
       },
       {
         "sha": "3a67f7f399",
@@ -932,7 +932,7 @@
         "run": 6,
         "kind": "narrowed",
         "reason": "selected 6 of 138 test files",
-        "ms": 90
+        "ms": 49
       },
       {
         "sha": "9c28d724c5",
@@ -942,7 +942,7 @@
         "run": 94,
         "kind": "narrowed",
         "reason": "selected 94 of 138 test files",
-        "ms": 91
+        "ms": 56
       },
       {
         "sha": "017000d6ad",
@@ -952,7 +952,7 @@
         "run": 138,
         "kind": "all",
         "reason": "selected 138 of 138 test files",
-        "ms": 89
+        "ms": 49
       },
       {
         "sha": "5e5b83d6ed",
@@ -962,7 +962,7 @@
         "run": 9,
         "kind": "narrowed",
         "reason": "selected 9 of 138 test files",
-        "ms": 90
+        "ms": 53
       },
       {
         "sha": "241ae4c72b",
@@ -972,7 +972,7 @@
         "run": 31,
         "kind": "narrowed",
         "reason": "selected 31 of 138 test files",
-        "ms": 91
+        "ms": 51
       },
       {
         "sha": "c409d855d9",
@@ -982,7 +982,7 @@
         "run": 86,
         "kind": "narrowed",
         "reason": "selected 86 of 138 test files",
-        "ms": 93
+        "ms": 50
       },
       {
         "sha": "612b59c022",
@@ -992,7 +992,7 @@
         "run": 86,
         "kind": "narrowed",
         "reason": "selected 86 of 138 test files",
-        "ms": 92
+        "ms": 50
       },
       {
         "sha": "73794bdabe",
@@ -1002,7 +1002,7 @@
         "run": 22,
         "kind": "narrowed",
         "reason": "selected 22 of 138 test files",
-        "ms": 96
+        "ms": 50
       },
       {
         "sha": "28a9c12891",
@@ -1012,7 +1012,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 138 test files",
-        "ms": 95
+        "ms": 50
       }
     ]
   },
@@ -1027,9 +1027,9 @@
     "shareNone": 0.32,
     "shareNarrowed": 0.46,
     "shareAll": 0.22,
-    "decisionMsP50": 108,
-    "decisionMsP95": 115,
-    "measured": "2026-10-18",
+    "decisionMsP50": 55,
+    "decisionMsP95": 60,
+    "measured": "2026-10-20",
     "runs": [
       {
         "sha": "680d19f7d1",
@@ -1039,7 +1039,7 @@
         "run": 32,
         "kind": "narrowed",
         "reason": "selected 32 of 202 test files",
-        "ms": 162
+        "ms": 55
       },
       {
         "sha": "40a5dba080",
@@ -1049,7 +1049,7 @@
         "run": 5,
         "kind": "narrowed",
         "reason": "selected 5 of 202 test files",
-        "ms": 112
+        "ms": 56
       },
       {
         "sha": "311cd74b27",
@@ -1059,7 +1059,7 @@
         "run": 32,
         "kind": "narrowed",
         "reason": "selected 32 of 202 test files",
-        "ms": 115
+        "ms": 56
       },
       {
         "sha": "b500a2ee95",
@@ -1069,7 +1069,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 111
+        "ms": 55
       },
       {
         "sha": "9c219833c3",
@@ -1079,7 +1079,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 108
+        "ms": 52
       },
       {
         "sha": "529f78dd94",
@@ -1089,7 +1089,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 112
+        "ms": 55
       },
       {
         "sha": "a0ebf970f2",
@@ -1099,7 +1099,7 @@
         "run": 34,
         "kind": "narrowed",
         "reason": "selected 34 of 202 test files",
-        "ms": 109
+        "ms": 57
       },
       {
         "sha": "a2ba4a6798",
@@ -1109,7 +1109,7 @@
         "run": 31,
         "kind": "narrowed",
         "reason": "selected 31 of 202 test files",
-        "ms": 110
+        "ms": 58
       },
       {
         "sha": "c42596bd1c",
@@ -1129,7 +1129,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 113
+        "ms": 52
       },
       {
         "sha": "8fb2faf058",
@@ -1139,7 +1139,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 115
+        "ms": 53
       },
       {
         "sha": "b2ef983e07",
@@ -1149,7 +1149,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 113
+        "ms": 58
       },
       {
         "sha": "74304ce5b5",
@@ -1159,7 +1159,7 @@
         "run": 202,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 31
+        "ms": 29
       },
       {
         "sha": "34a626f307",
@@ -1169,7 +1169,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 111
+        "ms": 57
       },
       {
         "sha": "9d5e60f162",
@@ -1179,7 +1179,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 107
+        "ms": 53
       },
       {
         "sha": "0cd3af5e9f",
@@ -1189,7 +1189,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 107
+        "ms": 53
       },
       {
         "sha": "59bbc03e10",
@@ -1199,7 +1199,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 107
+        "ms": 54
       },
       {
         "sha": "0f3f5ee3ca",
@@ -1209,7 +1209,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 108
+        "ms": 53
       },
       {
         "sha": "cc4cd4ee9c",
@@ -1219,7 +1219,7 @@
         "run": 202,
         "kind": "all",
         "reason": ".github/workflows/iso-4217.yml changed",
-        "ms": 40
+        "ms": 38
       },
       {
         "sha": "ca0229a404",
@@ -1229,7 +1229,7 @@
         "run": 202,
         "kind": "all",
         "reason": ".github/workflows/iso-4217.yml changed",
-        "ms": 38
+        "ms": 40
       },
       {
         "sha": "56222cd153",
@@ -1239,7 +1239,7 @@
         "run": 21,
         "kind": "narrowed",
         "reason": "selected 21 of 202 test files",
-        "ms": 107
+        "ms": 54
       },
       {
         "sha": "de65a5cb39",
@@ -1249,7 +1249,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 106
+        "ms": 55
       },
       {
         "sha": "f1448f7cee",
@@ -1259,7 +1259,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 111
+        "ms": 54
       },
       {
         "sha": "d2b135cfb7",
@@ -1269,7 +1269,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 107
+        "ms": 54
       },
       {
         "sha": "2bb087170f",
@@ -1279,7 +1279,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 111
+        "ms": 57
       },
       {
         "sha": "743aedbba7",
@@ -1289,7 +1289,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 110
+        "ms": 51
       },
       {
         "sha": "f6e1701a71",
@@ -1299,7 +1299,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 109
+        "ms": 55
       },
       {
         "sha": "d6bc1e30ac",
@@ -1309,7 +1309,7 @@
         "run": 202,
         "kind": "all",
         "reason": ".github/workflows/iso-4217.yml changed",
-        "ms": 42
+        "ms": 39
       },
       {
         "sha": "ad32d7512c",
@@ -1319,7 +1319,7 @@
         "run": 36,
         "kind": "narrowed",
         "reason": "selected 36 of 202 test files",
-        "ms": 112
+        "ms": 59
       },
       {
         "sha": "12e6272746",
@@ -1329,7 +1329,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 109
+        "ms": 57
       },
       {
         "sha": "413cce9a8c",
@@ -1339,7 +1339,7 @@
         "run": 36,
         "kind": "narrowed",
         "reason": "selected 36 of 202 test files",
-        "ms": 112
+        "ms": 61
       },
       {
         "sha": "75d63ee1e0",
@@ -1349,7 +1349,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 108
+        "ms": 56
       },
       {
         "sha": "46da95720b",
@@ -1359,7 +1359,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 110
+        "ms": 56
       },
       {
         "sha": "e359f7378f",
@@ -1369,7 +1369,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 115
+        "ms": 54
       },
       {
         "sha": "9446b5cc14",
@@ -1379,7 +1379,7 @@
         "run": 33,
         "kind": "narrowed",
         "reason": "selected 33 of 202 test files",
-        "ms": 112
+        "ms": 56
       },
       {
         "sha": "0c483c5884",
@@ -1389,7 +1389,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 110
+        "ms": 54
       },
       {
         "sha": "a00c3f348a",
@@ -1399,7 +1399,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 202 test files",
-        "ms": 110
+        "ms": 56
       },
       {
         "sha": "62311eb2c4",
@@ -1409,7 +1409,7 @@
         "run": 202,
         "kind": "all",
         "reason": "selected 202 of 202 test files",
-        "ms": 111
+        "ms": 57
       },
       {
         "sha": "2efa8b803c",
@@ -1419,7 +1419,7 @@
         "run": 202,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 35
+        "ms": 30
       },
       {
         "sha": "b12aa523e7",
@@ -1429,7 +1429,7 @@
         "run": 32,
         "kind": "narrowed",
         "reason": "selected 32 of 202 test files",
-        "ms": 112
+        "ms": 64
       },
       {
         "sha": "dd9c36fa2d",
@@ -1439,7 +1439,7 @@
         "run": 33,
         "kind": "narrowed",
         "reason": "selected 33 of 202 test files",
-        "ms": 110
+        "ms": 56
       },
       {
         "sha": "574d480fb4",
@@ -1449,7 +1449,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 202 test files",
-        "ms": 104
+        "ms": 60
       },
       {
         "sha": "c532d766de",
@@ -1459,7 +1459,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 202 test files",
-        "ms": 107
+        "ms": 55
       },
       {
         "sha": "3b1549922b",
@@ -1469,7 +1469,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 202 test files",
-        "ms": 106
+        "ms": 55
       },
       {
         "sha": "1c51cbe0fe",
@@ -1479,7 +1479,7 @@
         "run": 201,
         "kind": "all",
         "reason": "selected 201 of 201 test files",
-        "ms": 106
+        "ms": 53
       },
       {
         "sha": "661673ae3e",
@@ -1489,7 +1489,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 201 test files",
-        "ms": 105
+        "ms": 51
       },
       {
         "sha": "6de10dce1a",
@@ -1499,7 +1499,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 201 test files",
-        "ms": 107
+        "ms": 54
       },
       {
         "sha": "213ee75d2a",
@@ -1509,7 +1509,7 @@
         "run": 31,
         "kind": "narrowed",
         "reason": "selected 31 of 201 test files",
-        "ms": 109
+        "ms": 55
       },
       {
         "sha": "f9465d4e64",
@@ -1519,7 +1519,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 201 test files",
-        "ms": 108
+        "ms": 53
       },
       {
         "sha": "f7fd554806",
@@ -1529,7 +1529,7 @@
         "run": 34,
         "kind": "narrowed",
         "reason": "selected 34 of 201 test files",
-        "ms": 105
+        "ms": 55
       },
       {
         "sha": "36f17960d1",
@@ -1539,7 +1539,7 @@
         "run": 32,
         "kind": "narrowed",
         "reason": "selected 32 of 200 test files",
-        "ms": 107
+        "ms": 55
       },
       {
         "sha": "22bed61328",
@@ -1549,7 +1549,7 @@
         "run": 32,
         "kind": "narrowed",
         "reason": "selected 32 of 200 test files",
-        "ms": 115
+        "ms": 65
       },
       {
         "sha": "c5b9bcb39b",
@@ -1559,7 +1559,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 199 test files",
-        "ms": 105
+        "ms": 51
       },
       {
         "sha": "e54716cb56",
@@ -1569,7 +1569,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 199 test files",
-        "ms": 105
+        "ms": 57
       },
       {
         "sha": "dcbcf0529c",
@@ -1579,7 +1579,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 199 test files",
-        "ms": 106
+        "ms": 56
       },
       {
         "sha": "277613a61a",
@@ -1589,7 +1589,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 199 test files",
-        "ms": 106
+        "ms": 52
       },
       {
         "sha": "eb1c1089f7",
@@ -1599,7 +1599,7 @@
         "run": 199,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 34
+        "ms": 29
       },
       {
         "sha": "741981ffdb",
@@ -1609,7 +1609,7 @@
         "run": 32,
         "kind": "narrowed",
         "reason": "selected 32 of 199 test files",
-        "ms": 113
+        "ms": 57
       },
       {
         "sha": "804e0f5227",
@@ -1619,7 +1619,7 @@
         "run": 198,
         "kind": "all",
         "reason": "selected 198 of 198 test files",
-        "ms": 113
+        "ms": 60
       },
       {
         "sha": "6f0483671e",
@@ -1629,7 +1629,7 @@
         "run": 34,
         "kind": "narrowed",
         "reason": "selected 34 of 198 test files",
-        "ms": 119
+        "ms": 57
       },
       {
         "sha": "e4d67f3ea4",
@@ -1639,7 +1639,7 @@
         "run": 198,
         "kind": "all",
         "reason": ".github/workflows/lockstep.yml changed",
-        "ms": 37
+        "ms": 35
       },
       {
         "sha": "7a00236683",
@@ -1649,7 +1649,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 198 test files",
-        "ms": 112
+        "ms": 53
       },
       {
         "sha": "5489a532e6",
@@ -1659,7 +1659,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 198 test files",
-        "ms": 119
+        "ms": 56
       },
       {
         "sha": "e760471780",
@@ -1669,7 +1669,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 198 test files",
-        "ms": 108
+        "ms": 54
       },
       {
         "sha": "764ac59f1a",
@@ -1679,7 +1679,7 @@
         "run": 31,
         "kind": "narrowed",
         "reason": "selected 31 of 198 test files",
-        "ms": 110
+        "ms": 54
       },
       {
         "sha": "07917f4cb3",
@@ -1689,7 +1689,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 198 test files",
-        "ms": 107
+        "ms": 51
       },
       {
         "sha": "62e6624bc7",
@@ -1699,7 +1699,7 @@
         "run": 19,
         "kind": "narrowed",
         "reason": "selected 19 of 198 test files",
-        "ms": 111
+        "ms": 52
       },
       {
         "sha": "cafbee4772",
@@ -1709,7 +1709,7 @@
         "run": 31,
         "kind": "narrowed",
         "reason": "selected 31 of 198 test files",
-        "ms": 110
+        "ms": 56
       },
       {
         "sha": "4d7308828b",
@@ -1719,7 +1719,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 198 test files",
-        "ms": 108
+        "ms": 55
       },
       {
         "sha": "90269c601a",
@@ -1729,7 +1729,7 @@
         "run": 25,
         "kind": "narrowed",
         "reason": "selected 25 of 198 test files",
-        "ms": 108
+        "ms": 53
       },
       {
         "sha": "18e71c71da",
@@ -1739,7 +1739,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 198 test files",
-        "ms": 109
+        "ms": 56
       },
       {
         "sha": "68aca3dc40",
@@ -1749,7 +1749,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 197 test files",
-        "ms": 107
+        "ms": 53
       },
       {
         "sha": "eca9687153",
@@ -1759,7 +1759,7 @@
         "run": 18,
         "kind": "narrowed",
         "reason": "selected 18 of 197 test files",
-        "ms": 109
+        "ms": 52
       },
       {
         "sha": "81ded9918f",
@@ -1769,7 +1769,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 197 test files",
-        "ms": 108
+        "ms": 55
       },
       {
         "sha": "51caf01038",
@@ -1779,7 +1779,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 197 test files",
-        "ms": 108
+        "ms": 53
       },
       {
         "sha": "abfb38977d",
@@ -1789,7 +1789,7 @@
         "run": 33,
         "kind": "narrowed",
         "reason": "selected 33 of 197 test files",
-        "ms": 117
+        "ms": 60
       },
       {
         "sha": "69f2a7ff20",
@@ -1799,7 +1799,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 196 test files",
-        "ms": 108
+        "ms": 60
       },
       {
         "sha": "bf9902164b",
@@ -1809,7 +1809,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 196 test files",
-        "ms": 110
+        "ms": 59
       },
       {
         "sha": "bec73bea5a",
@@ -1819,7 +1819,7 @@
         "run": 33,
         "kind": "narrowed",
         "reason": "selected 33 of 195 test files",
-        "ms": 108
+        "ms": 55
       },
       {
         "sha": "07c43e2a08",
@@ -1829,7 +1829,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 195 test files",
-        "ms": 107
+        "ms": 55
       },
       {
         "sha": "bc1157e717",
@@ -1839,7 +1839,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 108
+        "ms": 55
       },
       {
         "sha": "2ec972ecc5",
@@ -1849,7 +1849,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 195 test files",
-        "ms": 106
+        "ms": 53
       },
       {
         "sha": "68a609ac9b",
@@ -1859,7 +1859,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 195 test files",
-        "ms": 110
+        "ms": 54
       },
       {
         "sha": "0227e53d03",
@@ -1869,7 +1869,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 109
+        "ms": 53
       },
       {
         "sha": "84dd3b0fc6",
@@ -1879,7 +1879,7 @@
         "run": 29,
         "kind": "narrowed",
         "reason": "selected 29 of 195 test files",
-        "ms": 107
+        "ms": 55
       },
       {
         "sha": "f83ab51129",
@@ -1889,7 +1889,7 @@
         "run": 31,
         "kind": "narrowed",
         "reason": "selected 31 of 195 test files",
-        "ms": 107
+        "ms": 55
       },
       {
         "sha": "74f9a6d3f2",
@@ -1899,7 +1899,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 106
+        "ms": 50
       },
       {
         "sha": "a2a019a57e",
@@ -1909,7 +1909,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 195 test files",
-        "ms": 107
+        "ms": 51
       },
       {
         "sha": "319f47f44f",
@@ -1919,7 +1919,7 @@
         "run": 30,
         "kind": "narrowed",
         "reason": "selected 30 of 195 test files",
-        "ms": 107
+        "ms": 57
       },
       {
         "sha": "08ba069e29",
@@ -1929,7 +1929,7 @@
         "run": 29,
         "kind": "narrowed",
         "reason": "selected 29 of 195 test files",
-        "ms": 108
+        "ms": 54
       },
       {
         "sha": "1ec6b7c5ec",
@@ -1939,7 +1939,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 106
+        "ms": 51
       },
       {
         "sha": "b801439b5f",
@@ -1949,7 +1949,7 @@
         "run": 195,
         "kind": "all",
         "reason": "selected 195 of 195 test files",
-        "ms": 113
+        "ms": 59
       },
       {
         "sha": "7ae49d64d5",
@@ -1959,7 +1959,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 105
+        "ms": 54
       },
       {
         "sha": "93f3ab3212",
@@ -1969,7 +1969,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 105
+        "ms": 54
       },
       {
         "sha": "fb2fedfd98",
@@ -1979,7 +1979,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 107
+        "ms": 52
       },
       {
         "sha": "ff56a551b5",
@@ -1989,7 +1989,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 106
+        "ms": 52
       },
       {
         "sha": "8cd1250f0e",
@@ -1999,7 +1999,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 105
+        "ms": 53
       },
       {
         "sha": "3195ed0107",
@@ -2009,7 +2009,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 195 test files",
-        "ms": 106
+        "ms": 54
       },
       {
         "sha": "a6b4939070",
@@ -2019,7 +2019,7 @@
         "run": 29,
         "kind": "narrowed",
         "reason": "selected 29 of 195 test files",
-        "ms": 113
+        "ms": 56
       },
       {
         "sha": "40b4d0b34d",
@@ -2029,7 +2029,7 @@
         "run": 195,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 31
+        "ms": 30
       }
     ]
   },
@@ -2044,9 +2044,9 @@
     "shareNone": 0.12,
     "shareNarrowed": 0.02,
     "shareAll": 0.86,
-    "decisionMsP50": 216,
-    "decisionMsP95": 233,
-    "measured": "2026-10-18",
+    "decisionMsP50": 92,
+    "decisionMsP95": 101,
+    "measured": "2026-10-20",
     "runs": [
       {
         "sha": "28145ca91e",
@@ -2056,7 +2056,7 @@
         "run": 186,
         "kind": "all",
         "reason": "selected 186 of 186 test files",
-        "ms": 272
+        "ms": 109
       },
       {
         "sha": "9d8a1c2604",
@@ -2066,7 +2066,7 @@
         "run": 186,
         "kind": "all",
         "reason": "selected 186 of 186 test files",
-        "ms": 239
+        "ms": 100
       },
       {
         "sha": "43f7451702",
@@ -2076,7 +2076,7 @@
         "run": 186,
         "kind": "all",
         "reason": "selected 186 of 186 test files",
-        "ms": 235
+        "ms": 96
       },
       {
         "sha": "72b511ab7e",
@@ -2086,7 +2086,7 @@
         "run": 186,
         "kind": "all",
         "reason": ".github/workflows/autoloader.yml changed",
-        "ms": 31
+        "ms": 35
       },
       {
         "sha": "b187adbb70",
@@ -2096,7 +2096,7 @@
         "run": 186,
         "kind": "all",
         "reason": "selected 186 of 186 test files",
-        "ms": 230
+        "ms": 101
       },
       {
         "sha": "d95679dd08",
@@ -2106,7 +2106,7 @@
         "run": 186,
         "kind": "all",
         "reason": "selected 186 of 186 test files",
-        "ms": 233
+        "ms": 93
       },
       {
         "sha": "bce9495257",
@@ -2116,7 +2116,7 @@
         "run": 185,
         "kind": "all",
         "reason": "selected 185 of 185 test files",
-        "ms": 230
+        "ms": 91
       },
       {
         "sha": "560806f892",
@@ -2126,7 +2126,7 @@
         "run": 185,
         "kind": "all",
         "reason": "selected 185 of 185 test files",
-        "ms": 225
+        "ms": 87
       },
       {
         "sha": "e9e8482d83",
@@ -2136,7 +2136,7 @@
         "run": 185,
         "kind": "all",
         "reason": "selected 185 of 185 test files",
-        "ms": 240
+        "ms": 99
       },
       {
         "sha": "f003231e93",
@@ -2146,7 +2146,7 @@
         "run": 185,
         "kind": "all",
         "reason": "selected 185 of 185 test files",
-        "ms": 227
+        "ms": 96
       },
       {
         "sha": "498dd67fc5",
@@ -2156,7 +2156,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 185 test files",
-        "ms": 218
+        "ms": 88
       },
       {
         "sha": "3a5137b86c",
@@ -2166,7 +2166,7 @@
         "run": 183,
         "kind": "narrowed",
         "reason": "selected 183 of 185 test files",
-        "ms": 224
+        "ms": 97
       },
       {
         "sha": "8d71acb561",
@@ -2176,7 +2176,7 @@
         "run": 185,
         "kind": "all",
         "reason": "selected 185 of 185 test files",
-        "ms": 228
+        "ms": 99
       },
       {
         "sha": "dfda78af1e",
@@ -2186,7 +2186,7 @@
         "run": 184,
         "kind": "all",
         "reason": "selected 184 of 184 test files",
-        "ms": 223
+        "ms": 97
       },
       {
         "sha": "213b1ea0ed",
@@ -2196,7 +2196,7 @@
         "run": 184,
         "kind": "all",
         "reason": "selected 184 of 184 test files",
-        "ms": 224
+        "ms": 93
       },
       {
         "sha": "4bddcad1c7",
@@ -2206,7 +2206,7 @@
         "run": 184,
         "kind": "all",
         "reason": "selected 184 of 184 test files",
-        "ms": 227
+        "ms": 101
       },
       {
         "sha": "8c46dd4018",
@@ -2216,7 +2216,7 @@
         "run": 2,
         "kind": "narrowed",
         "reason": "selected 2 of 180 test files",
-        "ms": 224
+        "ms": 91
       },
       {
         "sha": "8a2b3ede4a",
@@ -2226,7 +2226,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 220
+        "ms": 95
       },
       {
         "sha": "b4cda8defe",
@@ -2236,7 +2236,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 218
+        "ms": 97
       },
       {
         "sha": "c0fc7bd40e",
@@ -2246,7 +2246,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 225
+        "ms": 92
       },
       {
         "sha": "9c0fc6997c",
@@ -2256,7 +2256,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 221
+        "ms": 97
       },
       {
         "sha": "c4ee141830",
@@ -2266,7 +2266,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 218
+        "ms": 94
       },
       {
         "sha": "6712f83974",
@@ -2276,7 +2276,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 221
+        "ms": 100
       },
       {
         "sha": "5122c62ead",
@@ -2286,7 +2286,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 215
+        "ms": 89
       },
       {
         "sha": "957b0155ce",
@@ -2296,7 +2296,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 215
+        "ms": 90
       },
       {
         "sha": "6fa7707e04",
@@ -2306,7 +2306,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 218
+        "ms": 97
       },
       {
         "sha": "59a8a802ca",
@@ -2316,7 +2316,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 220
+        "ms": 91
       },
       {
         "sha": "0fc32b949a",
@@ -2326,7 +2326,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 221
+        "ms": 97
       },
       {
         "sha": "1e619740d6",
@@ -2336,7 +2336,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 227
+        "ms": 108
       },
       {
         "sha": "2561201835",
@@ -2346,7 +2346,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 220
+        "ms": 90
       },
       {
         "sha": "4cec96ea69",
@@ -2356,7 +2356,7 @@
         "run": 180,
         "kind": "all",
         "reason": "selected 180 of 180 test files",
-        "ms": 218
+        "ms": 92
       },
       {
         "sha": "cee1698f49",
@@ -2366,7 +2366,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 219
+        "ms": 89
       },
       {
         "sha": "c783931672",
@@ -2376,7 +2376,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 217
+        "ms": 92
       },
       {
         "sha": "f406c1723a",
@@ -2386,7 +2386,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 230
+        "ms": 94
       },
       {
         "sha": "8df7fac1aa",
@@ -2396,7 +2396,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 226
+        "ms": 89
       },
       {
         "sha": "d25ce76a06",
@@ -2406,7 +2406,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 179 test files",
-        "ms": 217
+        "ms": 94
       },
       {
         "sha": "4b72d5d764",
@@ -2416,7 +2416,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 221
+        "ms": 92
       },
       {
         "sha": "249394b09f",
@@ -2426,7 +2426,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 179 test files",
-        "ms": 216
+        "ms": 92
       },
       {
         "sha": "a5055dad05",
@@ -2436,7 +2436,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 217
+        "ms": 95
       },
       {
         "sha": "6ac030329c",
@@ -2446,7 +2446,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 179 test files",
-        "ms": 218
+        "ms": 87
       },
       {
         "sha": "2f27c61a92",
@@ -2456,7 +2456,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 216
+        "ms": 93
       },
       {
         "sha": "cc85480881",
@@ -2466,7 +2466,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 215
+        "ms": 89
       },
       {
         "sha": "a971f4e8cb",
@@ -2476,7 +2476,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 218
+        "ms": 87
       },
       {
         "sha": "63908779ac",
@@ -2486,7 +2486,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 217
+        "ms": 91
       },
       {
         "sha": "d77ba288b6",
@@ -2496,7 +2496,7 @@
         "run": 179,
         "kind": "all",
         "reason": "selected 179 of 179 test files",
-        "ms": 217
+        "ms": 91
       },
       {
         "sha": "0d9139e63c",
@@ -2506,7 +2506,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/conductor.yaml changed",
-        "ms": 34
+        "ms": 32
       },
       {
         "sha": "f494abb8f9",
@@ -2516,7 +2516,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 213
+        "ms": 85
       },
       {
         "sha": "61f86fa905",
@@ -2526,7 +2526,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/zizmor.yml changed",
-        "ms": 36
+        "ms": 34
       },
       {
         "sha": "56a26ff6ad",
@@ -2546,7 +2546,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 214
+        "ms": 94
       },
       {
         "sha": "573b17584c",
@@ -2556,7 +2556,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 178 test files",
-        "ms": 218
+        "ms": 93
       },
       {
         "sha": "640375fc88",
@@ -2566,7 +2566,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 178 test files",
-        "ms": 225
+        "ms": 89
       },
       {
         "sha": "2616959b47",
@@ -2576,7 +2576,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/continuous-integration.yml changed",
-        "ms": 32
+        "ms": 33
       },
       {
         "sha": "1ff9cd279a",
@@ -2586,7 +2586,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 213
+        "ms": 91
       },
       {
         "sha": "53e6ddca87",
@@ -2596,7 +2596,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 216
+        "ms": 99
       },
       {
         "sha": "b7abcc3c3f",
@@ -2606,7 +2606,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 213
+        "ms": 93
       },
       {
         "sha": "cd7457dbe5",
@@ -2616,7 +2616,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 215
+        "ms": 91
       },
       {
         "sha": "3d172baf55",
@@ -2626,7 +2626,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 215
+        "ms": 94
       },
       {
         "sha": "f0de0bf902",
@@ -2636,7 +2636,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 214
+        "ms": 94
       },
       {
         "sha": "f2477583b0",
@@ -2646,7 +2646,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 178 test files",
-        "ms": 211
+        "ms": 93
       },
       {
         "sha": "0aac50528e",
@@ -2656,7 +2656,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 215
+        "ms": 94
       },
       {
         "sha": "53b8bb4c24",
@@ -2666,7 +2666,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 216
+        "ms": 91
       },
       {
         "sha": "24e396b527",
@@ -2676,7 +2676,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 219
+        "ms": 103
       },
       {
         "sha": "f383d2318c",
@@ -2686,7 +2686,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 213
+        "ms": 95
       },
       {
         "sha": "ada00550c3",
@@ -2696,7 +2696,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 212
+        "ms": 92
       },
       {
         "sha": "cd19785d71",
@@ -2706,7 +2706,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 214
+        "ms": 99
       },
       {
         "sha": "eba7baa59e",
@@ -2716,7 +2716,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 221
+        "ms": 89
       },
       {
         "sha": "5e9f655ba7",
@@ -2726,7 +2726,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 216
+        "ms": 92
       },
       {
         "sha": "f600f9a1c5",
@@ -2736,7 +2736,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 33
+        "ms": 32
       },
       {
         "sha": "ab70897ec3",
@@ -2746,7 +2746,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/zizmor.yml changed",
-        "ms": 30
+        "ms": 34
       },
       {
         "sha": "6987fe5a4d",
@@ -2756,7 +2756,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 216
+        "ms": 96
       },
       {
         "sha": "c435d285c9",
@@ -2776,7 +2776,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/close-stale-support.yml changed",
-        "ms": 30
+        "ms": 35
       },
       {
         "sha": "6ffc117740",
@@ -2786,7 +2786,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 178 test files",
-        "ms": 214
+        "ms": 83
       },
       {
         "sha": "b73133523a",
@@ -2796,7 +2796,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/autoloader.yml changed",
-        "ms": 32
+        "ms": 30
       },
       {
         "sha": "70d07574be",
@@ -2806,7 +2806,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/zizmor.yml changed",
-        "ms": 32
+        "ms": 30
       },
       {
         "sha": "a271c92bae",
@@ -2816,7 +2816,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 216
+        "ms": 95
       },
       {
         "sha": "bd9d7f3430",
@@ -2826,7 +2826,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 178 test files",
-        "ms": 213
+        "ms": 89
       },
       {
         "sha": "1fcf791133",
@@ -2836,7 +2836,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/zizmor.yml changed",
-        "ms": 32
+        "ms": 31
       },
       {
         "sha": "68dcf526b5",
@@ -2846,7 +2846,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 33
+        "ms": 31
       },
       {
         "sha": "bb38c69cac",
@@ -2856,7 +2856,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 215
+        "ms": 92
       },
       {
         "sha": "138899a081",
@@ -2866,7 +2866,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/close-stale-support.yml changed",
-        "ms": 35
+        "ms": 29
       },
       {
         "sha": "2ce09be45d",
@@ -2876,7 +2876,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 178 test files",
-        "ms": 212
+        "ms": 87
       },
       {
         "sha": "1f54358cf8",
@@ -2886,7 +2886,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 214
+        "ms": 92
       },
       {
         "sha": "f1d3ad1aef",
@@ -2896,7 +2896,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/release.yml changed",
-        "ms": 33
+        "ms": 32
       },
       {
         "sha": "8fbad13554",
@@ -2906,7 +2906,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 178 test files",
-        "ms": 212
+        "ms": 88
       },
       {
         "sha": "8624fd5066",
@@ -2926,7 +2926,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/zizmor.yml changed",
-        "ms": 34
+        "ms": 32
       },
       {
         "sha": "ada2556220",
@@ -2936,7 +2936,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 233
+        "ms": 104
       },
       {
         "sha": "c6c9144f1b",
@@ -2946,7 +2946,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 216
+        "ms": 89
       },
       {
         "sha": "118acf3cb5",
@@ -2956,7 +2956,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 216
+        "ms": 86
       },
       {
         "sha": "15352a5938",
@@ -2966,7 +2966,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 214
+        "ms": 95
       },
       {
         "sha": "8d4439f572",
@@ -2976,7 +2976,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 216
+        "ms": 92
       },
       {
         "sha": "79d92f047d",
@@ -2986,7 +2986,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 178 test files",
-        "ms": 215
+        "ms": 93
       },
       {
         "sha": "8887ad76fb",
@@ -2996,7 +2996,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 213
+        "ms": 94
       },
       {
         "sha": "502c6c4f69",
@@ -3006,7 +3006,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 223
+        "ms": 101
       },
       {
         "sha": "145e74d325",
@@ -3016,7 +3016,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 214
+        "ms": 91
       },
       {
         "sha": "e42b4f1215",
@@ -3026,7 +3026,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 217
+        "ms": 94
       },
       {
         "sha": "8c3eba87d2",
@@ -3036,7 +3036,7 @@
         "run": 178,
         "kind": "all",
         "reason": "selected 178 of 178 test files",
-        "ms": 225
+        "ms": 101
       },
       {
         "sha": "c5f92a0ea9",
@@ -3046,7 +3046,7 @@
         "run": 178,
         "kind": "all",
         "reason": ".github/workflows/autoloader.yml changed",
-        "ms": 32
+        "ms": 31
       }
     ]
   },
@@ -3061,9 +3061,9 @@
     "shareNone": 0.05,
     "shareNarrowed": 0.9,
     "shareAll": 0.05,
-    "decisionMsP50": 748,
-    "decisionMsP95": 1011,
-    "measured": "2026-10-18",
+    "decisionMsP50": 328,
+    "decisionMsP95": 701,
+    "measured": "2026-10-20",
     "runs": [
       {
         "sha": "0fd0747167",
@@ -3073,7 +3073,7 @@
         "run": 1005,
         "kind": "narrowed",
         "reason": "selected 1005 of 1008 test files",
-        "ms": 773
+        "ms": 274
       },
       {
         "sha": "4145fdea5a",
@@ -3083,7 +3083,7 @@
         "run": 1005,
         "kind": "narrowed",
         "reason": "selected 1005 of 1008 test files",
-        "ms": 687
+        "ms": 230
       },
       {
         "sha": "8a8401e926",
@@ -3093,7 +3093,7 @@
         "run": 1005,
         "kind": "narrowed",
         "reason": "selected 1005 of 1008 test files",
-        "ms": 925
+        "ms": 577
       },
       {
         "sha": "6823482a9d",
@@ -3103,7 +3103,7 @@
         "run": 1005,
         "kind": "narrowed",
         "reason": "selected 1005 of 1008 test files",
-        "ms": 669
+        "ms": 241
       },
       {
         "sha": "326f8064a5",
@@ -3113,7 +3113,7 @@
         "run": 2,
         "kind": "narrowed",
         "reason": "selected 2 of 1008 test files",
-        "ms": 685
+        "ms": 244
       },
       {
         "sha": "e355670673",
@@ -3123,7 +3123,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 745
+        "ms": 301
       },
       {
         "sha": "e51b5fe16d",
@@ -3133,7 +3133,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 690
+        "ms": 275
       },
       {
         "sha": "6f2b5b77e6",
@@ -3143,7 +3143,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 709
+        "ms": 267
       },
       {
         "sha": "f72822e5b8",
@@ -3153,7 +3153,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 730
+        "ms": 334
       },
       {
         "sha": "e0b81354b3",
@@ -3163,7 +3163,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 804
+        "ms": 453
       },
       {
         "sha": "8998ef4555",
@@ -3173,7 +3173,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 694
+        "ms": 243
       },
       {
         "sha": "67905cc363",
@@ -3183,7 +3183,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 951
+        "ms": 653
       },
       {
         "sha": "86864f3dcf",
@@ -3193,7 +3193,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 1007 test files",
-        "ms": 664
+        "ms": 223
       },
       {
         "sha": "685f8d6c2a",
@@ -3203,7 +3203,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 669
+        "ms": 252
       },
       {
         "sha": "af81bbbc15",
@@ -3213,7 +3213,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 699
+        "ms": 278
       },
       {
         "sha": "fbc2b3e944",
@@ -3223,7 +3223,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 709
+        "ms": 270
       },
       {
         "sha": "6d2eefbb14",
@@ -3233,7 +3233,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 682
+        "ms": 244
       },
       {
         "sha": "ff0d6b967f",
@@ -3243,7 +3243,7 @@
         "run": 1004,
         "kind": "narrowed",
         "reason": "selected 1004 of 1007 test files",
-        "ms": 749
+        "ms": 346
       },
       {
         "sha": "bff5d2a24e",
@@ -3253,7 +3253,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 705
+        "ms": 269
       },
       {
         "sha": "940f3452ab",
@@ -3263,7 +3263,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 753
+        "ms": 344
       },
       {
         "sha": "c413cff982",
@@ -3273,7 +3273,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 731
+        "ms": 282
       },
       {
         "sha": "9bfc37320a",
@@ -3283,7 +3283,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 775
+        "ms": 379
       },
       {
         "sha": "da949b41e4",
@@ -3293,7 +3293,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 691
+        "ms": 264
       },
       {
         "sha": "531cd578bd",
@@ -3303,7 +3303,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 670
+        "ms": 229
       },
       {
         "sha": "a02558ef15",
@@ -3313,7 +3313,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 737
+        "ms": 488
       },
       {
         "sha": "42e87f0c9c",
@@ -3323,7 +3323,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 735
+        "ms": 607
       },
       {
         "sha": "840b2a96a6",
@@ -3333,7 +3333,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 729
+        "ms": 331
       },
       {
         "sha": "f43d77daf2",
@@ -3343,7 +3343,7 @@
         "run": 1006,
         "kind": "all",
         "reason": "selected 1006 of 1006 test files",
-        "ms": 661
+        "ms": 226
       },
       {
         "sha": "957afcdc93",
@@ -3353,7 +3353,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 809
+        "ms": 424
       },
       {
         "sha": "c4340e646a",
@@ -3363,7 +3363,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 692
+        "ms": 263
       },
       {
         "sha": "6ea1b32090",
@@ -3373,7 +3373,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 1007
+        "ms": 778
       },
       {
         "sha": "c3e586825b",
@@ -3383,7 +3383,7 @@
         "run": 1003,
         "kind": "narrowed",
         "reason": "selected 1003 of 1006 test files",
-        "ms": 1013
+        "ms": 708
       },
       {
         "sha": "c90a0c8d51",
@@ -3393,7 +3393,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 732
+        "ms": 287
       },
       {
         "sha": "5cc36e3233",
@@ -3403,7 +3403,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 842
+        "ms": 339
       },
       {
         "sha": "c1e3626ae0",
@@ -3413,7 +3413,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 811
+        "ms": 266
       },
       {
         "sha": "ce7a0de5ae",
@@ -3423,7 +3423,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 785
+        "ms": 323
       },
       {
         "sha": "9b4b444019",
@@ -3433,7 +3433,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 778
+        "ms": 339
       },
       {
         "sha": "04c07c33d9",
@@ -3443,7 +3443,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 1029
+        "ms": 783
       },
       {
         "sha": "43a4488e5f",
@@ -3453,7 +3453,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 706
+        "ms": 262
       },
       {
         "sha": "3727a91780",
@@ -3463,7 +3463,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 1014
+        "ms": 692
       },
       {
         "sha": "b597847d46",
@@ -3473,7 +3473,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 1011
+        "ms": 701
       },
       {
         "sha": "78a5c48ea3",
@@ -3483,7 +3483,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 734
+        "ms": 339
       },
       {
         "sha": "a0d6db3446",
@@ -3493,7 +3493,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 758
+        "ms": 335
       },
       {
         "sha": "8a58e4696c",
@@ -3503,7 +3503,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 667
+        "ms": 233
       },
       {
         "sha": "f9aed736a8",
@@ -3513,7 +3513,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 794
+        "ms": 441
       },
       {
         "sha": "6168f60d55",
@@ -3523,7 +3523,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 817
+        "ms": 484
       },
       {
         "sha": "0fd73881de",
@@ -3533,7 +3533,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 802
+        "ms": 445
       },
       {
         "sha": "d63eca049e",
@@ -3543,7 +3543,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 1005 test files",
-        "ms": 684
+        "ms": 224
       },
       {
         "sha": "e5626e3813",
@@ -3553,7 +3553,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 681
+        "ms": 225
       },
       {
         "sha": "9bbacaf625",
@@ -3563,7 +3563,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 668
+        "ms": 231
       },
       {
         "sha": "7b8a685ab0",
@@ -3573,7 +3573,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 681
+        "ms": 227
       },
       {
         "sha": "686f6bf4d1",
@@ -3583,7 +3583,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 701
+        "ms": 284
       },
       {
         "sha": "84744cdc2f",
@@ -3593,7 +3593,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 797
+        "ms": 414
       },
       {
         "sha": "631f8a6e68",
@@ -3603,7 +3603,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 832
+        "ms": 426
       },
       {
         "sha": "14e4c05951",
@@ -3613,7 +3613,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 936
+        "ms": 548
       },
       {
         "sha": "3c775493cf",
@@ -3623,7 +3623,7 @@
         "run": 1,
         "kind": "narrowed",
         "reason": "selected 1 of 1005 test files",
-        "ms": 698
+        "ms": 225
       },
       {
         "sha": "f20aadb0cb",
@@ -3633,7 +3633,7 @@
         "run": 1005,
         "kind": "all",
         "reason": ".github/workflows/install-nightly.yml changed",
-        "ms": 34
+        "ms": 29
       },
       {
         "sha": "88aadc10c5",
@@ -3643,7 +3643,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 749
+        "ms": 317
       },
       {
         "sha": "1adc68b20f",
@@ -3653,7 +3653,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 771
+        "ms": 405
       },
       {
         "sha": "4008fb3620",
@@ -3663,7 +3663,7 @@
         "run": 8,
         "kind": "narrowed",
         "reason": "selected 8 of 1005 test files",
-        "ms": 661
+        "ms": 222
       },
       {
         "sha": "e8b96d9369",
@@ -3673,7 +3673,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 822
+        "ms": 416
       },
       {
         "sha": "479bd9f5c3",
@@ -3683,7 +3683,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 818
+        "ms": 425
       },
       {
         "sha": "3496cdf700",
@@ -3693,7 +3693,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 1030
+        "ms": 781
       },
       {
         "sha": "83bf547da6",
@@ -3703,7 +3703,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 666
+        "ms": 242
       },
       {
         "sha": "1ee6d193db",
@@ -3713,7 +3713,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 785
+        "ms": 415
       },
       {
         "sha": "f618f7911d",
@@ -3723,7 +3723,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 690
+        "ms": 256
       },
       {
         "sha": "f33f395826",
@@ -3733,7 +3733,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 681
+        "ms": 256
       },
       {
         "sha": "73a25a4ad3",
@@ -3743,7 +3743,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 685
+        "ms": 259
       },
       {
         "sha": "01ac36d93a",
@@ -3753,7 +3753,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 688
+        "ms": 240
       },
       {
         "sha": "a9c22e409e",
@@ -3763,7 +3763,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 775
+        "ms": 328
       },
       {
         "sha": "224c7e6a57",
@@ -3773,7 +3773,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 859
+        "ms": 337
       },
       {
         "sha": "3517d4dbb2",
@@ -3783,7 +3783,7 @@
         "run": 1002,
         "kind": "narrowed",
         "reason": "selected 1002 of 1005 test files",
-        "ms": 875
+        "ms": 339
       },
       {
         "sha": "17bc0b1378",
@@ -3793,7 +3793,7 @@
         "run": 1005,
         "kind": "all",
         "reason": "selected 1005 of 1005 test files",
-        "ms": 678
+        "ms": 224
       },
       {
         "sha": "848f3edfc0",
@@ -3803,7 +3803,7 @@
         "run": 1005,
         "kind": "all",
         "reason": "selected 1005 of 1005 test files",
-        "ms": 669
+        "ms": 219
       },
       {
         "sha": "40c0d0b1d5",
@@ -3813,7 +3813,7 @@
         "run": 1001,
         "kind": "narrowed",
         "reason": "selected 1001 of 1004 test files",
-        "ms": 771
+        "ms": 395
       },
       {
         "sha": "dc3455f165",
@@ -3823,7 +3823,7 @@
         "run": 1001,
         "kind": "narrowed",
         "reason": "selected 1001 of 1004 test files",
-        "ms": 775
+        "ms": 393
       },
       {
         "sha": "68e78fe401",
@@ -3833,7 +3833,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 870
+        "ms": 484
       },
       {
         "sha": "d73760a879",
@@ -3843,7 +3843,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 863
+        "ms": 527
       },
       {
         "sha": "355d1e1e3a",
@@ -3853,7 +3853,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 757
+        "ms": 328
       },
       {
         "sha": "847f73b00d",
@@ -3863,7 +3863,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 724
+        "ms": 284
       },
       {
         "sha": "09c6dc3d90",
@@ -3873,7 +3873,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 678
+        "ms": 235
       },
       {
         "sha": "7ee7a6467b",
@@ -3883,7 +3883,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 953
+        "ms": 603
       },
       {
         "sha": "c7deadb839",
@@ -3893,7 +3893,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 750
+        "ms": 337
       },
       {
         "sha": "65c4898b78",
@@ -3903,7 +3903,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 1003 test files",
-        "ms": 652
+        "ms": 221
       },
       {
         "sha": "a979d096df",
@@ -3913,7 +3913,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 965
+        "ms": 688
       },
       {
         "sha": "38006c1ca5",
@@ -3923,7 +3923,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 782
+        "ms": 413
       },
       {
         "sha": "d1df8eef5c",
@@ -3933,7 +3933,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 671
+        "ms": 238
       },
       {
         "sha": "ca8cc85f47",
@@ -3943,7 +3943,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 809
+        "ms": 417
       },
       {
         "sha": "24fd84e62d",
@@ -3953,7 +3953,7 @@
         "run": 1003,
         "kind": "all",
         "reason": "selected 1003 of 1003 test files",
-        "ms": 669
+        "ms": 216
       },
       {
         "sha": "b5fdb3b4e5",
@@ -3963,7 +3963,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 966
+        "ms": 678
       },
       {
         "sha": "594f3a8da3",
@@ -3973,7 +3973,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 803
+        "ms": 395
       },
       {
         "sha": "aec7a75e78",
@@ -3983,7 +3983,7 @@
         "run": 1000,
         "kind": "narrowed",
         "reason": "selected 1000 of 1003 test files",
-        "ms": 871
+        "ms": 527
       },
       {
         "sha": "b99fa54475",
@@ -3993,7 +3993,7 @@
         "run": 999,
         "kind": "narrowed",
         "reason": "selected 999 of 1002 test files",
-        "ms": 969
+        "ms": 590
       },
       {
         "sha": "01ad26596c",
@@ -4003,7 +4003,7 @@
         "run": 999,
         "kind": "narrowed",
         "reason": "selected 999 of 1002 test files",
-        "ms": 748
+        "ms": 358
       },
       {
         "sha": "ff9b93b19a",
@@ -4013,7 +4013,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 1002 test files",
-        "ms": 703
+        "ms": 222
       },
       {
         "sha": "725381d29c",
@@ -4023,7 +4023,7 @@
         "run": 0,
         "kind": "none",
         "reason": "selected 0 of 1002 test files",
-        "ms": 671
+        "ms": 222
       },
       {
         "sha": "a413a9da94",
@@ -4033,7 +4033,7 @@
         "run": 999,
         "kind": "narrowed",
         "reason": "selected 999 of 1002 test files",
-        "ms": 669
+        "ms": 227
       },
       {
         "sha": "2e172fca85",
@@ -4043,7 +4043,7 @@
         "run": 999,
         "kind": "narrowed",
         "reason": "selected 999 of 1002 test files",
-        "ms": 682
+        "ms": 253
       },
       {
         "sha": "998623efd5",
@@ -4053,7 +4053,7 @@
         "run": 999,
         "kind": "narrowed",
         "reason": "selected 999 of 1002 test files",
-        "ms": 986
+        "ms": 686
       },
       {
         "sha": "d302e39a70",
@@ -4063,7 +4063,7 @@
         "run": 999,
         "kind": "narrowed",
         "reason": "selected 999 of 1002 test files",
-        "ms": 797
+        "ms": 403
       }
     ]
   }

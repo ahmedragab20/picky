@@ -1,0 +1,3 @@
+# Matches the 140-column width the rest of the repo uses.
+max_width = 140
+use_small_heuristics = "Max"

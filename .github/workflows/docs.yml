@@ -3,7 +3,7 @@ name: Docs
 on:
   push:
     branches: [main]
-    paths: ['docs/**', 'skills/**', 'CHANGELOG.md', 'bench/results.json', 'bench/hero.json', 'package.json', '.github/workflows/docs.yml']
+    paths: ['docs/**', 'skills/**', 'CHANGELOG.md', 'bench/results.json', 'bench/hero.json', 'Cargo.toml', '.github/workflows/docs.yml']
   workflow_dispatch:
 
 permissions:
@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v7
       # Bun installs and runs the scripts; next build itself runs on Node.
       - uses: oven-sh/setup-bun@v2
-        with: { bun-version-file: package.json }
+        with: { bun-version-file: docs/package.json }
       - uses: actions/setup-node@v7
         with: { node-version: 24 }
       - id: pages

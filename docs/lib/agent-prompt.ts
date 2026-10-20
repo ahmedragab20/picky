@@ -7,12 +7,13 @@ picky runs only the tests, lint and type checks a pull request can affect.
 1. Read the instructions first. Do not guess flags or behavior.
    - Skill: https://raw.githubusercontent.com/ahmedragab20/picky/main/skills/picky/SKILL.md
    - If you cannot fetch it, use the full docs: https://ahmedragab20.github.io/picky/llms-full.txt
-2. Download picky.mjs and picky.mjs.sha256 from
+2. Download SHA256SUMS and the binary for this machine (picky-linux-x64, picky-linux-arm64,
+   picky-darwin-x64, picky-darwin-arm64 or picky-windows-x64.exe) from
    ${releaseUrl}/
-   and verify the checksum. Stop if it fails.
-3. Run \`node picky.mjs init\` (a dry run). Show me the full diff and the notes it
+   and verify its checksum against SHA256SUMS. Stop if it fails.
+3. Run \`<binary> init\` (a dry run). Show me the full diff and the notes it
    prints, and explain anything it skipped.
-4. Wait for my OK. Then run \`node picky.mjs init --write\` and delete the downloaded files.
+4. Wait for my OK. Then run \`<binary> init --write\` and delete the downloaded files.
 5. Keep \`mode: shadow\` in .picky.yml. Do not switch to enforce.
 6. Do not change or delete any test. Do not remove existing path filters or
    --changedSince-style flags without asking me. Do not mark commands picky does not recognize.
