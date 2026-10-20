@@ -33,12 +33,16 @@ struct Run {
 
 /// Runs a step the way GitHub Actions does: bash --noprofile --norc -eo pipefail <script>, with BASH_ENV set.
 fn run_step(root: &str, script: &str, env: &[(&str, &str)]) -> Run {
+    run_step_with("bash", root, script, env)
+}
+
+fn run_step_with(bash: &str, root: &str, script: &str, env: &[(&str, &str)]) -> Run {
     let file = format!("{root}/.step.sh");
     std::fs::write(&file, script).unwrap();
     let hook = format!("{HOME}/hook/hook.sh");
     let mut vars = clean_env(&[("BASH_ENV", &hook), ("PICKY_BIN", PICKY)]);
     vars.extend(env.iter().map(|(k, v)| (k.to_string(), v.to_string())));
-    let out = Command::new("bash")
+    let out = Command::new(bash)
         .args(["--noprofile", "--norc", "-eo", "pipefail", &file])
         .current_dir(root)
         .env_clear()
@@ -135,6 +139,22 @@ fn runs_unmarked_steps_of_a_marked_workflow_as_they_are_keeping_dollar_0() {
     let r = run_step(&root, "echo \"$0\"\n", &pairs(&gh(&root)));
     assert_eq!(r.code, Some(0));
     assert_eq!(r.out.trim(), format!("{}/.step.sh", &*root));
+}
+
+#[test]
+fn reads_the_step_script_on_bash_3_2_where_bash_env_runs_before_dollar_0_is_set() {
+    // /bin/bash is bash 3.2 on macOS runners.
+    let wf = files(&[(
+        ".github/workflows/ci.yml",
+        "on: pull_request\njobs:\n  test:\n    runs-on: macos-latest\n    steps:\n      - run: echo \"$0\"\n      - run: node --test # picky\n",
+    )]);
+    let root = repo(&cat(&[&base(), &wf]), &math_change());
+    let marked = run_step_with("/bin/bash", &root, "node --test # picky\n", &pairs(&gh(&root)));
+    assert_eq!(marked.code, Some(0), "{}", marked.err);
+    assert!(marked.err.contains("picky: $ node --test test/cart.test.ts test/math.test.ts"), "{}", marked.err);
+    let unmarked = run_step_with("/bin/bash", &root, "echo \"$0\"\n", &pairs(&gh(&root)));
+    assert_eq!(unmarked.code, Some(0), "{}", unmarked.err);
+    assert_eq!(unmarked.out.trim(), format!("{}/.step.sh", &*root));
 }
 
 #[test]

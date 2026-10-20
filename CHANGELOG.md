@@ -20,6 +20,7 @@ All notable changes to picky are listed here. The format follows [Keep a Changel
 
 ### Fixed
 
+- On macOS runners, where `bash` is 3.2, the hook works. Before, every bash step in a workflow with a `# picky` marker failed with `cannot execute binary file`.
 - When the hook can't write the rewritten step script, it runs the original step instead of failing.
 - On macOS, `picky explain` prints a long decision in full when its output is a pipe. Node cut it off at 64 KB.
 
