@@ -7,10 +7,15 @@ description: What picky does to each marked command.
 |---|---|
 | **vitest, jest, `node --test`** | runs only the affected test files |
 | **PHPUnit, Pest** | runs only the affected test files |
+| **`gradle test`, `./gradlew test`** | runs only the affected test classes, per project: `:core:test --tests 'shop.CartTest*'` |
+| **`cargo test`, `cargo nextest run`** | runs only the affected crates (`-p`) and integration test targets (`--test`) |
+| **ktlint** (no patterns) | checks only changed `.kt`/`.kts` files |
 | **ESLint** (flat config) | lints changed files and every file that imports them |
 | **Prettier** | checks only changed files |
 | **tsc, vue-tsc, svelte-check, biome** | skips when no changed file can matter, otherwise runs in full |
 | **phpstan, psalm, phpcs, php-cs-fixer, pint, rector** | skips when no changed file can matter, otherwise runs in full |
+| **detekt, `gradle check`, `ktlintCheck`, `spotlessCheck`, `lint`, `compileKotlin`** | skips when no changed file can matter, otherwise runs in full |
+| **`cargo clippy`, `cargo check`, `cargo fmt`** | skips when no changed file can matter, otherwise runs in full |
 
 They're also recognized through `npm`/`pnpm`/`yarn run` and `composer` scripts. Any other marked command runs in full.
 
@@ -19,6 +24,9 @@ They're also recognized through `npm`/`pnpm`/`yarn run` and `composer` scripts. 
 
 `*.test.*` and `*.spec.*` (ts, tsx, js, jsx, mts, cts, mjs, cjs), and `*Test.php`. Files under `node_modules/` and `vendor/` are ignored.
 
+- **Kotlin and Java:** a file under `src/test/kotlin/` or `src/test/java/` that declares a concrete class with a test annotation (`@Test`, `@ParameterizedTest`, …), a Kotest spec, or a supertype.
+- **Rust:** each crate (its unit tests and doctests, named by its `Cargo.toml`) and each integration test target, `tests/<name>.rs` or `tests/<name>/main.rs`.
+
 </Accordion>
 <Accordion title="Edge cases">
 
@@ -26,6 +34,9 @@ They're also recognized through `npm`/`pnpm`/`yarn run` and `composer` scripts. 
 - **Legacy `.eslintrc`** and `import/no-unused-modules`: skip or run in full, never narrowed.
 - A change to a linter's config, or a file it imports, runs that linter in full.
 - **`php artisan test`** always runs in full in this version.
+- **Gradle:** only a bare `test` task is narrowed. `:app:test`, `--tests`, `-p` or other tasks in the same call run in full. Android and Kotlin Multiplatform projects run in full: their test tasks take no `--tests` filter. Narrowed runs add an `--init-script` that lets a filter match no tests, so a helper class never fails the task.
+- **Cargo:** `-p`, `--lib`, `--test <name>` or a test name filter mean the command already targets tests: it runs in full. `--workspace` and `--exclude` become `-p` per selected crate. When a whole crate is selected next to single integration targets, every listed crate runs whole, because cargo applies `--test` to each `-p`. nextest gets `--no-tests=pass`, so a selected crate without tests doesn't fail the run; a nextest too old to know `--no-tests` fails on it.
+- **Maven** (`mvn test`) runs in full in this version.
 
 </Accordion>
 </Accordions>

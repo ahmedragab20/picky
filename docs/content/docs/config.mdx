@@ -15,7 +15,7 @@ low: ["docs/**", "**/*.md"]                # changes here never trigger tests
     mode: { type: '"shadow" | "enforce"', default: '"shadow"', description: 'Shadow decides and logs but runs everything.' },
     model: { type: '"jev" | "typesafe/<version>" | "none"', default: '"jev"', description: 'none = graph only, no network call.' },
     critical: { type: 'glob[]', default: '[]', description: 'Changed files here run everything. Tests here always run.' },
-    low: { type: 'glob[]', default: '["**/*.md", "**/*.mdx", "docs/**", "LICENSE*"]', description: 'Changes here never select tests on their own.' },
+    low: { type: 'glob[]', default: '["**/*.md", "**/*.mdx", "docs/**", "LICENSE*"]', description: 'Changes here never select tests on their own, unless code reads the file (a README a Rust crate includes as doctests).' },
   }}
 />
 
@@ -35,7 +35,7 @@ low: ["docs/**", "**/*.md"]                # changes here never trigger tests
 - A change to `.picky.yml`, `.github/workflows/**`, `.github/picky/**` or a `critical` path.
 - Any event other than `pull_request`.
 - A missing API key with `model: jev`, an unknown key or `extends` in `.picky.yml`.
-- Per ecosystem: `package.json`, lockfiles, `tsconfig*.json` or vitest/vite/jest config run JS in full; `composer.json`, `composer.lock` or `phpunit.xml` run PHP in full.
+- Per ecosystem: `package.json`, lockfiles, `tsconfig*.json` or vitest/vite/jest config run JS in full; `composer.json`, `composer.lock` or `phpunit.xml` run PHP in full; Gradle build files (`*.gradle*`, `gradle.properties`, the wrapper, version catalogs, `buildSrc/`, `includeBuild` directories) or `pom.xml` run Kotlin in full; `Cargo.toml`, `Cargo.lock`, `rust-toolchain*` or `.cargo/config*` run Rust in full.
 
 </Accordion>
 </Accordions>

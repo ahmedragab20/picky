@@ -28,6 +28,11 @@ export function isSetupCommand(words: string[] | null): boolean {
       return sub === undefined || sub.startsWith('-') || (sub === 'install' && flagsOnly);
     case 'npx':
       return sub === 'playwright' && (args[0] === 'install' || args[0] === 'install-deps');
+    case 'cargo':
+      // `cargo install`/`binstall` add tools (cargo-nextest), not project dependencies.
+      return (sub === 'fetch' && flagsOnly) || sub === 'install' || sub === 'binstall';
+    case 'rustup':
+      return ['toolchain', 'target', 'component', 'install', 'update', 'default', 'show'].includes(sub);
     default:
       return false;
   }
@@ -37,6 +42,8 @@ export function isSetupCommand(words: string[] | null): boolean {
 const PASSIVE_ACTIONS = [
   /^actions\/(checkout|setup-[\w-]+|cache(\/(restore|save))?|upload-artifact|download-artifact)@/,
   /^(shivammathur\/setup-php|pnpm\/action-setup|oven-sh\/setup-bun)@/,
+  /^(dtolnay\/rust-toolchain|actions-rust-lang\/setup-rust-toolchain|actions-rs\/toolchain|Swatinem\/rust-cache|taiki-e\/install-action)@/,
+  /^gradle\/(actions\/(setup-gradle|wrapper-validation)|gradle-build-action|wrapper-validation-action)@/,
   /^\.\/\.github\/picky\/?$/, // the setup action `picky init` vendors
 ];
 

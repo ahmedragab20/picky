@@ -1,8 +1,10 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { gradleBuild, gradleInitScript, jvmTestClasses } from './kotlin.ts';
+import { cargoScope, cargoTarget } from './rust.ts';
 import { splitAssignments, tokenize } from './sh.ts';
 
-export type Ecosystem = 'js' | 'php';
+export type Ecosystem = 'js' | 'php' | 'kotlin' | 'rust';
 
 /** Runs test files: picky narrows it to the selected ones. */
 export interface TestCommand {
@@ -11,6 +13,10 @@ export interface TestCommand {
   ecosystem: Ecosystem;
   /** The argv that runs only `files` (relative to the cwd), or null when the runner can't take them all. */
   narrow(files: string[]): string[] | null;
+  /** Why `narrow` can return null, for the log. */
+  whyNot?: string;
+  /** Whether a test file (relative to the cwd) is one this command runs, when not every test under the cwd is. */
+  owns?(file: string): boolean;
 }
 
 /** Checks files one by one (a linter or formatter): picky narrows it to the affected files. */
@@ -35,7 +41,10 @@ export interface CheckCommand {
 export type Command = TestCommand | FilesCommand | CheckCommand;
 
 export function ecosystemOf(file: string): Ecosystem {
-  return file.endsWith('.php') ? 'php' : 'js';
+  if (file.endsWith('.php')) return 'php';
+  if (file.endsWith('.rs') || path.posix.basename(file) === 'Cargo.toml') return 'rust';
+  if (/\.(?:kt|kts|java)$/.test(file)) return 'kotlin';
+  return 'js';
 }
 
 const MAX_SCRIPT_DEPTH = 3;
@@ -50,6 +59,8 @@ const CHECKS: Record<string, Ecosystem> = {
   'php-cs-fixer': 'php',
   pint: 'php',
   rector: 'php',
+  detekt: 'kotlin',
+  'detekt-cli': 'kotlin',
 };
 
 /**
@@ -79,7 +90,7 @@ export function recognize(argv: string[], cwd: string, depth = 0): Command | nul
   if (i >= argv.length) return null;
 
   const before = argv.slice(0, i + 1);
-  const tool = path.basename(argv[i]).replace(/\.phar$/, '');
+  const tool = path.basename(argv[i]).replace(/\.(?:phar|bat|cmd)$/, '');
   const args = argv.slice(i + 1);
 
   if (CHECKS[tool]) return { kind: 'check', tool, ecosystem: CHECKS[tool] };
@@ -108,6 +119,7 @@ export function recognize(argv: string[], cwd: string, depth = 0): Command | nul
         tool,
         ecosystem: 'php',
         narrow: (files) => (files.length > 1 && !severalOk ? null : [...before, ...args, ...files]),
+        whyNot: `${tool} before 10 runs only the first of several paths`,
       };
     }
     case 'eslint':
@@ -120,6 +132,13 @@ export function recognize(argv: string[], cwd: string, depth = 0): Command | nul
       return recognizeScript(tool, argv.slice(0, i), args, cwd, depth);
     case 'composer':
       return recognizeComposer(argv.slice(0, i + 1), args, cwd, depth);
+    case 'cargo':
+      return cargo(before, args, cwd);
+    case 'gradle':
+    case 'gradlew':
+      return gradle(before, args, cwd);
+    case 'ktlint':
+      return ktlint(before, args);
     default:
       return null;
   }
@@ -201,6 +220,261 @@ function scriptBody(value: unknown): string | null {
   if (typeof value === 'string') return value;
   if (Array.isArray(value) && value.length === 1 && typeof value[0] === 'string') return value[0];
   return null;
+}
+
+// Cargo options that take a value as the next word. Package and target selection (-p, --lib,
+// --test, a test name) means the command already targets specific tests, so it isn't listed.
+const CARGO_VALUE = [
+  '--features',
+  '-F',
+  '--target',
+  '--target-dir',
+  '--profile',
+  '-j',
+  '--jobs',
+  '--color',
+  '--message-format',
+  '--config',
+  '-Z',
+  '--exclude',
+  '--lockfile-path',
+];
+const CARGO_BOOLEAN = [
+  '--workspace',
+  '--all',
+  '--all-features',
+  '--no-default-features',
+  '--release',
+  '-r',
+  '--locked',
+  '--frozen',
+  '--offline',
+  '--no-fail-fast',
+  '--quiet',
+  '-q',
+  '--verbose',
+  '-v',
+  '-vv',
+  '--all-targets',
+  '--tests',
+  '--bins',
+  '--examples',
+  '--benches',
+  '--timings',
+  '--keep-going',
+  '--ignore-rust-version',
+  '--no-run',
+];
+const NEXTEST_VALUE = [
+  ...CARGO_VALUE,
+  '-P',
+  '-E',
+  '--filterset',
+  '--filter-expr',
+  '--partition',
+  '--test-threads',
+  '--retries',
+  '--cargo-profile',
+  '--run-ignored',
+  '--status-level',
+  '--final-status-level',
+  '--success-output',
+  '--failure-output',
+  '--no-tests',
+  '--max-fail',
+];
+const NEXTEST_BOOLEAN = [...CARGO_BOOLEAN, '--no-capture', '--nocapture', '--fail-fast', '--hide-progress-bar'];
+/** Target kinds: with one of these, crates are narrowed only as a whole. */
+const CARGO_TARGET_KINDS = new Set(['--all-targets', '--tests', '--bins', '--examples', '--benches']);
+
+function cargo(before: string[], args: string[], cwd: string): Command | null {
+  const toolchain = args[0]?.startsWith('+') ? 1 : 0; // cargo +nightly test
+  const sub = args[toolchain];
+  const call = [...before, ...args.slice(0, toolchain + 1)];
+  const rest = args.slice(toolchain + 1);
+  if (sub === 'clippy' || sub === 'check' || sub === 'fmt') return { kind: 'check', tool: `cargo ${sub}`, ecosystem: 'rust' };
+  if (sub === 'test') return cargoTests(call, rest, cwd, 'cargo test', CARGO_VALUE, CARGO_BOOLEAN);
+  if (sub === 'nextest' && rest[0] === 'run') {
+    return cargoTests([...call, 'run'], rest.slice(1), cwd, 'cargo nextest', NEXTEST_VALUE, NEXTEST_BOOLEAN);
+  }
+  return null;
+}
+
+function cargoTests(call: string[], args: string[], cwd: string, tool: string, value: string[], boolean: string[]): Command | null {
+  const dash = args.indexOf('--');
+  const harness = dash < 0 ? [] : args.slice(dash);
+  // A bare word is a test name filter, before `--` or after it.
+  if (!onlyFlags(harness.slice(1))) return null;
+  const parsed = splitOptions(dash < 0 ? args : args.slice(0, dash), new Set(value), new Set(boolean));
+  if (!parsed || parsed.targets.length) return null;
+
+  // Package selection is replaced by `-p` for each selected crate.
+  const options: string[] = [];
+  const excluded: string[] = [];
+  for (let i = 0; i < parsed.options.length; i++) {
+    const o = parsed.options[i];
+    if (o === '--exclude') excluded.push(parsed.options[++i]);
+    else if (o.startsWith('--exclude=')) excluded.push(o.slice('--exclude='.length));
+    else if (o !== '--workspace' && o !== '--all') options.push(o);
+  }
+  const workspaceWide = parsed.options.includes('--workspace') || parsed.options.includes('--all');
+  if (excluded.length && !workspaceWide) return null;
+  const scope = cargoScope(cwd, workspaceWide, excluded);
+  if (!scope) return null;
+  const wholeCrates = options.some((o) => CARGO_TARGET_KINDS.has(o));
+  // nextest fails a run that selects no tests, as a crate without tests would.
+  const noTests = tool === 'cargo nextest' && !options.some((o) => o.startsWith('--no-tests')) ? ['--no-tests=pass'] : [];
+
+  return {
+    kind: 'tests',
+    tool,
+    ecosystem: 'rust',
+    owns: (file) => scope.owns(path.resolve(cwd, file)),
+    narrow: (files) => {
+      // Package name -> its selected integration targets, or null when the whole crate runs.
+      const crates = new Map<string, Set<string> | null>();
+      for (const file of files) {
+        const target = cargoTarget(path.resolve(cwd, file));
+        if (!target) return null;
+        const selected = crates.get(target.name);
+        if (!target.test || wholeCrates) crates.set(target.name, null);
+        else if (selected !== null) crates.set(target.name, new Set([...(selected ?? []), target.test]));
+      }
+      // `--test` applies to every listed package, so one whole crate makes every crate whole.
+      const partial = [...crates.values()].every((t) => t !== null);
+      const tests = partial ? [...new Set([...crates.values()].flatMap((t) => [...t!]))].sort() : [];
+      const packages = [...crates.keys()].sort().flatMap((name) => ['-p', name]);
+      return [...call, ...options, ...noTests, ...packages, ...tests.flatMap((t) => ['--test', t]), ...harness];
+    },
+  };
+}
+
+// Gradle options without a value. `-P`/`-D` properties and `--name=value` options are accepted too.
+const GRADLE_BOOLEAN = new Set([
+  '--no-daemon',
+  '--daemon',
+  '--stacktrace',
+  '-s',
+  '--full-stacktrace',
+  '-S',
+  '--info',
+  '-i',
+  '--debug',
+  '-d',
+  '--quiet',
+  '-q',
+  '--warn',
+  '-w',
+  '--scan',
+  '--no-scan',
+  '--parallel',
+  '--no-parallel',
+  '--build-cache',
+  '--no-build-cache',
+  '--configuration-cache',
+  '--no-configuration-cache',
+  '--offline',
+  '--refresh-dependencies',
+  '--rerun-tasks',
+  '--continue',
+  '--watch-fs',
+  '--no-watch-fs',
+  '--profile',
+]);
+const GRADLE_VALUE = new Set(['-x', '--exclude-task']);
+/** Options that move the build somewhere else, so test files no longer map to its projects. */
+const GRADLE_RELOCATE = /^--(?:project-dir|settings-file|build-file|include-build|tests)\b/;
+/** Tasks that only compile, lint or verify (`check` runs `test` too): run in full or skipped. */
+const GRADLE_CHECKS = new Set([
+  'check',
+  'detekt',
+  'detektMain',
+  'detektTest',
+  'ktlintCheck',
+  'lintKotlin',
+  'spotlessCheck',
+  'spotlessKotlinCheck',
+  'apiCheck',
+  'lint',
+  'compileKotlin',
+  'compileTestKotlin',
+  'compileJava',
+  'compileTestJava',
+]);
+
+function gradle(before: string[], args: string[], cwd: string): Command | null {
+  const tasks: string[] = [];
+  const flags: string[] = [];
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (!a.startsWith('-')) tasks.push(a);
+    else if (GRADLE_VALUE.has(a) && i + 1 < args.length) flags.push(a, args[++i]);
+    else if (GRADLE_RELOCATE.test(a)) return null;
+    else if (GRADLE_BOOLEAN.has(a) || /^-[PD]\S/.test(a) || /^--[\w-]+=/.test(a)) flags.push(a);
+    else return null;
+  }
+  if (tasks.length && tasks.every((t) => GRADLE_CHECKS.has(t.split(':').pop()!))) {
+    return { kind: 'check', tool: `gradle ${tasks.join(' ')}`, ecosystem: 'kotlin' };
+  }
+  if (tasks.length !== 1 || tasks[0] !== 'test') return null;
+  const build = gradleBuild(cwd);
+  if (!build) return null;
+
+  return {
+    kind: 'tests',
+    tool: 'gradle test',
+    ecosystem: 'kotlin',
+    owns: (file) => build.projectOf(path.resolve(cwd, file)) !== null,
+    whyNot: 'Android and Kotlin Multiplatform test tasks take no --tests filter',
+    narrow: (files) => {
+      // `test` runs every project's tests; each selected project's task gets its own `--tests` filters.
+      const tasks = new Map<string, Set<string>>();
+      for (const file of files) {
+        const abs = path.resolve(cwd, file);
+        const project = build.projectOf(abs);
+        const classes = jvmTestClasses(abs);
+        if (!project || classes.length === 0 || build.cantFilter(project)) return null;
+        if (!tasks.has(project.path)) tasks.set(project.path, new Set());
+        // The trailing * keeps nested (@Nested) classes on every Gradle version.
+        for (const c of classes) tasks.get(project.path)!.add(`${c}*`);
+      }
+      const init = gradleInitScript();
+      if (!init) return null;
+      const selected = [...tasks]
+        .sort(([a], [b]) => (a < b ? -1 : 1))
+        .flatMap(([project, classes]) => [`${project === ':' ? '' : project}:test`, ...[...classes].sort().flatMap((c) => ['--tests', c])]);
+      return [...before, ...flags, '--init-script', init, ...selected];
+    },
+  };
+}
+
+const KTLINT_VALUE = new Set([
+  '--reporter',
+  '--editorconfig',
+  '--baseline',
+  '--log-level',
+  '-l',
+  '--limit',
+  '--color-name',
+  '--ruleset',
+  '-R',
+  '--code-style',
+]);
+const KTLINT_BOOLEAN = new Set(['--relative', '-F', '--format', '--color', '--verbose', '--debug', '--android', '-a', '--experimental']);
+
+function ktlint(before: string[], args: string[]): Command | null {
+  const parsed = splitOptions(args, KTLINT_VALUE, KTLINT_BOOLEAN);
+  if (!parsed) return null;
+  // Explicit patterns are globs (`src/**/*.kt`, `!**/generated/**`): checked in full or skipped.
+  if (parsed.targets.length) return { kind: 'check', tool: 'ktlint', ecosystem: 'kotlin' };
+  return {
+    kind: 'files',
+    tool: 'ktlint',
+    ecosystem: 'kotlin',
+    targets: ['.'],
+    withDependents: false,
+    narrow: (files) => [...before, ...parsed.options, ...files],
+  };
 }
 
 // ESLint options that take a value as the next word. Any other option without `=` must be boolean.

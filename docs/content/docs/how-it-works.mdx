@@ -22,6 +22,8 @@ Tests that always run: changed tests, `critical` tests, and every test that reac
 
 - **JS/TS:** relative imports, `.js` → `.ts`, index files, tsconfig `paths`, workspace packages, dynamic imports, re-exports.
 - **PHP:** every declared class and function is indexed (PSR-4, classmaps, custom autoloaders), then `use` statements, same-namespace names, class names in docblocks and strings, `require`/`include`. `Pest.php` and the `phpunit.xml` bootstrap link to every test under them.
+- **Kotlin and Java:** like PHP, by name: every top-level class, object, function and property is indexed, then imports (aliases, `*`), same-package names, fully-qualified names in code and strings, and the `FileNameKt` facades Java calls. Tests depend on their project's `src/*/resources`.
+- **Rust:** by crate. A crate's unit tests and doctests depend on every `.rs` file in it, the files it reads with `include_str!`, `include_bytes!`, `include!` or `#[path]`, its build script inputs, and the crates it depends on. An integration target in `tests/` depends on its crate and on the shared files under `tests/`.
 - Tests that still use a deleted file or class are selected.
 
 </Accordion>

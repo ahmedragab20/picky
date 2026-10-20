@@ -74,7 +74,7 @@ export function llmsIndex() {
   return [
     `# ${appName}`,
     '',
-    '> picky runs only the tests, lint and type checks a pull request can affect in GitHub Actions, for JS/TS and PHP. A dependency graph decides what must run, a model (Jev) judges the tests the graph cannot link, and any doubt, error or timeout runs everything.',
+    '> picky runs only the tests, lint and type checks a pull request can affect in GitHub Actions, for JS/TS, PHP, Kotlin and Rust. A dependency graph decides what must run, a model (Jev) judges the tests the graph cannot link, and any doubt, error or timeout runs everything.',
     '',
     `- Version v${version}, MIT license. Source: ${repoUrl}`,
     `- Install: download \`picky.mjs\` and \`picky.mjs.sha256\` from ${releaseUrl}/, verify the checksum, run \`node picky.mjs init\` (prints a diff), then \`node picky.mjs init --write\`. Needs Node 20+.`,

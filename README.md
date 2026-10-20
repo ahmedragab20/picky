@@ -3,7 +3,7 @@
 [![CI](https://github.com/ahmedragab20/picky/actions/workflows/ci.yml/badge.svg)](https://github.com/ahmedragab20/picky/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-c4a7e7)](LICENSE)
 
-**Run only the tests your PR can affect.** picky reads the diff, follows the import graph, and runs only the tests, lint and type checks a change can reach, in GitHub Actions, for JS/TS and PHP. Any doubt runs everything.
+**Run only the tests your PR can affect.** picky reads the diff, follows the import graph, and runs only the tests, lint and type checks a change can reach, in GitHub Actions, for JS/TS, PHP, Kotlin and Rust. Any doubt runs everything.
 
 [Docs](https://ahmedragab20.github.io/picky/) · [Benchmarks](https://ahmedragab20.github.io/picky/docs/benchmarks/) · [For agents](https://ahmedragab20.github.io/picky/docs/agents/) · [Changelog](CHANGELOG.md)
 
@@ -41,6 +41,8 @@ Then add the `PICKY_API_KEY` repository secret (or set `model: none`), commit, a
 - **Docs, assets and CI-script PRs:** no test can see the change, so tests, type checks and the `npm ci` before them all skip.
 - **Big JS/TS suites:** a fix in one module runs the tests that import it. Vitest, Jest, `node --test`, ESLint, Prettier.
 - **PHP projects:** PHPUnit and Pest narrowed by the class graph; phpstan, psalm, phpcs, pint and rector skip when nothing they check changed.
+- **Kotlin and Java on Gradle:** `gradle test` runs only the affected test classes, per project (`:core:test --tests …`); ktlint checks changed files; detekt and `gradle check` skip when nothing they check changed.
+- **Rust workspaces:** `cargo test` and `cargo nextest run` run only the affected crates (`-p`) and integration targets (`--test`); clippy and `cargo fmt` skip when no Rust input changed.
 - **Matrix and multi-OS jobs:** one decision per PR, shared by every job on Linux, Windows and containers.
 
 ## How it decides
@@ -72,7 +74,7 @@ The demo builds a small repo and runs 4 PRs through the hook: a source change, a
 
 ## Limits
 
-- GitHub Actions only, on `pull_request` events. JS/TS and PHP only.
+- GitHub Actions only, on `pull_request` events. JS/TS, PHP, Kotlin/Java (Gradle) and Rust only. Maven, Android and Kotlin Multiplatform test tasks run in full.
 - Verified on GitHub-hosted runners. Self-hosted runners and GitHub Enterprise Server are not verified yet.
 - More in [Limits](https://ahmedragab20.github.io/picky/docs/limits/).
 

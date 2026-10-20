@@ -47,6 +47,8 @@ const STEPS: { title: string; body: string; tone: string; bar: string; border: s
       rows: [
         ['JS/TS', 'import graph'],
         ['PHP', 'class graph'],
+        ['Kotlin', 'class graph'],
+        ['Rust', 'crate graph'],
       ],
       note: `Example: zod ${schema.sha} changed ${short(schema.changed[0])}: the ${ran(schema)} of ${TOTAL} test files that import it ran.`,
     },

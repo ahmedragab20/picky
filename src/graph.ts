@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
+import { jvmGraph } from './kotlin.ts';
 import { parsePhp, type PhpFile } from './php.ts';
+import { rustGraph } from './rust.ts';
 
 const SOURCE_EXT = ['.ts', '.tsx', '.mts', '.cts', '.js', '.jsx', '.mjs', '.cjs'];
 const RESOLVE_EXT = [...SOURCE_EXT, '.json'];
@@ -21,6 +23,12 @@ export interface Graph {
   unresolved: Map<string, string[]>;
   /** PHP file -> lowercased fully-qualified names it may reference */
   phpReferences: Map<string, Set<string>>;
+  /** Kotlin/Java file -> fully-qualified names it may reference */
+  jvmReferences: Map<string, Set<string>>;
+  /** Tests found from the build layout, not the file name: Rust crates (`Cargo.toml`) and integration targets, Kotlin/Java test classes. */
+  testUnits: string[];
+  /** Rust package directories ('.' for the root), to find the crate of a removed file. */
+  rustCrates: string[];
 }
 
 export function isSource(file: string): boolean {
@@ -29,7 +37,7 @@ export function isSource(file: string): boolean {
 
 export const isVendored = (f: string) => f.includes('node_modules/') || f.startsWith('vendor/') || f.includes('/vendor/');
 
-/** Builds the dependency graph for JS/TS and PHP files from the working tree. */
+/** Builds the dependency graph for JS/TS, PHP, Kotlin/Java and Rust files from the working tree. */
 export function buildGraph(root: string, files: string[]): Graph {
   const fileSet = new Set(files.filter((f) => !isVendored(f)));
   const resolver = makeResolver(root, fileSet);
@@ -59,8 +67,18 @@ export function buildGraph(root: string, files: string[]): Graph {
     }
     imports.set(file, deps);
   }
-  const graph = { imports, dependents, unresolved, phpReferences: new Map<string, Set<string>>() };
+  const graph: Graph = {
+    imports,
+    dependents,
+    unresolved,
+    phpReferences: new Map(),
+    jvmReferences: new Map(),
+    testUnits: [],
+    rustCrates: [],
+  };
   addPhp(root, fileSet, graph);
+  addJvm(root, fileSet, graph);
+  addRust(root, fileSet, graph);
   return graph;
 }
 
@@ -111,6 +129,26 @@ function addPhp(root: string, fileSet: Set<string>, graph: Graph): void {
   }
 }
 
+function addJvm(root: string, fileSet: Set<string>, graph: Graph): void {
+  const jvm = jvmGraph(root, fileSet);
+  for (const [file, refs] of jvm.references) {
+    graph.jvmReferences.set(file, refs);
+    if (!graph.imports.has(file)) graph.imports.set(file, new Set());
+  }
+  for (const [from, to] of jvm.edges) addEdge(graph, from, to);
+  graph.testUnits.push(...jvm.units);
+}
+
+function addRust(root: string, fileSet: Set<string>, graph: Graph): void {
+  const rust = rustGraph(root, fileSet);
+  for (const unit of rust.units) if (!graph.imports.has(unit)) graph.imports.set(unit, new Set());
+  for (const [from, to] of rust.edges) addEdge(graph, from, to);
+  // An include of a path that's gone: the file now fails to compile, like a JS import of a removed file.
+  for (const [file, target] of rust.missing) graph.unresolved.set(file, [...(graph.unresolved.get(file) ?? []), stripExt(target)]);
+  graph.testUnits.push(...rust.units);
+  graph.rustCrates = rust.crates;
+}
+
 function phpunitBootstrap(file: string): string | null {
   try {
     return /<phpunit\b[^>]*\bbootstrap\s*=\s*"([^"]+)"/.exec(readFileSync(file, 'utf8'))?.[1] ?? null;
@@ -123,6 +161,13 @@ function phpunitBootstrap(file: string): string | null {
 export function phpReferencersOf(graph: Graph, names: string[]): Set<string> {
   const out = new Set<string>();
   for (const [file, refs] of graph.phpReferences) if (names.some((n) => refs.has(n))) out.add(file);
+  return out;
+}
+
+/** Kotlin/Java files that reference any of the given fully-qualified names. */
+export function jvmReferencersOf(graph: Graph, names: string[]): Set<string> {
+  const out = new Set<string>();
+  for (const [file, refs] of graph.jvmReferences) if (names.some((n) => refs.has(n))) out.add(file);
   return out;
 }
 

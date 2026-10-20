@@ -10,13 +10,14 @@ description: What v0.1.0-rc doesn't do yet.
 
 | Not yet | Today |
 |---|---|
-| Go and Rust | JS/TS and PHP only |
+| Go | JS/TS, PHP, Kotlin/Java (Gradle) and Rust |
 | Other model providers | Jev only |
-| Symbol-level analysis | file level (JS/TS), class level (PHP) |
+| Symbol-level analysis | file level (JS/TS), class level (PHP, Kotlin/Java), crate level (Rust) |
 | Context packing for diffs over 200k chars | every candidate test runs |
 | History and coverage signals | graph and model only |
 | `extends` presets | a config with `extends` runs everything |
 | `cmd` and custom shells in `shell: picky …` | bash, sh, pwsh, powershell |
 | `php artisan test` | runs in full |
+| Maven, Android and Kotlin Multiplatform test tasks | run in full |
 | Recall measured across runs | each shadow run reports its own misses |
 | Verified on GHES and self-hosted runners | GitHub-hosted runners |

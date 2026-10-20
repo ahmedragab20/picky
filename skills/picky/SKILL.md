@@ -1,6 +1,6 @@
 ---
 name: picky
-description: "Install and use picky, a CLI that runs only the tests, lint and type checks a pull request can affect in GitHub Actions (JS/TS and PHP). Use it to install picky in a repo, migrate existing CI workflows to picky (`picky init`, `# picky` markers, `shell: picky {0}`), debug a picky decision or a `picky shadow miss`, or tune `.picky.yml`."
+description: "Install and use picky, a CLI that runs only the tests, lint and type checks a pull request can affect in GitHub Actions (JS/TS, PHP, Kotlin/Java on Gradle, and Rust). Use it to install picky in a repo, migrate existing CI workflows to picky (`picky init`, `# picky` markers, `shell: picky {0}`), debug a picky decision or a `picky shadow miss`, or tune `.picky.yml`."
 ---
 
 # picky
@@ -8,7 +8,7 @@ description: "Install and use picky, a CLI that runs only the tests, lint and ty
 picky decides which tests, lint and type checks a PR can affect, then skips or narrows the CI commands you mark with `# picky`. A dependency graph decides first. A model (Jev) judges the tests the graph can't link. Any doubt, error or timeout runs everything.
 
 - Works in GitHub Actions on `pull_request` events. Every other event runs everything.
-- Ecosystems: JS/TS and PHP.
+- Ecosystems: JS/TS, PHP, Kotlin/Java (Gradle) and Rust.
 - Docs: https://ahmedragab20.github.io/picky/ (full text: https://ahmedragab20.github.io/picky/llms-full.txt)
 
 ## Rules
@@ -72,7 +72,7 @@ The PR that adds picky changes `.github/workflows/**`, so it always runs everyth
 
 - **Workflow `paths:` filters** decide whether a workflow runs at all. picky doesn't replace them. Keep them unless the user asks to remove them.
 - **`--changedSince`, `--changed`, `--onlyChanged`, `nx affected`, `turbo --filter`, `git diff`-based scripts**: ask the user whether to keep each one or replace it with picky. picky does not recognize a test-runner command with a bare word after it (a path or test filter), so such a command runs unchanged.
-- Put the picky marker on the plain full-suite command (`npx vitest run`, `npx eslint .`, `vendor/bin/phpunit`). Never on a command that already targets specific files.
+- Put the picky marker on the plain full-suite command (`npx vitest run`, `npx eslint .`, `vendor/bin/phpunit`). Never on a command that already targets specific files (`cargo test -p x`, `gradle :app:test --tests X`).
 - To switch a command to picky, remove its narrowing flag in the same diff and tell the user. Do not do this without their agreement.
 
 ### Generated code
@@ -147,12 +147,14 @@ First line of the output: `picky: FULL RUN` or `selective`, with the mode, model
 | `no base commit to compare against (set PICKY_BASE)` | set `PICKY_BASE=<ref>` |
 | `.picky.yml has unknown key "x"`, `` `extends` is not supported ``, `unknown mode`, `model "x" is not supported`, `.picky.yml is invalid` | fix `.picky.yml` |
 | `internal error: ...` | picky failed open. Report the message. |
-| `full run for js commands: package.json changed` | a lockfile, `package.json`, `tsconfig*.json`, `jsconfig.json` or vitest/vite/jest config runs JS in full. `composer.json`, `composer.lock` or `phpunit.xml` do the same for PHP. |
+| `full run for js commands: package.json changed` | a lockfile, `package.json`, `tsconfig*.json`, `jsconfig.json` or vitest/vite/jest config runs JS in full. `composer.json`, `composer.lock` or `phpunit.xml` do the same for PHP; Gradle build files, `buildSrc/` or `includeBuild` dirs for Kotlin; `Cargo.toml`, `Cargo.lock` or `rust-toolchain*` for Rust. |
 | `command not recognized; runs in full` | the marker is on an unsupported command. Remove it. |
 | `no test files found under this directory; runs in full` | no test file of this runner's ecosystem under the command's directory. Check `working-directory`. |
 | `model unavailable (...)`, `model gave no answer`, `diff too large for one request` | the tests the graph couldn't link run |
 | `<tool> config <file> affected; runs in full` | ESLint or Prettier config changed |
 | `<tool> before 10 runs only the first of several paths; runs in full` | PHPUnit 9 narrows only to one file |
+| `Android and Kotlin Multiplatform test tasks take no --tests filter; runs in full` | a selected test is in an Android or KMP project |
+| `N files <tool> checks read a changed file (e.g. X); runs in full` | a Rust or Kotlin source reads the changed file (`include_str!`, resources), so the check runs |
 
 Per-test reasons: `critical test`, `test changed`, `imports <file>`, `model: possibly affected` (p >= 0.15), `model: unaffected`, `only low-risk files changed`, `no graph link (graph-only mode, model: none)`.
 
@@ -211,16 +213,22 @@ Recognized when run directly (`vendor/bin/phpunit`), through `npx`, `bunx`, `pnp
 | Tool | What picky does |
 |---|---|
 | vitest, jest, `node --test`, PHPUnit, Pest | runs only the affected test files |
+| `gradle test`, `./gradlew test` | runs only the affected test classes: `:proj:test --tests 'pkg.Class*'` per project |
+| `cargo test`, `cargo nextest run` | runs only the affected crates (`-p`) and integration targets (`--test`) |
+| ktlint (no patterns) | checks only changed `.kt`/`.kts` files |
 | ESLint (flat config) | lints changed files and every file that imports them |
 | Prettier | checks only the changed files |
 | tsc, vue-tsc, svelte-check, biome | skips when no changed file can matter, else runs in full |
 | phpstan, psalm, phpcs, php-cs-fixer, pint, rector | skips when no changed file can matter, else runs in full |
+| detekt, `gradle check`/`ktlintCheck`/`spotlessCheck`/`lint`/`compileKotlin`, `cargo clippy`/`check`/`fmt` | skips when no changed file can matter, else runs in full |
 
-- A test file is `*.test.*` or `*.spec.*` (ts, tsx, js, jsx, mts, cts, mjs, cjs), or `*Test.php`. `node_modules/` and `vendor/` are ignored.
+- A test file is `*.test.*` or `*.spec.*` (ts, tsx, js, jsx, mts, cts, mjs, cjs), or `*Test.php`; a test class under `src/test/kotlin|java/`; a Rust crate (unit tests and doctests) or integration target `tests/<name>.rs`. `node_modules/` and `vendor/` are ignored.
 - Legacy `.eslintrc`, `eslint -c ...` and `import/no-unused-modules`: skip or run in full, never narrowed.
 - `php artisan test` always runs in full. PHPUnit 9 is narrowed only to a single file.
+- Gradle: only a bare `test` task is narrowed. Android, Kotlin Multiplatform and Maven (`mvn test`) run in full.
+- Cargo: `-p`, `--lib`, `--test <name>` or a name filter run in full. Narrowed nextest runs add `--no-tests=pass`, which older nextest versions reject.
 - Any other marked command runs in full.
 
 ### Not supported yet
 
-Go and Rust, other model providers, `extends` presets, `cmd` and custom shells in `shell: picky ...`, and CI systems other than GitHub Actions (`init` only edits `.github/workflows/`). Self-hosted runners and GitHub Enterprise Server are not verified.
+Go, Maven, other model providers, `extends` presets, `cmd` and custom shells in `shell: picky ...`, and CI systems other than GitHub Actions (`init` only edits `.github/workflows/`). Self-hosted runners and GitHub Enterprise Server are not verified.

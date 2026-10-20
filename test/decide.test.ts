@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'bun:test';
 import { decide, decideCached, THRESHOLD } from '../src/decide.ts';
 import path from 'node:path';
-import { cleanEnv, repo, SHOP, tempDir, writeFiles } from './helpers.ts';
+import { cleanEnv, repo, SHOP, SHOP_KOTLIN, SHOP_RUST, tempDir, writeFiles } from './helpers.ts';
 
 const GRAPH_ONLY = { '.picky.yml': 'mode: enforce\nmodel: none\n' };
 const JEV = { '.picky.yml': 'mode: enforce\nmodel: jev\n' };
@@ -110,6 +110,22 @@ describe('decide: Jev judge', () => {
     expect(d.tests['test/cart.test.ts']).toMatchObject({ run: true, p: 0.9 });
     expect(d.tests['test/math.test.ts']).toMatchObject({ run: false, p: THRESHOLD / 2 });
     expect(d.modelUsage).toMatchObject({ model: 'jev-1.14.0', questions: 2, requests: 1, inputTokens: 321 });
+  });
+
+  it('asks about a Rust crate by its unit tests, and a Kotlin test by its @Test names', async () => {
+    const root = repo({ ...SHOP_RUST, ...SHOP_KOTLIN, ...JEV }, { 'config/app.yml': 'tax: 0.2\n' });
+    let questions: string[] = [];
+    const fetchImpl = vi.fn(async (_url: string | URL | Request, init?: RequestInit) => {
+      const body = JSON.parse(String(init!.body));
+      questions = Object.values(body.questions).map((q: any) => q.instructions);
+      return jevReply({});
+    });
+    await decide({ root, env: cleanEnv({ PICKY_API_KEY: 'k' }), fetchImpl });
+    const about = (needle: string) => questions.find((q) => q.includes(needle)) ?? '';
+    expect(about('crates/cart')).toContain('the unit tests and doctests of the Rust crate in "crates/cart"');
+    expect(about('crates/cart')).toContain('Test names: totals.');
+    expect(about('crates/money/tests/arith.rs')).toContain('Test names: adds.');
+    expect(about('core/src/test/kotlin/shop/CartTest.kt')).toContain('Test names: totals items.');
   });
 
   it('records no model usage when the graph decides everything', async () => {

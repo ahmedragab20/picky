@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import { decide } from '../src/decide.ts';
 import { isSetupCommand, planSetup } from '../src/job.ts';
 import { tokenize } from '../src/sh.ts';
-import { cleanEnv, repo, SHOP } from './helpers.ts';
+import { cleanEnv, repo, SHOP, SHOP_RUST } from './helpers.ts';
 
 const GRAPH_ONLY = { '.picky.yml': 'mode: enforce\nmodel: none\n' };
 const MATH_CHANGE = { 'src/math.ts': 'export const add = (a: number, b: number) => b + a;\n' };
@@ -36,10 +36,23 @@ describe('isSetupCommand', () => {
       'bun install',
       'composer install -n --prefer-dist',
       'npx playwright install --with-deps chromium',
+      'cargo fetch --locked',
+      'cargo install cargo-nextest --locked',
+      'cargo binstall -y cargo-nextest',
+      'rustup component add clippy rustfmt',
+      'rustup toolchain install stable --profile minimal',
     ]) {
       expect(isSetupCommand(tokenize(cmd)), cmd).toBe(true);
     }
-    for (const cmd of ['npm install lodash', 'npm test', 'yarn test', 'composer require x/y', 'composer update']) {
+    for (const cmd of [
+      'npm install lodash',
+      'npm test',
+      'yarn test',
+      'composer require x/y',
+      'composer update',
+      'cargo build',
+      'rustup run stable cargo test',
+    ]) {
       expect(isSetupCommand(tokenize(cmd)), cmd).toBe(false);
     }
   });
@@ -92,6 +105,23 @@ describe('planSetup', () => {
     expect(await setupPlan(plain, { 'README.md': 'x' })).toMatchObject({
       skip: false,
       note: "setup runs (picky can't decide `node --test` here)",
+    });
+  });
+
+  it('skips Rust toolchain setup when the marked cargo command skips', async () => {
+    const steps = [
+      '      - uses: actions/checkout@v4',
+      '      - uses: dtolnay/rust-toolchain@stable',
+      '      - uses: Swatinem/rust-cache@v2',
+      '      - uses: taiki-e/install-action@nextest',
+      '      - run: cargo fetch',
+      '      - run: cargo nextest run --workspace # picky',
+      '',
+    ].join('\n');
+    const root = repo({ ...SHOP_RUST, ...GRAPH_ONLY, ...workflow(steps) }, { 'README.md': '# docs\n' });
+    expect(await planSetup('cargo fetch', root, cleanEnv(GH), () => decide({ root, env: cleanEnv(GH) }))).toEqual({
+      skip: true,
+      note: 'skip: all 1 marked commands in this job skip',
     });
   });
 

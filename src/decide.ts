@@ -5,9 +5,19 @@ import picomatch from 'picomatch';
 import { loadConfig, type Config, type Mode } from './config.ts';
 import { changedFiles, git, hunks, resolveRange, trackedFiles, type Change, type Range } from './git.ts';
 import { ecosystemOf, type Ecosystem } from './commands.ts';
-import { buildGraph, importersOfMissing, isVendored, phpReferencersOf, transitiveDependents, type Graph } from './graph.ts';
+import {
+  buildGraph,
+  importersOfMissing,
+  isVendored,
+  jvmReferencersOf,
+  phpReferencersOf,
+  transitiveDependents,
+  type Graph,
+} from './graph.ts';
 import { askJev, type Fetch, type Question } from './judge.ts';
+import { includedBuilds, isJvmSource, jvmDeclaredNames } from './kotlin.ts';
 import { declaredNames } from './php.ts';
+import { crateDirOf } from './rust.ts';
 
 export interface TestDecision {
   run: boolean;
@@ -69,6 +79,18 @@ const ECOSYSTEM_GLOBS: Record<Ecosystem, string[]> = {
     '**/{vitest,vite,jest}.config.*',
   ],
   php: ['**/composer.json', '**/composer.lock', '**/phpunit.xml', '**/phpunit.xml.dist', '**/phpunit.dist.xml'],
+  kotlin: [
+    '**/*.gradle',
+    '**/*.gradle.kts',
+    '**/gradle.properties',
+    '**/gradle/wrapper/**',
+    '**/gradle/*.versions.toml',
+    '**/{gradlew,gradlew.bat}',
+    '**/buildSrc/**',
+    '**/pom.xml',
+    '**/.mvn/**',
+  ],
+  rust: ['**/Cargo.toml', '**/Cargo.lock', '**/rust-toolchain', '**/rust-toolchain.toml', '**/.cargo/config', '**/.cargo/config.toml'],
 };
 /** Bump when the decision's shape changes, so cached decisions from older versions aren't reused. */
 const DECISION_SCHEMA = 4;
@@ -215,24 +237,34 @@ async function decideInner(opts: DecideOptions, config: Config, started: number)
   const criticalChange = changed.find((c) => isCritical(c.path));
   if (criticalChange) return { ...fullRun(config, `critical path ${criticalChange.path} changed`, changed, started), ...base };
 
+  const files = trackedFiles(root);
+  // Gradle build logic (`includeBuild` in a settings file) configures every project, like buildSrc.
+  const buildLogic = includedBuilds(root, files).map((dir) => `${dir}/**`);
   const ecosystems: Partial<Record<Ecosystem, string>> = {};
-  for (const eco of ['js', 'php'] as const) {
-    const hit = touches(ECOSYSTEM_GLOBS[eco]);
+  for (const eco of Object.keys(ECOSYSTEM_GLOBS) as Ecosystem[]) {
+    const hit = touches([...ECOSYSTEM_GLOBS[eco], ...(eco === 'kotlin' ? buildLogic : [])]);
     if (hit) ecosystems[eco] = `${hit.path} changed`;
   }
 
-  const files = trackedFiles(root);
   const isTest = picomatch(TEST_GLOBS, { dot: true });
-  const tests = files.filter((f) => isTest(f) && !isVendored(f));
   const graph = buildGraph(root, files);
+  const tests = [...files.filter((f) => isTest(f) && !isVendored(f)), ...graph.testUnits];
 
   const isLow = picomatch(config.low.length ? config.low : ['\0'], { dot: true });
-  const relevant = changed.filter((c) => !isLow(c.path));
+  // A low-risk file that code reads (a README a Rust crate includes as its doctests) still counts.
+  const readByCode = (f: string) => (graph.dependents.get(f)?.size ?? 0) > 0 || importersOfMissing(graph, [f]).size > 0;
+  const relevant = changed.filter((c) => !isLow(c.path) || readByCode(c.path) || (c.from !== undefined && readByCode(c.from)));
   const present = relevant.filter((c) => c.status !== 'D').map((c) => c.path);
   const missing = relevant.flatMap((c) => (c.status === 'D' ? [c.path] : c.from ? [c.from] : []));
 
   // Floor: changed tests, tests importing changed files, tests importing removed files.
-  const seeds = new Set([...present, ...importersOfMissing(graph, missing), ...usersOfRemovedPhp(root, range, graph, missing)]);
+  const seeds = new Set([
+    ...present,
+    ...importersOfMissing(graph, missing),
+    ...usersOfRemovedPhp(root, range, graph, missing),
+    ...usersOfRemovedJvm(root, range, graph, missing),
+    ...cratesOfRemoved(graph, missing),
+  ]);
   const affected = new Set([...seeds, ...transitiveDependents(graph, seeds)]);
 
   const decisions: Record<string, TestDecision> = {};
@@ -344,10 +376,15 @@ function buildState(ctx: JudgeContext): string {
 }
 
 function questionFor(ctx: JudgeContext, test: string): string {
-  const imports = [...(ctx.graph.imports.get(test) ?? [])].slice(0, 10);
-  const names = testNames(path.join(ctx.root, test)).slice(0, 12);
+  const crate = path.posix.basename(test) === 'Cargo.toml';
+  const allImports = [...(ctx.graph.imports.get(test) ?? [])];
+  const imports = allImports.slice(0, 10);
+  // A crate's manifest stands for the tests inside its sources: unit tests and doctests.
+  const sources = crate ? allImports.filter((f) => f.endsWith('.rs')) : [test];
+  const names = sources.flatMap((f) => testNames(path.join(ctx.root, f))).slice(0, 12);
+  const subject = crate ? `the unit tests and doctests of the Rust crate in "${path.posix.dirname(test)}"` : `the tests in "${test}"`;
   return [
-    `Could the code change in the state alter the result of the tests in "${test}"?`,
+    `Could the code change in the state alter the result of ${subject}?`,
     names.length ? `Test names: ${names.join('; ')}.` : '',
     imports.length ? `It imports: ${imports.join(', ')}.` : 'It imports no changed project files.',
   ]
@@ -369,12 +406,42 @@ function usersOfRemovedPhp(root: string, range: Range, graph: Graph, missing: st
   return names.length ? phpReferencersOf(graph, names) : new Set();
 }
 
+/** Files that use a class or function declared in a removed or renamed-away Kotlin or Java file. */
+function usersOfRemovedJvm(root: string, range: Range, graph: Graph, missing: string[]): Set<string> {
+  const names = missing.filter(isJvmSource).flatMap((f) => {
+    try {
+      return jvmDeclaredNames(f, git(root, ['show', `${range.base}:${f}`]));
+    } catch {
+      return [];
+    }
+  });
+  return names.length ? jvmReferencersOf(graph, names) : new Set();
+}
+
+/** The crate of each removed Rust file: its `mod` declaration, or an `include!` of it, no longer compiles. */
+function cratesOfRemoved(graph: Graph, missing: string[]): string[] {
+  const dirs = new Set(graph.rustCrates);
+  return missing.flatMap((f) => {
+    const dir = crateDirOf(dirs, f);
+    return dir === null ? [] : [path.posix.join(dir, 'Cargo.toml')];
+  });
+}
+
 function testNames(file: string): string[] {
   try {
     const text = readFileSync(file, 'utf8');
     const calls = [...text.matchAll(/\b(?:describe|it|test)\s*\(\s*(['"`])((?:\\.|(?!\1).)*)\1/g)].map((m) => m[2]);
-    // PHPUnit: test methods.
-    return [...calls, ...[...text.matchAll(/\bfunction\s+(test\w+)\s*\(/g)].map((m) => m[1])];
+    // PHPUnit: test methods. Rust: #[test] (and #[tokio::test]) functions. JUnit: @Test functions and methods.
+    const php = [...text.matchAll(/\bfunction\s+(test\w+)\s*\(/g)].map((m) => m[1]);
+    const rust = [...text.matchAll(/#\[(?:\w+::)*test\b[^\]]*\]\s*(?:#\[[^\]]*\]\s*)*(?:pub\s+)?(?:async\s+)?fn\s+(\w+)/g)].map(
+      (m) => m[1],
+    );
+    const jvm = [
+      ...text.matchAll(
+        /@(?:Test|ParameterizedTest|RepeatedTest)\b(?:\([^)]*\))?\s+(?:@\w+(?:\([^)]*\))?\s+)*(?:(?:public|internal|protected|open|override|suspend)\s+)*(?:fun\s+(?:`([^`]+)`|(\w+))|void\s+(\w+))/g,
+      ),
+    ].map((m) => m[1] ?? m[2] ?? m[3]);
+    return [...calls, ...php, ...rust, ...jvm];
   } catch {
     return [];
   }

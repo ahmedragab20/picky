@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { parse } from 'yaml';
 import { editWorkflow, planInit, SETUP_ACTION } from '../src/init.ts';
-import { SHOP, SHOP_PHP, tempDir, writeFiles } from './helpers.ts';
+import { SHOP, SHOP_KOTLIN, SHOP_PHP, SHOP_RUST, tempDir, writeFiles } from './helpers.ts';
 
 const WORKFLOW = `name: CI
 on:
@@ -35,6 +35,31 @@ function project(files: Record<string, string> = {}): string {
 }
 
 describe('editWorkflow', () => {
+  it('marks Cargo and Gradle commands, not Maven or setup', () => {
+    const root = tempDir();
+    writeFiles(root, { '.git/HEAD': 'ref: refs/heads/main\n', ...SHOP_RUST, ...SHOP_KOTLIN });
+    const workflow = [
+      'on: pull_request',
+      'jobs:',
+      '  build:',
+      '    runs-on: ubuntu-latest',
+      '    steps:',
+      '      - uses: actions/checkout@v4',
+      '      - run: cargo fetch',
+      '      - run: cargo test --workspace --locked',
+      '      - run: cargo clippy --all-targets -- -D warnings',
+      '      - run: ./gradlew test --no-daemon',
+      '      - run: mvn test',
+      '',
+    ].join('\n');
+    const { text } = editWorkflow(workflow, root);
+    expect(text).toContain('      - run: cargo test --workspace --locked # picky\n');
+    expect(text).toContain('      - run: cargo clippy --all-targets -- -D warnings # picky\n');
+    expect(text).toContain('      - run: ./gradlew test --no-daemon # picky\n');
+    expect(text).toContain('      - run: cargo fetch\n');
+    expect(text).toContain('      - run: mvn test\n');
+  });
+
   it('marks recognized commands, adds the env lines and shares one decision across jobs', () => {
     const { text, notes } = editWorkflow(WORKFLOW, project());
     const wf = parse(text);

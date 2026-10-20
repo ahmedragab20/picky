@@ -19,25 +19,48 @@ const JS = [
   '**/{pnpm-lock.yaml,yarn.lock,bun.lock,bun.lockb}',
 ];
 const PHP = ['**/*.php', '**/composer.{json,lock}', '**/*.neon', '**/*.neon.dist', '**/phpunit*.xml*'];
-const OTHER = ['**/*.{go,rs,py,rb,java,kt,swift,cs,c,h,cpp,hpp}', '**/{go.mod,go.sum,Cargo.toml,Cargo.lock}'];
+const KOTLIN = [
+  '**/*.{kt,kts,java}',
+  '**/{gradle.properties,gradlew,gradlew.bat,pom.xml}',
+  '**/gradle/wrapper/**',
+  '**/gradle/*.versions.toml',
+];
+const RUST = ['**/*.rs', '**/{Cargo.toml,Cargo.lock,rust-toolchain,rust-toolchain.toml}'];
+const OTHER = ['**/*.{go,py,rb,swift,cs,c,h,cpp,hpp}', '**/{go.mod,go.sum}'];
 
 /**
  * Files that can't change a whole-project check's result. Anything not listed counts,
  * including unknown file types: a step may generate code from them before the check runs.
  */
 const IRRELEVANT: Record<string, string[]> = {
-  tsc: [...DOCS, ...MEDIA, ...STYLES, ...PHP, ...OTHER],
-  'vue-tsc': [...DOCS, ...MEDIA, ...STYLES, ...PHP, ...OTHER],
-  'svelte-check': [...DOCS, ...MEDIA, ...STYLES, ...PHP, ...OTHER],
-  biome: [...MEDIA, ...PHP, ...OTHER],
-  eslint: [...MEDIA, ...STYLES, ...PHP, ...OTHER],
-  php: [...DOCS, ...MEDIA, ...STYLES, ...JS, ...OTHER],
+  tsc: [...DOCS, ...MEDIA, ...STYLES, ...PHP, ...KOTLIN, ...RUST, ...OTHER],
+  'vue-tsc': [...DOCS, ...MEDIA, ...STYLES, ...PHP, ...KOTLIN, ...RUST, ...OTHER],
+  'svelte-check': [...DOCS, ...MEDIA, ...STYLES, ...PHP, ...KOTLIN, ...RUST, ...OTHER],
+  biome: [...MEDIA, ...PHP, ...KOTLIN, ...RUST, ...OTHER],
+  eslint: [...MEDIA, ...STYLES, ...PHP, ...KOTLIN, ...RUST, ...OTHER],
+  // Every other check of an ecosystem: phpstan, cargo clippy, gradle check, detekt, ...
+  php: [...DOCS, ...MEDIA, ...STYLES, ...JS, ...KOTLIN, ...RUST, ...OTHER],
+  kotlin: [...DOCS, ...MEDIA, ...STYLES, ...JS, ...PHP, ...RUST, ...OTHER],
+  rust: [...DOCS, ...MEDIA, ...STYLES, ...JS, ...PHP, ...KOTLIN, ...OTHER],
 };
+
+/** Per-file tools that only take these files: anything else isn't passed to them. */
+const ONLY: Record<string, string[]> = {
+  ktlint: ['**/*.{kt,kts}'],
+};
+
+/**
+ * Ecosystems whose checks also see files their sources read: a Rust `include_str!("../README.md")`,
+ * or a resource a `gradle check` test loads. The graph links those files to their readers, so a
+ * check counts an affected source, not only a changed one.
+ */
+const READS_FILES = new Set(['kotlin', 'rust']);
 
 /** Per-file tools: a change to these (or to a file they import) can change every file's result. */
 const TOOL_CONFIG: Record<string, string[]> = {
   eslint: ['**/eslint.config.*', '**/.eslintrc*', '**/.eslintignore'],
   prettier: ['**/.prettierrc*', '**/prettier.config.*', '**/.prettierignore', '**/.editorconfig'],
+  ktlint: ['**/.editorconfig', '**/.ktlint*', '**/baseline.xml'],
 };
 
 /** Decides what to do with one marked command, given the PR-wide decision. */
@@ -64,8 +87,9 @@ function planKind(command: Command, cwd: string, root: string, decision: Decisio
 function planTests(command: TestCommand, cwd: string, root: string, decision: Decision): Outcome {
   // Only this runner's tests under the command's working directory belong to it.
   const here = toPosix(path.relative(root, cwd));
+  const rel = (t: string) => toPosix(path.relative(cwd, path.join(root, t)));
   const tests = Object.keys(decision.tests).filter(
-    (t) => (here === '' || t.startsWith(`${here}/`)) && ecosystemOf(t) === command.ecosystem,
+    (t) => (here === '' || t.startsWith(`${here}/`)) && ecosystemOf(t) === command.ecosystem && (command.owns?.(rel(t)) ?? true),
   );
   if (tests.length === 0) return { action: 'full', note: 'no test files found under this directory; runs in full' };
 
@@ -74,8 +98,8 @@ function planTests(command: TestCommand, cwd: string, root: string, decision: De
   if (selected.length === tests.length) return { action: 'full', note: `all ${tests.length} test files affected` };
   if (selected.length === 0) return { action: 'skip', note: `skip: no affected tests (0 of ${tests.length})` };
 
-  const argv = command.narrow(selected.map((t) => toPosix(path.relative(cwd, path.join(root, t)))));
-  if (!argv) return { action: 'full', note: `${command.tool} before 10 runs only the first of several paths; runs in full` };
+  const argv = command.narrow(selected.map(rel));
+  if (!argv) return { action: 'full', note: `${command.whyNot ?? `${command.tool} can't run only the selected tests`}; runs in full` };
   return { action: 'narrow', argv, note: `running ${summary}` };
 }
 
@@ -90,9 +114,10 @@ function planFiles(command: FilesCommand, cwd: string, root: string, decision: D
   const targets = command.targets.map((t) => toPosix(path.relative(root, path.resolve(cwd, t))));
   const inTargets = (f: string) => targets.some((t) => t === '' || f === t || f.startsWith(`${t}/`));
   const unchecked = picomatch(IRRELEVANT[command.tool] ?? ['\0'], { dot: true });
+  const checked = picomatch(ONLY[command.tool] ?? ['**'], { dot: true });
   const files = (command.withDependents ? decision.affected : present).filter(
     // The tools error on paths that don't exist, so only files on disk are passed.
-    (f) => inTargets(f) && !unchecked(f) && !isVendored(f) && existsSync(path.join(root, f)),
+    (f) => inTargets(f) && checked(f) && !unchecked(f) && !isVendored(f) && existsSync(path.join(root, f)),
   );
   if (files.length === 0) return { action: 'skip', note: `skip: no affected files for ${command.tool}` };
   const argv = command.narrow(files.map((f) => toPosix(path.relative(cwd, path.join(root, f)))));
@@ -100,11 +125,20 @@ function planFiles(command: FilesCommand, cwd: string, root: string, decision: D
 }
 
 function planCheck(command: CheckCommand, decision: Decision): Outcome {
-  const irrelevant = picomatch(IRRELEVANT[command.ecosystem === 'php' ? 'php' : command.tool] ?? ['\0'], { dot: true });
+  const irrelevant = picomatch(IRRELEVANT[command.tool] ?? IRRELEVANT[command.ecosystem] ?? ['\0'], { dot: true });
   const paths = decision.changed.flatMap((c) => (c.from ? [c.from, c.path] : [c.path]));
   const relevant = paths.filter((p) => !irrelevant(p));
-  if (relevant.length === 0) return { action: 'skip', note: `skip: no changes ${command.tool} checks` };
-  return { action: 'full', note: `${relevant.length} changed files ${command.tool} checks (e.g. ${relevant[0]}); runs in full` };
+  if (relevant.length > 0) {
+    return { action: 'full', note: `${relevant.length} changed files ${command.tool} checks (e.g. ${relevant[0]}); runs in full` };
+  }
+  const readers = READS_FILES.has(command.ecosystem) ? (decision.affected ?? []).filter((p) => !irrelevant(p)) : [];
+  if (readers.length > 0) {
+    return {
+      action: 'full',
+      note: `${readers.length} files ${command.tool} checks read a changed file (e.g. ${readers[0]}); runs in full`,
+    };
+  }
+  return { action: 'skip', note: `skip: no changes ${command.tool} checks` };
 }
 
 function toPosix(p: string): string {

@@ -15,7 +15,7 @@ import { defaultShell, extension, finalize, invocation, isShell, rewriteStep, sh
 import { quoteArgv, splitAssignments, tokenize } from './sh.ts';
 import { VERSION } from './version.ts';
 
-const USAGE = `picky: runs only the tests, lint and type checks a change can affect (JS/TS and PHP)
+const USAGE = `picky: runs only the tests, lint and type checks a change can affect (JS/TS, PHP, Kotlin and Rust)
 
 usage:
   picky init [--write]                  show (or apply) the files and workflow edits that turn picky on

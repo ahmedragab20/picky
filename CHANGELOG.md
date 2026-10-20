@@ -4,6 +4,16 @@ All notable changes to picky are listed here. The format follows [Keep a Changel
 
 ## [Unreleased]
 
+### Added
+
+- **Kotlin and Java (Gradle).** A class-level graph by fully-qualified name (imports, aliases, wildcards, same-package names, `FileNameKt` facades, resources). `gradle test` and `./gradlew test` run only the affected test classes per project; ktlint checks changed files; detekt and Gradle verification tasks skip when nothing they check changed. Gradle build files, `buildSrc/` and `includeBuild` directories run Kotlin commands in full. Android, Kotlin Multiplatform and Maven run in full.
+- **Rust.** A crate-level graph: sources, `include_str!`/`include_bytes!`/`include!`/`#[path]` files, build script inputs and path or workspace dependencies. `cargo test` and `cargo nextest run` run only the affected crates (`-p`) and integration targets (`--test`); clippy, `cargo check` and `cargo fmt` skip when no Rust input changed. `Cargo.toml`, `Cargo.lock` and `rust-toolchain*` run Rust commands in full.
+- Job-level setup skips cover `cargo fetch`, `cargo install`, `rustup` and the common Rust and Gradle setup actions.
+
+### Changed
+
+- A low-risk file (by default `**/*.md`) that code reads, such as a README a Rust crate includes as its doctests, now selects tests.
+
 ## [0.1.0-rc] - 2026-10-18
 
 The first public release candidate.

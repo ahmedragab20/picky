@@ -8,9 +8,9 @@ A drop-in CI time saver that picks which jobs and tests run for a change.
 
 The core is a single-file CLI that works in any CI. The GitHub Action is a thin wrapper around it.
 
-## Build status (2026-10-17)
+## Build status (2026-10-20)
 
-The build is v0.2. It's tested locally (99 unit tests, plus end-to-end runs with real PHPUnit 11, ESLint 9, Prettier 3 and tsc) and **on GitHub-hosted runners** through the private fixture repo `ahmedragab20/picky-e2e`:
+The build is v0.2. It's tested locally (145 unit tests, plus end-to-end runs with real PHPUnit 11, ESLint 9, Prettier 3, tsc, cargo 1.96.1 and Gradle 9.6.1) and **on GitHub-hosted runners** through the private fixture repo `ahmedragab20/picky-e2e`:
 - 6 jobs set up by `picky init`: the decide job, bash JS and PHP jobs, Windows (pwsh), `node:22-alpine` and node-less `composer:2`
 - 6 PRs: PHP change, TS change, docs only, a deliberately broken PHP class that must fail, and 2 shadow-mode PRs that must report a miss
 
@@ -19,13 +19,15 @@ The build is v0.2. It's tested locally (99 unit tests, plus end-to-end runs with
 | Area | What works | Plan milestone |
 |---|---|---|
 | Core | merge-base diff (PR base, `PICKY_BASE`, default branch); fail-open; decision reuse per commit; `picky explain`; `picky -- <cmd>` | M1 (part) |
-| Gates | full run on `.picky.yml`, workflows, `critical` paths and non-PR events. **Per-ecosystem gates:** a JS lockfile or config runs only the JS commands in full; `composer.*` or `phpunit.xml` runs only the PHP commands in full | M1 (part) |
+| Gates | full run on `.picky.yml`, workflows, `critical` paths and non-PR events. **Per-ecosystem gates:** a JS lockfile or config runs only the JS commands in full; `composer.*` or `phpunit.xml` runs only the PHP commands in full; Gradle build files, `buildSrc/` and `includeBuild` dirs run Kotlin in full; `Cargo.toml`, `Cargo.lock`, `rust-toolchain*` run Rust in full | M1 (part) |
 | JS/TS graph | file-level imports: relative, `.js`→`.ts`, index files, tsconfig `paths`, workspace packages, dynamic imports, deleted files | M3 (file level only) |
 | PHP graph (first party) | class-level: every declared class or function is indexed (PSR-4, classmap or anything else); `use` (aliases, groups, functions), same-namespace names, docblock and string class names, `require`/`include`, `Pest.php` and `phpunit.xml` bootstrap edges, users of a deleted class | M6 (moved up) |
-| Test runners | vitest, jest, `node --test`, PHPUnit, Pest, `php [-d k=v] vendor/bin/…`; npm/pnpm/yarn and composer scripts. PHPUnit 9 is narrowed only to one path, because it silently ignores the rest | M1 |
+| Kotlin/Java graph | class-level, by fully-qualified name: top-level classes, objects, functions, properties, `FileNameKt`/`@file:JvmName` facades; imports (aliases, `*`), same-package names, dotted names in code and strings; tests depend on their project's resources; users of a deleted declaration | new |
+| Rust graph | crate-level: every `.rs` file of a package, `include_str!`/`include_bytes!`/`include!`/`include_dir!`/`migrate!`/`#[path]` targets, build script inputs (`rerun-if-changed`, path literals, or the whole package), path/workspace dependencies; integration targets as their own units; a removed file selects its crate | M5 (Rust, moved up) |
+| Test runners | vitest, jest, `node --test`, PHPUnit, Pest, `php [-d k=v] vendor/bin/…`; npm/pnpm/yarn and composer scripts. PHPUnit 9 is narrowed only to one path, because it silently ignores the rest. `gradle test` → `:proj:test --tests 'pkg.Class*'` per project with an init script that allows empty filters (verified with Gradle 9.6.1); `cargo test`/`cargo nextest run` → `-p` per crate and `--test` per integration target (verified with cargo 1.96.1). Android, KMP and Maven run in full | M1 |
 | Lint narrowing | ESLint (flat config): changed files plus their dependents, with `--no-warn-ignored`. Prettier: changed files, with `--ignore-unknown`. A change to the linter's config, or to a file the config imports, runs it in full. Legacy `.eslintrc` and `import/no-unused-modules` fall back to skip-or-full | new |
-| Type checks and analyzers | tsc, vue-tsc, svelte-check, biome, phpstan, psalm, phpcs, php-cs-fixer, pint, rector: skipped when no changed file can matter to them (docs, media, styles, another language), otherwise run in full | new |
-| Job-level setup skip | `npm ci`/`install`, `pnpm`/`yarn`/`bun install`, `composer install` and `npx playwright install` are skipped when every other command in the job is a marked command that skips. The job is read from the workflow (`GITHUB_WORKFLOW_REF`, `GITHUB_JOB`). Any unmarked command, non-bash step, expression working directory or non-passive `uses:` step keeps the setup | M2 (part) |
+| Type checks and analyzers | tsc, vue-tsc, svelte-check, biome, phpstan, psalm, phpcs, php-cs-fixer, pint, rector, detekt, Gradle verification tasks, `cargo clippy`/`check`/`fmt`: skipped when no changed file can matter to them (docs, media, styles, another language), otherwise run in full | new |
+| Job-level setup skip | `npm ci`/`install`, `pnpm`/`yarn`/`bun install`, `composer install`, `npx playwright install`, `cargo fetch`/`install` and `rustup` are skipped when every other command in the job is a marked command that skips. The job is read from the workflow (`GITHUB_WORKFLOW_REF`, `GITHUB_JOB`). Any unmarked command, non-bash step, expression working directory or non-passive `uses:` step keeps the setup | M2 (part) |
 | Hook | `BASH_ENV` hook, `# picky` markers inside scripts **and** as the YAML comment of a one-line `run:` (YAML drops that comment, so picky reads it from the workflow), shell flags preserved, original line on any failure | M2 (part) |
 | One decision per PR | `picky decide` in a small `picky` job computes the decision once into `$RUNNER_TEMP/picky`; the job uploads it as an artifact, and every other job (`needs: picky`) downloads it there and reuses it. Every step of the `picky` job is `continue-on-error`, so it never blocks the jobs that need it. **Verified with live Jev on 2026-10-17:** 1 model call per PR (before: 1 per job, with answers that differed near the threshold); every job prints the same decision. Cost: the `picky` job takes 7–12 s before the other jobs start. Fail-open: `picky decide` always exits 0, and a job without the artifact decides on its own | M2 (part) |
 | `picky init` and the vendored bundle | `npm run build` makes one minified file (3.8 MB, Node 20+). `picky init` shows a diff, and `--write` applies it: `.picky.yml` (shadow), `.github/picky/` (hook, wrapper, bundle), the 2 env lines, `# picky` on every recognized command, and the decide job when several jobs or a matrix use picky. Workflows are edited as text at parser positions, so formatting and comments are kept; it is idempotent. Pull-request workflows only; Windows, container and non-bash jobs get the `shell: picky {0}` fallback (next row). The hook finds the vendored bundle next to itself, so `PICKY_BIN` is no longer needed. **Verified on 2026-10-17:** the fixture's workflow was reset to plain commands and set up by `init` alone; all 4 PRs behaved as before. Found and fixed: `init` put two spaces before `# picky`, which the repo's own `prettier --check` rejected | M2 (part) |
@@ -53,7 +55,7 @@ The build is v0.2. It's tested locally (99 unit tests, plus end-to-end runs with
    - lossless compaction
 4. **Later milestones:**
    - M4 history and backstop
-   - M5 Go and Rust
+   - M5 Go (Rust done at crate level)
    - M7 other model providers
    - M9 other CIs and binaries
    - M10 coverage graph
