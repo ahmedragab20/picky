@@ -23,7 +23,7 @@ jobs:
       - if: runner.os == 'Linux'
         run: cargo fmt --check
       - run: cargo clippy --all-targets --locked -- -D warnings
-      - run: cargo test --locked
+      - run: cargo test --locked --no-fail-fast
       - run: cargo build --release --locked
       # What a Windows job runs: `shell: picky pwsh {0}` resolves to the vendored picky.cmd.
       - name: Windows wrapper

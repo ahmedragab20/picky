@@ -190,7 +190,7 @@ fn runs_a_narrowed_lint_script_through_the_local_binary_not_the_package_manager(
     let Some(Command::Files(c)) = recognize(&argv(&["CI=1", "npm", "run", "lint"]), &cwd).unwrap() else { panic!() };
     assert_eq!(
         (c.narrow)(&strings(&["a.ts"])),
-        ["CI=1".to_string(), format!("{}/node_modules/.bin/eslint", &*cwd), "--no-warn-ignored".into(), "a.ts".into()]
+        ["CI=1".to_string(), picky::npath::join(&[&cwd, "node_modules/.bin/eslint"]), "--no-warn-ignored".into(), "a.ts".into()]
     );
     assert_eq!(kind(&["npm", "run", "fmt"], &cwd), None); // a pre-script would be skipped
 }
