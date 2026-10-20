@@ -4875,8 +4875,7 @@ impl<'a> Composer<'a> {
                 ee.insert(0, *c);
             }
         }
-        let range;
-        if !ee.is_empty() {
+        let range = if !ee.is_empty() {
             let (end_comment, end_offset) = self.resolve_end(Some(&ee), ce_pos, true);
             if !end_comment.is_empty() {
                 match &mut coll_comment {
@@ -4887,10 +4886,10 @@ impl<'a> Composer<'a> {
                     _ => coll_comment = Some(end_comment),
                 }
             }
-            range = [fc.offset, ce_pos, end_offset];
+            [fc.offset, ce_pos, end_offset]
         } else {
-            range = [fc.offset, ce_pos, ce_pos];
-        }
+            [fc.offset, ce_pos, ce_pos]
+        };
         let kind = if is_map { NodeKind::Map { items: pairs, flow: true } } else { NodeKind::Seq { items: nodes, flow: true } };
         let mut node = new_node(kind, range);
         node.comment = coll_comment;

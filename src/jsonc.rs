@@ -184,7 +184,7 @@ pub fn try_parse_config_text(text: &str) -> Result<JsonValue, String> {
 /// UTF-8 replaced by U+FFFD. A byte-swapped odd trailing byte, like Node's `utf16le` decoder, is ignored.
 fn decode_file(bytes: &[u8]) -> Vec<u16> {
     let units = |data: &[u8], big_endian: bool| -> Vec<u16> {
-        data.chunks_exact(2).map(|p| if big_endian { u16::from_be_bytes([p[0], p[1]]) } else { u16::from_le_bytes([p[0], p[1]]) }).collect()
+        data.as_chunks::<2>().0.iter().map(|&p| if big_endian { u16::from_be_bytes(p) } else { u16::from_le_bytes(p) }).collect()
     };
     match bytes {
         [0xFE, 0xFF, rest @ ..] => units(rest, true),
@@ -4777,8 +4777,7 @@ impl Parser<'_> {
     fn parse_jsx_element_or_self_closing_element_or_fragment_worker(&mut self, in_expression_context: bool, must_be_unary: bool) -> Node {
         let pos = self.full_start;
         let opening = self.parse_jsx_opening_or_self_closing_element_or_opening_fragment(in_expression_context);
-        let result;
-        if opening.kind == sk::N_JSX_OPENING_ELEMENT {
+        let result = if opening.kind == sk::N_JSX_OPENING_ELEMENT {
             let opening_tag_name = Self::opening_tag_name(&opening);
             let last_child = self.parse_jsx_children(&opening);
             // a last child that was closed by this element's closing tag takes the closing tag over
@@ -4800,14 +4799,14 @@ impl Parser<'_> {
                     closing_tag_name
                 }
             };
-            result = self.node_with(sk::N_JSX_ELEMENT, pos, Data::Tags(Box::new((opening_tag_name, closing_tag_name))));
+            self.node_with(sk::N_JSX_ELEMENT, pos, Data::Tags(Box::new((opening_tag_name, closing_tag_name))))
         } else if opening.kind == sk::N_JSX_OPENING_FRAGMENT {
             self.parse_jsx_children(&opening);
             self.parse_jsx_closing_fragment(in_expression_context);
-            result = self.node(sk::N_JSX_FRAGMENT, pos);
+            self.node(sk::N_JSX_FRAGMENT, pos)
         } else {
-            result = opening;
-        }
+            opening
+        };
         if !must_be_unary && in_expression_context && self.tok() == sk::LESS_THAN {
             // `tryParse` of a callback that always returns a node: never undone
             self.parse_jsx_element_or_self_closing_element_or_fragment(true, false);
