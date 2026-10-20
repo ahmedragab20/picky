@@ -37,7 +37,7 @@ jobs:
           Set-Location $repo
           git init -q
           New-Item -ItemType Directory -Force .github\workflows | Out-Null
-          "on: pull_request`njobs:`n  test:`n    runs-on: windows-latest`n    steps:`n      - run: npx vitest run`n" | Set-Content .github\workflows\ci.yml
+          "on: pull_request`njobs:`n  test:`n    runs-on: windows-latest`n    steps:`n      - uses: actions/checkout@v4`n      - run: npx vitest run`n" | Set-Content .github\workflows\ci.yml
           & (Join-Path $dist picky-windows-x64.exe) init --write --dist $dist
           if ($LASTEXITCODE -ne 0) { throw 'init failed' }
           $version = cmd /c '.github\picky\picky.cmd --version'
