@@ -24,15 +24,29 @@ Reproduce it:
 
 ```bash
 git clone --depth 102 https://github.com/honojs/hono /tmp/hono
-bun install && bun run bench /tmp/hono hono 100
+cargo run --release --example selection -- /tmp/hono hono 100
 ```
 
-The script is [`bench/selection.ts`](https://github.com/ahmedragab20/picky/blob/main/bench/selection.ts). It writes `bench/results.json`, which this page reads at build time.
+The script is [`bench/selection.rs`](https://github.com/ahmedragab20/picky/blob/main/bench/selection.rs). It writes `bench/results.json`, which this page reads at build time.
 
 </Accordion>
 <Accordion title="Raw numbers">
 
 <BenchTable />
+
+</Accordion>
+<Accordion title="TypeScript vs Rust">
+
+picky 0.2 is a Rust rewrite of the TypeScript version. On these 400 commits both select the same tests. Measured on one Apple M1 Pro on 2026-10-20:
+
+| Repo | Decision p50, TypeScript | Decision p50, Rust | `picky explain`, TypeScript | `picky explain`, Rust |
+| --- | ---: | ---: | ---: | ---: |
+| colinhacks/zod | 107 ms | 55 ms | 371 ms, 134 MB | 106 ms, 11 MB |
+| honojs/hono | 93 ms | 51 ms | 351 ms, 133 MB | 100 ms, 10 MB |
+| composer/composer | 213 ms | 92 ms | 460 ms, 156 MB | 148 ms, 50 MB |
+| laravel/framework | 711 ms | 328 ms | 1,055 ms, 224 MB | 406 ms, 130 MB |
+
+The decision is timed inside the bench script. `picky explain` is a whole process on every 5th commit, with no cache: median wall time and peak memory.
 
 </Accordion>
 <Accordion title="From the live CI fixture">

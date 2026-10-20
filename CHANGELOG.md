@@ -4,15 +4,24 @@ All notable changes to picky are listed here. The format follows [Keep a Changel
 
 ## [Unreleased]
 
+## [0.2.0-rc] - 2026-10-20
+
+### Changed
+
+- **picky is one native binary now, rewritten in Rust.** No Node is needed on your machine or the runners. `picky init` vendors the binary for each runner OS your workflows use (`.github/picky/bin/picky-<os>-<cpu>`, about 5 MB each) for Linux and macOS on x64 and arm64, and Windows x64. It downloads them from the release and checks them against its `SHA256SUMS`, or takes them from `--dist <dir>` with no network. The Linux binaries are static, so they run in any container. A decision takes about half the time (1.8–2.3× faster at the median on the benchmark repos), and a whole `picky explain` run is 2.6–4.2× faster with 1.7–13× less memory. Decisions, narrowed commands and workflow edits are the same as before.
+- **Upgrading from 0.1.0-rc:** run the new binary's `init --write`. It replaces `.github/picky/picky.mjs` with the binaries and updates the wrapper.
+- A low-risk file (by default `**/*.md`) that code reads, such as a README a Rust crate includes as its doctests, now selects tests.
+
 ### Added
 
 - **Kotlin and Java (Gradle).** A class-level graph by fully-qualified name (imports, aliases, wildcards, same-package names, `FileNameKt` facades, resources). `gradle test` and `./gradlew test` run only the affected test classes per project; ktlint checks changed files; detekt and Gradle verification tasks skip when nothing they check changed. Gradle build files, `buildSrc/` and `includeBuild` directories run Kotlin commands in full. Android, Kotlin Multiplatform and Maven run in full.
 - **Rust.** A crate-level graph: sources, `include_str!`/`include_bytes!`/`include!`/`#[path]` files, build script inputs and path or workspace dependencies. `cargo test` and `cargo nextest run` run only the affected crates (`-p`) and integration targets (`--test`); clippy, `cargo check` and `cargo fmt` skip when no Rust input changed. `Cargo.toml`, `Cargo.lock` and `rust-toolchain*` run Rust commands in full.
 - Job-level setup skips cover `cargo fetch`, `cargo install`, `rustup` and the common Rust and Gradle setup actions.
 
-### Changed
+### Fixed
 
-- A low-risk file (by default `**/*.md`) that code reads, such as a README a Rust crate includes as its doctests, now selects tests.
+- When the hook can't write the rewritten step script, it runs the original step instead of failing.
+- On macOS, `picky explain` prints a long decision in full when its output is a pipe. Node cut it off at 64 KB.
 
 ## [0.1.0-rc] - 2026-10-18
 
@@ -31,5 +40,6 @@ The first public release candidate.
 - **Shadow mode** (the default): runs everything, logs what picky would have done, and reports a `picky shadow miss` when enforce mode would have missed a failure.
 - `picky --version`.
 
-[Unreleased]: https://github.com/ahmedragab20/picky/compare/v0.1.0-rc...HEAD
+[Unreleased]: https://github.com/ahmedragab20/picky/compare/v0.2.0-rc...HEAD
+[0.2.0-rc]: https://github.com/ahmedragab20/picky/compare/v0.1.0-rc...v0.2.0-rc
 [0.1.0-rc]: https://github.com/ahmedragab20/picky/releases/tag/v0.1.0-rc

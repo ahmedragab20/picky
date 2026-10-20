@@ -15,6 +15,8 @@ export const gitConfig = {
 export const repoUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}`;
 export const version = meta.version;
 export const releaseUrl = `${repoUrl}/releases/download/v${version}`;
+/** Picks the release binary for the machine it runs on: picky-<os>-<cpu>. */
+export const platformShell = `os=$(uname -s | tr A-Z a-z); cpu=$(uname -m | sed 's/x86_64/x64/; s/aarch64/arm64/')`;
 
 const getContentUrl = createGetUrl(docsContentRoute);
 

@@ -77,7 +77,7 @@ export function llmsIndex() {
     '> picky runs only the tests, lint and type checks a pull request can affect in GitHub Actions, for JS/TS, PHP, Kotlin and Rust. A dependency graph decides what must run, a model (Jev) judges the tests the graph cannot link, and any doubt, error or timeout runs everything.',
     '',
     `- Version v${version}, MIT license. Source: ${repoUrl}`,
-    `- Install: download \`picky.mjs\` and \`picky.mjs.sha256\` from ${releaseUrl}/, verify the checksum, run \`node picky.mjs init\` (prints a diff), then \`node picky.mjs init --write\`. Needs Node 20+.`,
+    `- Install: download the binary for your machine (\`picky-linux-x64\`, \`picky-linux-arm64\`, \`picky-darwin-x64\`, \`picky-darwin-arm64\` or \`picky-windows-x64.exe\`) and \`SHA256SUMS\` from ${releaseUrl}/, verify the checksum, run \`<binary> init\` (prints a diff), then \`<binary> init --write\`. No runtime needed: it is one self-contained binary (static on Linux), and \`init\` vendors the one for each runner OS.`,
     '- CI setup: `init` puts a `# picky` marker on each test, lint and type-check command it recognizes. Config is an optional `.picky.yml` with `mode`, `model`, `critical` and `low`.',
     '- Rollout: it starts in `mode: shadow` (everything runs, picky logs what it would skip). Switch to `enforce` only after PRs show no `picky shadow miss`.',
     '- The model needs a `PICKY_API_KEY` repository secret. `model: none` is graph-only: no network call, and no diff leaves the runner.',

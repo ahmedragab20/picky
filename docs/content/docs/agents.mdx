@@ -16,12 +16,13 @@ picky runs only the tests, lint and type checks a pull request can affect.
 1. Read the instructions first. Do not guess flags or behavior.
    - Skill: https://raw.githubusercontent.com/ahmedragab20/picky/main/skills/picky/SKILL.md
    - If you cannot fetch it, use the full docs: https://ahmedragab20.github.io/picky/llms-full.txt
-2. Download picky.mjs and picky.mjs.sha256 from
-   https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/
-   and verify the checksum. Stop if it fails.
-3. Run `node picky.mjs init` (a dry run). Show me the full diff and the notes it
+2. Download SHA256SUMS and the binary for this machine (picky-linux-x64, picky-linux-arm64,
+   picky-darwin-x64, picky-darwin-arm64 or picky-windows-x64.exe) from
+   https://github.com/ahmedragab20/picky/releases/download/v0.2.0-rc/
+   and verify its checksum against SHA256SUMS. Stop if it fails.
+3. Run `<binary> init` (a dry run). Show me the full diff and the notes it
    prints, and explain anything it skipped.
-4. Wait for my OK. Then run `node picky.mjs init --write` and delete the downloaded files.
+4. Wait for my OK. Then run `<binary> init --write` and delete the downloaded files.
 5. Keep `mode: shadow` in .picky.yml. Do not switch to enforce.
 6. Do not change or delete any test. Do not remove existing path filters or
    --changedSince-style flags without asking me. Do not mark commands picky does not recognize.
@@ -82,7 +83,7 @@ Or download the file into the folder your agent loads skills or rules from.
 <Accordion title="What the agent changes">
 
 - Writes `.picky.yml` in shadow mode, if there is none.
-- Adds `.github/picky/`: the hook, a wrapper, a local action and the bundle.
+- Adds `.github/picky/`: the hook, a wrapper, a local action and the picky binary for each runner OS.
 - In each workflow that runs on `pull_request`: 2 `env` lines and a `# picky` marker on each recognized command.
 - With several jobs or a matrix: a `picky` job that decides once, plus `needs: picky` and a download step in each job.
 - For Windows, container and `sh`/`pwsh` jobs: `shell: picky {0}`.
@@ -103,7 +104,7 @@ The PR that adds picky changes workflows, so it runs everything. Savings start o
 2. The diff of each workflow only adds `env` lines, `# picky` markers, `shell: picky {0}`, and the `picky` job with its `needs` and download step.
 3. No test file changed.
 4. Existing path filters and `--changedSince`-style flags are still there, unless you said to remove them.
-5. No `picky.mjs` or `picky.mjs.sha256` at the repo root.
+5. No downloaded `picky-*` binary or `SHA256SUMS` at the repo root.
 
 </Accordion>
 <Accordion title="A prompt for a shadow miss">

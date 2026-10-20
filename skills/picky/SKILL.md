@@ -22,25 +22,29 @@ picky decides which tests, lint and type checks a PR can affect, then skips or n
 
 ## 1. Install
 
-Needs Node 20+ on your machine and on the runners. Run from inside the repo:
+picky is one self-contained binary: no runtime is needed on your machine or the runners. Run from inside the repo:
 
 ```bash
-curl -fsSLO https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/picky.mjs
-curl -fsSLO https://github.com/ahmedragab20/picky/releases/download/v0.1.0-rc/picky.mjs.sha256
-sha256sum -c picky.mjs.sha256        # macOS: shasum -a 256 -c picky.mjs.sha256
-node picky.mjs init                  # dry run: prints a diff, writes nothing
+os=$(uname -s | tr A-Z a-z); cpu=$(uname -m | sed 's/x86_64/x64/; s/aarch64/arm64/')
+base=https://github.com/ahmedragab20/picky/releases/download/v0.2.0-rc
+curl -fsSLO "$base/picky-$os-$cpu" && curl -fsSLO "$base/SHA256SUMS"
+grep " picky-$os-$cpu\$" SHA256SUMS | sha256sum -c   # macOS: shasum -a 256 -c
+chmod +x "picky-$os-$cpu"
+"./picky-$os-$cpu" init              # dry run: prints a diff, writes nothing
 ```
+
+On Windows, download `picky-windows-x64.exe` instead.
 
 Stop if the checksum fails. Read the diff and the `picky:` notes at the end of the output (see "When init can't finish a job"). Show both to the user. After they agree:
 
 ```bash
-node picky.mjs init --write
-rm picky.mjs picky.mjs.sha256        # do not commit these two files
+"./picky-$os-$cpu" init --write
+rm "picky-$os-$cpu" SHA256SUMS       # do not commit these two files
 ```
 
-`gh release download v0.1.0-rc -R ahmedragab20/picky -p 'picky.mjs*'` also works.
+`init` vendors the binary for each runner OS the workflows use, downloaded from the same release and checked against `SHA256SUMS`. Without network access: `gh release download v0.2.0-rc -R ahmedragab20/picky -D picky-dist`, verify with `sha256sum -c SHA256SUMS` inside it, then run `init --dist picky-dist`.
 
-`init` is safe to rerun: it never adds anything twice. It prints `already set up; nothing to change` when nothing is left. To upgrade, rerun it with a newer `picky.mjs`.
+`init` is safe to rerun: it never adds anything twice. It prints `already set up; nothing to change` when nothing is left. To upgrade, rerun it with a newer binary. Upgrading from 0.1.0-rc removes the old `picky.mjs` bundle.
 
 ## 2. Migrate existing workflows
 
@@ -49,7 +53,7 @@ rm picky.mjs picky.mjs.sha256        # do not commit these two files
 | File | What it is |
 |---|---|
 | `.picky.yml` | config, in `mode: shadow` (only if the file doesn't exist) |
-| `.github/picky/` | the hook, a `picky` wrapper, `picky.cmd`, a local action and the `picky.mjs` bundle. Git pins the version. Nothing is downloaded at run time. |
+| `.github/picky/` | the hook, a `picky` wrapper, `picky.cmd`, a local action and `bin/picky-<os>-<cpu>` for each runner OS (about 5 MB each). Git pins the version. Nothing is downloaded at run time. |
 
 In each workflow that runs on `pull_request` it edits:
 
@@ -123,7 +127,7 @@ A flaky test or a runner problem can look like a miss. Read the failure before a
 Run in a repo where picky is vendored:
 
 ```bash
-.github/picky/picky explain                      # the decision for this branch (or: node .github/picky/picky.mjs explain)
+.github/picky/picky explain                      # the decision for this branch
 PICKY_BASE=origin/main .github/picky/picky explain
 PICKY_MODEL=none .github/picky/picky explain     # graph only, no API key needed
 .github/picky/picky -- npx vitest run            # run a command narrowed to the change
