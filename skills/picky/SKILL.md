@@ -134,6 +134,7 @@ PICKY_MODEL=none .github/picky/picky explain     # graph only, no API key needed
 ```
 
 - `explain` diffs committed work. Commit first.
+- `.github/picky/bin/` holds only the binaries for the runners' OS. If the wrapper prints `no picky binary for <os>-<cpu>`, download the binary for this machine (the install step's `curl` command) and run `./picky explain` instead.
 - Without `PICKY_BASE`, the base is the merge base with the first of `origin/HEAD`, `origin/main`, `main`, `origin/master`, `master` that works. Else it prints `no base commit to compare against (set PICKY_BASE)`.
 - Without an API key and with `model: jev`, it prints a full run. Set `PICKY_API_KEY` or `PICKY_MODEL=none`.
 - Outside Actions, `picky -- <cmd>` follows `.picky.yml`'s mode: in shadow mode it runs the full command and logs what it would have done.
