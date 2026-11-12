@@ -14,7 +14,7 @@ The build is v0.2. It's tested locally (145 unit tests, plus end-to-end runs wit
 - 6 jobs set up by `picky init`: the decide job, bash JS and PHP jobs, Windows (pwsh), `node:22-alpine` and node-less `composer:2`
 - 6 PRs: PHP change, TS change, docs only, a deliberately broken PHP class that must fail, and 2 shadow-mode PRs that must report a miss
 
-**Rust port (2026-10-20):** the CLI is now one static Rust binary per platform instead of a Node bundle. Its decisions and command plans match the TypeScript version on 700 real commits (hono, zod, composer, laravel/framework, ripgrep, okhttp, axum), and `init` produces the same workflow edits on 2,816 real workflows. The GitHub-hosted runs above were made with the TypeScript version; the fixture has not been rerun with the binaries yet.
+**Rust port (2026-10-20):** the CLI is now one static Rust binary per platform instead of a Node bundle. Its decisions and command plans match the TypeScript version on 700 real commits (hono, zod, composer, laravel/framework, ripgrep, okhttp, axum), and `init` produces the same workflow edits on 2,816 real workflows. **Rerun with the v0.2.0-rc release binaries on 2026-11-12:** the fixture was upgraded by the released binary's `init --write` (it removed `picky.mjs` and vendored the Linux and Windows binaries), and all 6 PRs behaved as with the TypeScript version: every job reused the shared decision; graph-decided tests, setup skips and narrowed commands were the same; `php-break` failed in the `php` and `composer` jobs; both shadow PRs reported the miss in the bash, `node:22-alpine` and Windows jobs. The only differences were Jev scores at the threshold (p=0.14 vs 0.15) for PHP tests on the TS PRs.
 
 ### Done
 
