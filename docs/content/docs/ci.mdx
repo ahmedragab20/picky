@@ -84,9 +84,14 @@ Recognized: `npm ci`/`install`, `pnpm install`, `yarn`, `bun install`, `composer
 
 ```bash
 picky explain                 # print the decision for this branch
+PICKY_MODEL=none picky explain  # graph only, no API key needed
 picky -- npx vitest run       # run a command narrowed to the change
 PICKY_BASE=origin/main picky explain
 ```
+
+- `explain` diffs committed work, so commit first.
+- With `model: jev` and no `PICKY_API_KEY`, `explain` prints a full run. Set the key, or `PICKY_MODEL=none` to see the graph's decision.
+- `.github/picky/bin/` holds only the binaries for your runners' OS. On a laptop with another OS, download the binary for your machine with the [install](/docs/install) command and run it from the repo root.
 
 </Accordion>
 <Accordion title="Which events are narrowed?">
